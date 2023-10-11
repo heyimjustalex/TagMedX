@@ -1,0 +1,6 @@
+bash
+node_modules
+*.log
+*.md
+npm-debug.log
+yarn-error.log

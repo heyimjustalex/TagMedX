@@ -1,0 +1,110 @@
+Table User {
+  id integer  [primary key]
+  e_mail integer
+  password_hash varchar
+  name varchar
+  surname varchar
+  title varchar
+  role varchar
+  decription varchar
+  experience varchar
+
+}
+
+Table Group {
+  id integer  [primary key] 
+  name varchar 
+  description varchar
+
+}
+
+Table Task {
+  id integer  [primary key]
+  id_group integer
+  max_samples_for_user integer
+  name varchar
+  decription varchar
+  type varchar
+
+}
+
+Table Membership{
+  id_user integer
+  id_group integer
+}
+
+
+Table Sample
+{
+  id integer [ primary key ]
+  id_task integer
+  path varchar
+  format varchar
+
+}
+
+Table Examination{
+   id integer  [primary key]
+   id_user integer
+   id_sample integer
+   to_further_verification bool
+   bad_quality bool
+
+}
+
+Table Label{
+  id integer [primary key]
+  id_task integer
+  name varchar
+  description varchar
+
+}
+
+Table BBox{
+  id integer [primary key]
+  id_examination integer
+  label_id integer
+  comment varchar
+  x1 float
+  y1 float
+  x2 float
+  y2 float  
+}
+
+
+
+
+
+
+
+
+Ref: "Sample"."id_task" > "Task"."id"
+
+
+Ref: "User"."id" < "Membership"."id_user"
+
+Ref: "Group"."id" < "Membership"."id_group"
+
+Ref: "Examination"."id" < "BBox"."id_examination"
+
+
+
+
+
+Ref: "User"."id" < "Examination"."id_user"
+
+
+
+Ref: "Task"."id_group" > "Group"."id"
+
+
+
+
+
+Ref: "Sample"."id" < "Examination"."id_sample"
+
+
+
+Ref: "Task"."id" < "Label"."id_task"
+
+Ref: "Label"."id" < "BBox"."label_id"
