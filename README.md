@@ -142,7 +142,7 @@ Backend project is divided into 3 main folders: features, models, repositories. 
 ```
 <br>
 
-### Backend packages
+### Requirements.txt Python packages
 
 - **FastAPI (0.103.1)**: A fast web framework for building APIs with automatic documentation.
 - **SQLAlchemy (2.0.21)**: A powerful SQL toolkit and ORM for Python.
@@ -151,5 +151,13 @@ Backend project is divided into 3 main folders: features, models, repositories. 
 - **Uvicorn (0.23.2)**: A lightweight ASGI server for asynchronous Python web apps.
 - **mysql-connector-python (8.1.0)**: A Python driver for MySQL databases.
 - **mysqlclient**: A MySQL database adapter for Python.
+
+### Useful links 
+
+https://levelup.gitconnected.com/structuring-fastapi-project-using-3-tier-design-pattern-4d2e88a55757
+https://github.com/fastapi-practices/fastapi_best_architecture
+https://github.com/zhanymkanov/fastapi-best-practices#2-excessively-use-pydantic-for-data-validation
+
+
 
 ## Frontend
