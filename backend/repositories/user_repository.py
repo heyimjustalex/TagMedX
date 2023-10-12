@@ -2,9 +2,12 @@
 from sqlalchemy.orm import Session
 from models.models import User
 from typing import List
+
+# Repository that talks to database through db session object with SQLAlchemy
+
 class UserRepository:
     def __init__(self, db: Session):
-        self.db :Session = db
+        self.db : Session = db
 
     def get_user_by_id(self, user_id: int) -> User:
         return self.db.query(User).filter(User.id == user_id).first()

@@ -35,11 +35,14 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     volumes:
-      - ./backend/:/app/src
+      - ./backend/:/app:ro
     ports:
       - 8000:8000
+    environment:
+      - WATCHFILES_FORCE_POLLING=true
     networks:
       - network
+    restart: on-failure
 
   # frontend:
   #   container_name: frontend_TagMedX

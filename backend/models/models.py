@@ -4,6 +4,8 @@ from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
+# SQLAlchemy models that map to /DB/setup.sql in MYSQL database
+
 class User(Base):
     __tablename__ = 'User'
 
