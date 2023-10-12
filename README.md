@@ -26,6 +26,8 @@ SQL file in /DB/setup.sql (with some random data loading). <br> In /DB folder th
 Scheme might also be viewed in PHPMyadmin
 
 ![dbdiagram](./DB/2.PNG)
+
+
 ### Structure
 
 The structure of the database is as follows:
@@ -86,6 +88,7 @@ The structure of the database is as follows:
 - Relationships: 
   - Many-to-One with Examination
   - Many-to-One with Label
+
 
 
 
