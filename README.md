@@ -22,67 +22,85 @@ docker-compose -f docker-compose_all.yml up --build
 
 ## Database
 
-SQL file in /DB/setup.sql (with some random data loading).
+SQL file in /DB/setup.sql (with some random data loading). <br> In /DB folder there are also screenshots of scheme and dbdiagram.io code if modification of scheme is needed. <br>
+Scheme might also be viewed in PHPMyadmin
+
+![network topology](./DB/2.PNG)
 
 ### Structure
 
 Each structure modification must result in backend model update of SQLAlchemy in ./backend/models
 
-    User :
+    **User:**
         Fields: id, e_mail, password_hash, name, surname, title, role, description, experience
         Purpose:  entity representing a doctor or an admin who controlls datasets
         Relationships: 
-            - one-to-many relationship with Membership
-            - one-to-many relationship with Examination
+            - One-to-Many with Membership
+            - One-to-Many with Examination
 
-    Group:
+    **Group:**
         Fields: id, name, description
-        Purpose: Represents a group or team of users that will mark a some set for example group of dentists marking teeth dataset
+        Purpose: Represents a group or team of users that will mark a some data set. <br> For example a group of dentists marking teeth dataset
         Relationships: 
+            - One-to-Many with Task
+            - One-to-Many with Membership
 
-    Membership:
+    **Membership:**
         Fields: id_user, id_group
         Purpose: Represents the membership of users in groups.
         Relationships: 
             - Many-to-One with User 
             - Many-to-One with Group
-  
 
-    Task:
-
+    **Task:**
         Fields: id, id_group, max_samples_for_user, name, description, type
-        Purpose: Represents tasks or assignments.
-        Relationships: Many-to-One with Group.
+        Purpose: Represents tasks that are created by user with role="admin/manager".<br> A Group is linked with Task, so that a group of doctors<br> can have many tasks assigned. Task is a representation of activity <br>dataset marking. 
+        Relationships: 
+            - Many-to-One with Group
+            - One-to-Many with Sample (one task has multiple photos/samples to mark)
+            - One-to-Many with Label (a task has some labels assigned by admin that a doctor might later choose from)
 
-    Sample:
-
+    **Sample:**
         Fields: id, id_task, path, format
-        Purpose: Represents samples or data to be examined.
-        Relationships: Many-to-One with Task.
+        Purpose: Represents samples (information about added photos) to be examined.
+        Relationships: 
+            - Many-to-One with Task       
 
-    Examination:
-
+    **Examination:**
         Fields: id, id_user, id_sample, to_further_verification, bad_quality
-        Purpose: Records information about examinations.
-        Relationships: Many-to-One with User and Sample.
+        Purpose: Records information about Sample Examination by User (doctor). <br>It might be detection or classification. <br>If classification there is just one bounding box (BBox).
+        Relationships: 
+            - Many-to-One with User
+            - Many-to-One with Sample
+            - One-to-Many with BBox (during single Sample Examination by a particular User he might crop some data on Sample with one BBox or with many. It depends on type of sample)
 
-    Label:
-
+    **Label:**
         Fields: id, id_task, name, description
-        Purpose: Represents labels or tags for tasks.
-        Relationships: Many-to-One with Task.
+        Purpose: Represents labels for tasks that are constrained by admin/manager who creates Task.
+        Relationships: 
+            - Many-to-One with Task
+            - One-to-Many with BBox
 
-    BBox:
-
+    **BBox:**
         Fields: id, id_examination, id_label, comment, x1, y1, x2, y2
-        Purpose: Stores bounding box details.
-        Relationships: Many-to-One with Examination and Label.
+        Purpose: Stores bounding box details. <br> x1,y1 means bottom-left corner and x2,y2 top-right corner.
+        Relationships: 
+            - Many-to-One with Examination
+            - Many-to-One with Label
+
+
 
 ## Backend
 
 ### General
 
-Project has hot-reload with Docker and it gets started with compose.
+Project has hot-reload with Docker and it gets started with compose. Written with FastAPI.
+
+### TODO - Deadline: 2.11.2023 but it would be better to end this part up to 26.10.2023
+- Register/Login with JWT (dogadajcie się z Michałem jak to zrobić)
+- Adding user to a group, getting users that are part of a group
+- File (photos) upload (create some new assets folder for uploaded photos) 
+- Possibility to print information about photos
 
 ### Naming conventions
 
@@ -100,7 +118,6 @@ Backend project is divided into 3 main folders: features, models, repositories. 
 - Backend is dockerized and avaliable at localhost:8000 (You can test endpoints users/1 or /users)
 
 ```
-├── assets_readme             <- Images, diagrams for Readme.md
 ├── backend                   <- FastAPI backend
 │   ├── features              <- Domain specific features
         ├── exceptions        <- Our defined exceptions
