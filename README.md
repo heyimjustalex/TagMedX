@@ -26,67 +26,67 @@ SQL file in /DB/setup.sql (with some random data loading). <br> In /DB folder th
 Scheme might also be viewed in PHPMyadmin
 
 ![dbdiagram](./DB/2.PNG)
-
 ### Structure
 
-Each structure modification must result in backend model update of SQLAlchemy in ./backend/models
+The structure of the database is as follows:
 
-   **User:**
-        Fields: id, e_mail, password_hash, name, surname, title, role, description, experience
-        Purpose:  entity representing a doctor or an admin who controlls datasets
-        Relationships: 
-            - One-to-Many with Membership
-            - One-to-Many with Examination
+**User:**
+- Fields: id, e_mail, password_hash, name, surname, title, role, description, experience
+- Purpose: Represents a doctor or an admin who controls datasets.
+- Relationships: 
+  - One-to-Many with Membership
+  - One-to-Many with Examination
 
-   **Group:**
-        Fields: id, name, description
-        Purpose: Represents a group or team of users that will mark a some data set. <br> For example a group of dentists marking teeth dataset
-        Relationships: 
-            - One-to-Many with Task
-            - One-to-Many with Membership
+**Group:**
+- Fields: id, name, description
+- Purpose: Represents a group or team of users that will work on a specific dataset. For example, a group of dentists marking a teeth dataset.
+- Relationships: 
+  - One-to-Many with Task
+  - One-to-Many with Membership
 
-   **Membership:**
-        Fields: id_user, id_group
-        Purpose: Represents the membership of users in groups.
-        Relationships: 
-            - Many-to-One with User 
-            - Many-to-One with Group
+**Membership:**
+- Fields: id_user, id_group
+- Purpose: Represents the membership of users in groups.
+- Relationships: 
+  - Many-to-One with User 
+  - Many-to-One with Group
 
-   **Task:**
-        Fields: id, id_group, max_samples_for_user, name, description, type
-        Purpose: Represents tasks that are created by user with role="admin/manager".<br> A Group is linked with Task, so that a group of doctors<br> can have many tasks assigned. Task is a representation of activity <br>dataset marking. 
-        Relationships: 
-            - Many-to-One with Group
-            - One-to-Many with Sample (one task has multiple photos/samples to mark)
-            - One-to-Many with Label (a task has some labels assigned by admin that a doctor might later choose from)
+**Task:**
+- Fields: id, id_group, max_samples_for_user, name, description, type
+- Purpose: Represents tasks that are created by users with the role "admin/manager." A Group is linked with Task, allowing a group of doctors to have many tasks assigned. Task is a representation of activity dataset marking.
+- Relationships: 
+  - Many-to-One with Group
+  - One-to-Many with Sample (each task has multiple photos/samples to mark)
+  - One-to-Many with Label (a task has some labels assigned by the admin, which doctors can later choose from)
 
-   **Sample:**
-        Fields: id, id_task, path, format
-        Purpose: Represents samples (information about added photos) to be examined.
-        Relationships: 
-            - Many-to-One with Task       
+**Sample:**
+- Fields: id, id_task, path, format
+- Purpose: Represents samples, which contain information about added photos to be examined.
+- Relationships: 
+  - Many-to-One with Task       
 
-   **Examination:**
-        Fields: id, id_user, id_sample, to_further_verification, bad_quality
-        Purpose: Records information about Sample Examination by User (doctor). <br>It might be detection or classification. <br>If classification there is just one bounding box (BBox).
-        Relationships: 
-            - Many-to-One with User
-            - Many-to-One with Sample
-            - One-to-Many with BBox (during single Sample Examination by a particular User he might crop some data on Sample with one BBox or with many. It depends on type of sample)
+**Examination:**
+- Fields: id, id_user, id_sample, to_further_verification, bad_quality
+- Purpose: Records information about Sample Examination by User (doctor). It might involve detection or classification. If it's classification, there is just one bounding box (BBox).
+- Relationships: 
+  - Many-to-One with User
+  - Many-to-One with Sample
+  - One-to-Many with BBox (during a single Sample Examination by a particular User, they might crop some data on the Sample with one BBox or with many, depending on the type of sample)
 
-   **Label:**
-        Fields: id, id_task, name, description
-        Purpose: Represents labels for tasks that are constrained by admin/manager who creates Task.
-        Relationships: 
-            - Many-to-One with Task
-            - One-to-Many with BBox
+**Label:**
+- Fields: id, id_task, name, description
+- Purpose: Represents labels for tasks that are constrained by the admin/manager who creates the Task.
+- Relationships: 
+  - Many-to-One with Task
+  - One-to-Many with BBox
 
-   **BBox:**
-        Fields: id, id_examination, id_label, comment, x1, y1, x2, y2
-        Purpose: Stores bounding box details. <br> x1,y1 means bottom-left corner and x2,y2 top-right corner.
-        Relationships: 
-            - Many-to-One with Examination
-            - Many-to-One with Label
+**BBox:**
+- Fields: id, id_examination, id_label, comment, x1, y1, x2, y2
+- Purpose: Stores bounding box details. The coordinates x1, y1 represent the bottom-left corner, and x2, y2 represent the top-right corner.
+- Relationships: 
+  - Many-to-One with Examination
+  - Many-to-One with Label
+
 
 
 
