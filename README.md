@@ -25,10 +25,10 @@ docker-compose -f docker-compose_all.yml up --build
 SQL file in /DB/setup.sql (with some random data loading). <br> In /DB folder there are also screenshots of scheme and dbdiagram.io code if modification of scheme is needed. <br>
 Scheme might also be viewed in PHPMyadmin
 
-![network topology](./DB/2.PNG)
+![dbdiagram](./DB/2.PNG)
 
 ### Structure
-
+```markdown
 Each structure modification must result in backend model update of SQLAlchemy in ./backend/models
 
     **User:**
@@ -89,7 +89,7 @@ Each structure modification must result in backend model update of SQLAlchemy in
             - Many-to-One with Label
 
 
-
+```
 ## Backend
 
 ### General
