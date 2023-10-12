@@ -10,11 +10,12 @@ git clone https://github.com/heyimjustalex/TagMedX.git
 cd TagMedX
 
 ```
-```bash
-# Start without Frontend, just backend, DB, and DBAdmin
+Start without Frontend, just backend, DB, and DBAdmin
+```bash 
 docker-compose up --build
-
 ```
+Start with Frontend, just backend, DB, and DBAdmin
+
 ```bash
 docker-compose -f docker-compose_all.yml up --build
 ```
