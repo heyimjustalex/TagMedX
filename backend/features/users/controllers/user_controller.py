@@ -1,13 +1,11 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from ..schema.user_schema import UserResponse, ErrorResponse, UserListResponse
-from ..service.user_service import UserService
-from utility.session import get_db
+from ..schemas.user_schema import UserResponse, ErrorResponse, UserListResponse
+from ..services.user_service import UserService
+from utilities.session import get_db
 
 router = APIRouter()
-
-
 
 
 @router.get("/users/", response_model=UserListResponse)

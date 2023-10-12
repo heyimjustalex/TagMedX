@@ -1,7 +1,7 @@
 
 
 from fastapi import FastAPI
-from Users.controller.user_controller import router as user_router
+from features.users.controllers.user_controller import router as user_router
 import mysql.connector
 
 # Quick connection check, you can remove it if you don't want it
