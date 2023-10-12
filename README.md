@@ -154,9 +154,9 @@ Backend project is divided into 3 main folders: features, models, repositories. 
 
 ### Useful links 
 
-https://levelup.gitconnected.com/structuring-fastapi-project-using-3-tier-design-pattern-4d2e88a55757
-https://github.com/fastapi-practices/fastapi_best_architecture
-https://github.com/zhanymkanov/fastapi-best-practices#2-excessively-use-pydantic-for-data-validation
+https://levelup.gitconnected.com/structuring-fastapi-project-using-3-tier-design-pattern-4d2e88a55757 <br>
+https://github.com/fastapi-practices/fastapi_best_architecture <br>
+https://github.com/zhanymkanov/fastapi-best-practices#2-excessively-use-pydantic-for-data-validation <br>
 
 
 
