@@ -12,6 +12,10 @@ TagMedX is an open-source web app built with FastAPI, Next.js, and MySQL, design
 
 ### Project structure
 
+Backend project is divided into 3 main folders: features, models, repositories. Features have user-domain specific folders like groups, users or tasks. Each of these subfolders has it's own controllers, schemas and services. Some facts:
+- If you want to make new feature make new folder in feature folder
+- Models are mapped to MySQL database entities defined in /DB/setup.sql. Any change made to model any of these means the other needs to be changed.
+- Backend is dockerized and avaliable at localhost:8000 (You can test endpoints users/1 or /users
 
 ```
 ├── assets_readme             <- Images, diagrams for Readme.md
@@ -30,5 +34,4 @@ TagMedX is an open-source web app built with FastAPI, Next.js, and MySQL, design
 │   ├── requirements.txt      <- Packages to install
 │   ├── Dockerfile            <- Dockerfile for Docker image
 ```
-
 <br>
