@@ -2,6 +2,25 @@
 
 TagMedX is an open-source web app built with FastAPI, Next.js, and MySQL, designed for medical image tagging – both classification and detection. It's a tool for healthcare professionals, such as doctors and medical experts, to annotate medical images remotely for AI systems. 
 
+## 🚀  Quickstart
+
+```bash
+
+git clone https://github.com/heyimjustalex/TagMedX.git
+cd TagMedX
+
+```
+```bash
+# Start without Frontend, just backend, DB, and DBAdmin
+docker-compose up --build
+
+```
+```bash
+docker-compose -f docker-compose_all.yml up --build
+```
+
+
+
 ## Dependencies
 - Database -  mysql:8.1.0
 - Database Admin Panel - phpmyadmin:5.2.1

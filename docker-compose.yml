@@ -29,6 +29,35 @@ services:
     networks:
       - network
 
+  backend:
+    container_name: backend_TagMedX
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/:/app/src
+    ports:
+      - 8000:8000
+    networks:
+      - network
+
+  # frontend:
+  #   container_name: frontend_TagMedX
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./frontend/src:/app/src
+  #     - /app/node_modules
+  #   environment:
+  #     NODE_ENV: development
+  #   ports:
+  #     - 80:3000
+  #   networks:
+  #     - network
+
+
+
 volumes:
   DB:
 networks:
