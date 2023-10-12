@@ -20,6 +20,12 @@ Start whole project (with frontend)
 docker-compose -f docker-compose_all.yml up --build
 ```
 
+## Project dependencies
+- Database -  mysql:8.1.0
+- Database Admin Panel - phpmyadmin:5.2.1
+- Backend (FastAPI) - python:3.8 - (additional dependencies in ./backend/requirements.txt)
+- Frontend (Next.js + TS) -  node:20 - (additional dependencies in ./frontend/package.json)
+
 ## Database
 
 SQL file in /DB/setup.sql (with some random data loading). <br> In /DB folder there are also screenshots of scheme and dbdiagram.io code if modification of scheme is needed. <br>
@@ -89,12 +95,7 @@ The structure of the database is as follows:
   - Many-to-One with Examination
   - Many-to-One with Label
 
-
-
-
-
 ## Backend
-
 ### General
 
 Project has hot-reload with Docker and it gets started with compose. Written with FastAPI.
@@ -141,9 +142,14 @@ Backend project is divided into 3 main folders: features, models, repositories. 
 ```
 <br>
 
+### Backend packages
 
-## Dependencies
-- Database -  mysql:8.1.0
-- Database Admin Panel - phpmyadmin:5.2.1
-- Backend (FastAPI) - python:3.8 - (additional dependencies in ./backend/requirements.txt)
-- Frontend (Next.js + TS) -  node:20 - (additional dependencies in ./frontend/package.json)
+- **FastAPI (0.103.1)**: A fast web framework for building APIs with automatic documentation.
+- **SQLAlchemy (2.0.21)**: A powerful SQL toolkit and ORM for Python.
+- **aiomysql (0.2.0)**: An asyncio driver for MySQL databases.
+- **Pydantic (2.4.2)**: Data validation and parsing library for Python.
+- **Uvicorn (0.23.2)**: A lightweight ASGI server for asynchronous Python web apps.
+- **mysql-connector-python (8.1.0)**: A Python driver for MySQL databases.
+- **mysqlclient**: A MySQL database adapter for Python.
+
+## Frontend
