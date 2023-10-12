@@ -10,23 +10,73 @@ git clone https://github.com/heyimjustalex/TagMedX.git
 cd TagMedX
 
 ```
-Start without Frontend, just backend, DB, and DBAdmin
+Start without frontend, just backend, DB, and DBAdmin
 ```bash 
 docker-compose up --build
 ```
-Start with Frontend, just backend, DB, and DBAdmin
+Start whole project (with frontend)
 
 ```bash
 docker-compose -f docker-compose_all.yml up --build
 ```
 
+## Database
 
+SQL file in /DB/setup.sql (with some random data loading).
 
-## Dependencies
-- Database -  mysql:8.1.0
-- Database Admin Panel - phpmyadmin:5.2.1
-- Backend (FastAPI) - python:3.8 - (additional dependencies in ./backend/requirements.txt)
-- Frontend (Next.js + TS) -  node:20 - (additional dependencies in ./frontend/package.json)
+### Structure
+
+Each structure modification must result in backend model update of SQLAlchemy in ./backend/models
+
+    User :
+        Fields: id, e_mail, password_hash, name, surname, title, role, description, experience
+        Purpose:  entity representing a doctor or an admin who controlls datasets
+        Relationships: 
+            - one-to-many relationship with Membership
+            - one-to-many relationship with Examination
+
+    Group:
+        Fields: id, name, description
+        Purpose: Represents a group or team of users that will mark a some set for example group of dentists marking teeth dataset
+        Relationships: 
+
+    Membership:
+        Fields: id_user, id_group
+        Purpose: Represents the membership of users in groups.
+        Relationships: 
+            - Many-to-One with User 
+            - Many-to-One with Group
+  
+
+    Task:
+
+        Fields: id, id_group, max_samples_for_user, name, description, type
+        Purpose: Represents tasks or assignments.
+        Relationships: Many-to-One with Group.
+
+    Sample:
+
+        Fields: id, id_task, path, format
+        Purpose: Represents samples or data to be examined.
+        Relationships: Many-to-One with Task.
+
+    Examination:
+
+        Fields: id, id_user, id_sample, to_further_verification, bad_quality
+        Purpose: Records information about examinations.
+        Relationships: Many-to-One with User and Sample.
+
+    Label:
+
+        Fields: id, id_task, name, description
+        Purpose: Represents labels or tags for tasks.
+        Relationships: Many-to-One with Task.
+
+    BBox:
+
+        Fields: id, id_examination, id_label, comment, x1, y1, x2, y2
+        Purpose: Stores bounding box details.
+        Relationships: Many-to-One with Examination and Label.
 
 ## Backend
 
@@ -55,3 +105,10 @@ Backend project is divided into 3 main folders: features, models, repositories. 
 │   ├── Dockerfile            <- Dockerfile for Docker image
 ```
 <br>
+
+
+## Dependencies
+- Database -  mysql:8.1.0
+- Database Admin Panel - phpmyadmin:5.2.1
+- Backend (FastAPI) - python:3.8 - (additional dependencies in ./backend/requirements.txt)
+- Frontend (Next.js + TS) -  node:20 - (additional dependencies in ./frontend/package.json)
