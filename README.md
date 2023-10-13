@@ -210,3 +210,28 @@ Frontend source folder is divided into 3 main folders: app, components, consts. 
 │   ├── Dockerfile            <- Dockerfile for Docker image
 ```
 <br>
+
+## Git workflow
+### Branches
+In order to start developing, please create your own branch:
+`git checkout -b "<type>/<branch-name>"`
+
+- Type: feature, fix, devops, docs
+- Name: dash-case
+
+### Commits
+Please use following commits name convention:
+`<type>: commit name`
+
+- Type: feature, fix, build, chore, ci, docs, style, refactor, test
+- Name: lowercase
+
+### Pull request
+Please use following pull request name convention:
+`<Type>: commit name`
+
+- Type: Feature, Fix, Build, Chore, CI, Docs, Style, Refactor, Test
+- Name: lowercase
+
+Add all commits names to description with GitHub button.
+Use squash and merge (!!!)
