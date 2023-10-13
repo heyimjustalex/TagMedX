@@ -219,12 +219,16 @@ In order to start developing, please create your own branch:
 - Type: feature, fix, devops, docs
 - Name: dash-case
 
+ex. feature/login-page
+
 ### Commits
 Please use following commits name convention:
 `<type>: commit name`
 
 - Type: feature, fix, build, chore, ci, docs, style, refactor, test
 - Name: lowercase
+
+ex. feature: add login button
 
 ### Pull request
 Please use following pull request name convention:
@@ -233,5 +237,8 @@ Please use following pull request name convention:
 - Type: Feature, Fix, Build, Chore, CI, Docs, Style, Refactor, Test
 - Name: lowercase
 
+ex. Feature: add login page
+
+### Merging
 Add all commits names to description with GitHub button.
 Use squash and merge (!!!)
