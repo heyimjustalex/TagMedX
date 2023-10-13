@@ -101,18 +101,18 @@ The structure of the database is as follows:
 Project has hot-reload with Docker and it gets started with compose. Written with FastAPI.
 
 ### TODO - Deadline: 2.11.2023 but it would be better to end this part up to 26.10.2023
-- Register/Login with JWT (dogadajcie się z Michałem jak to zrobić)
+- Register/Login with JWT (ask @wybieracz how to do it)
 - Adding user to a group, getting users that are part of a group
 - File (photos) upload (create some new assets folder for uploaded photos) 
 - Possibility to print information about photos
 
 ### Naming conventions
 
-1. Use typing and linter
+1. Use typing and linter.
 2. Try to stick to PEP8. 
 
-- methods: snake_case
-- classes: PascalCase
+- Methods: snake_case
+- Classes: PascalCase
 
 ### Project structure
 
@@ -124,9 +124,9 @@ Backend project is divided into 3 main folders: features, models, repositories. 
 ```
 ├── backend                   <- FastAPI backend
 │   ├── features              <- Domain specific features
-        ├── exceptions        <- Our defined exceptions
-            ├── definitions   <- Exceptions definitions (used by services)
-            ├── handlers      <- Excaptions hanlders used by app.py
+|   |   ├── exceptions        <- Our defined exceptions
+|   |   |   ├── definitions   <- Exceptions definitions (used by services)
+|   |   |   ├── handlers      <- Excaptions hanlders used by app.py
 |   |   ├── examination       <- Sample examination related features
 |   |   ├── groups            <- Group related features
 |   |   ├── tasks             <- Tasks related features
@@ -161,3 +161,52 @@ https://github.com/zhanymkanov/fastapi-best-practices#2-excessively-use-pydantic
 
 
 ## Frontend
+### General
+
+Project has hot-reload with Docker and it gets started with command `docker-compose -f docker-compose_all.yml up --build`.
+
+### Technologies
+- Next.js
+- TypeScript
+- Tailwind CSS
+- NextUI
+
+### TODO - Deadline: 2.11.2023 but it would be better to end this part up to 26.10.2023
+- Main page
+- Register/Login Page
+- Group page
+- Adding user to a group
+- File (photos) upload (create some new assets folder for uploaded photos)
+
+### Naming conventions
+
+1. Components functions and files should start with capital letter.
+2. Every component file should be in folder with the same name.
+3. Component folder should contains no more than 4 files:
+  - **component.css** - component styling
+  - **Component.tsx** - component
+  - **ComponentConsts.ts** - component consts
+  - **ComponentUtils.ts** - component utils (functions)
+
+- Components: camelCase, () => {}
+- Functions: camelCase, function() {}
+- CSS classes: dash-case (ex. class-name__sub-class--variant)
+
+### Project structure
+
+Frontend source folder is divided into 3 main folders: app, components, consts. App folder defines app structure. Components contains subfolders with components. Consts folder is intended for global consts and interfaces. Frontend is dockerized and avaliable at localhost:3000.
+
+```
+├── frontend                  <- Next.js frontend
+│   ├── src                   <- Source folder
+|   |   ├── app               <- App structure
+|   |   ├── components        <- Components folder
+|   |   ├── consts            <- Consts folder
+│   ├── public                <- Media folder
+│   ├── next.config.js        <- Next.js config
+│   ├── package.json          <- Packages to install
+│   ├── tsconfig.json         <- TypeScript config
+│   ├── tailwind.config.json  <- Tailwind CSS config
+│   ├── Dockerfile            <- Dockerfile for Docker image
+```
+<br>
