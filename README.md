@@ -167,7 +167,6 @@ Project has hot-reload with Docker and it gets started with command:
 ```bash
 docker-compose -f docker-compose_all.yml up --build
 ```
-.
 
 ### Technologies
 - Next.js
@@ -248,4 +247,4 @@ ex. Feature: add login page
 ### Merging
 Add all commits names to description with GitHub button.
 <br>
-⚠ Use squash and merge (!!!) ⚠
+⚠ Use squash and merge ⚠
