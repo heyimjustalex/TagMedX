@@ -244,7 +244,7 @@ Please use following pull request name convention:
 
 ex. Feature: add login page
 <br>
-Additionally describe main features included in pull request.
+Additionally list in pull request description main changes.
 
 ### Merging
 ⚠ Use squash and merge ⚠
