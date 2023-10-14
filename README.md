@@ -163,7 +163,10 @@ https://github.com/zhanymkanov/fastapi-best-practices#2-excessively-use-pydantic
 ## Frontend
 ### General
 
-Project has hot-reload with Docker and it gets started with command `docker-compose -f docker-compose_all.yml up --build`.
+Project has hot-reload with Docker and it gets started with command:
+```bash
+docker-compose -f docker-compose_all.yml up --build
+```
 
 ### Technologies
 - Next.js
@@ -183,10 +186,12 @@ Project has hot-reload with Docker and it gets started with command `docker-comp
 1. Components functions and files should start with capital letter.
 2. Every component file should be in folder with the same name.
 3. Component folder should contains no more than 4 files:
-  - **component.css** - component styling
-  - **Component.tsx** - component
-  - **ComponentConsts.ts** - component consts
-  - **ComponentUtils.ts** - component utils (functions)
+  + **component.css** - component styling
+  + **Component.tsx** - component
+  + **ComponentConsts.ts** - component consts
+  + **ComponentUtils.ts** - component utils (functions)
+
+<br>
 
 - Components: camelCase, () => {}
 - Functions: camelCase, function() {}
@@ -216,7 +221,7 @@ Frontend source folder is divided into 3 main folders: app, components, consts. 
 In order to start developing, please create your own branch:
 `git checkout -b "<type>/<branch-name>"`
 
-- Type: feature, fix, devops, docs
+- Type: feature, fix, build, chore, ci, docs, style, refactor, test
 - Name: dash-case
 
 ex. feature/login-page
@@ -238,7 +243,8 @@ Please use following pull request name convention:
 - Name: lowercase
 
 ex. Feature: add login page
+<br>
+Additionally list in pull request description main changes.
 
 ### Merging
-Add all commits names to description with GitHub button.
-Use squash and merge (!!!)
+⚠ Use squash and merge ⚠
