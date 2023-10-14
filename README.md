@@ -243,8 +243,8 @@ Please use following pull request name convention:
 - Name: lowercase
 
 ex. Feature: add login page
+<br>
+Additionally describe main features included in pull request.
 
 ### Merging
-Add all commits names to description with GitHub button.
-<br>
 ⚠ Use squash and merge ⚠
