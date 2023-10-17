@@ -24,13 +24,13 @@
   
 .background:after {
     content: "";
-    background-image: url("/assets/grid.svg");
+    background-image: url("../assets/grid.svg");
     z-index: 1;
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
-    opacity: 0.4;
+    opacity: .4;
     filter: invert(1);
 }
   
