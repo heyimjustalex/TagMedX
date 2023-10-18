@@ -9,7 +9,7 @@ const NavDesktop = () => {
         <>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarBrand>
-                    <Link href="#" className="font-bold text-inherit">
+                    <Link href="/" className="font-bold text-inherit">
                         TagMedX
                     </Link>
                 </NavbarBrand>
@@ -27,7 +27,7 @@ const NavDesktop = () => {
                     <Link href="/signup">Sign Up</Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Button as={Link} color="primary" href="#" variant="solid">
+                    <Button as={Link} color="primary" href="/login" variant="solid">
                         Login
                     </Button>
                 </NavbarItem>
