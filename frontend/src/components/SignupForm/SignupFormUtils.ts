@@ -1,5 +1,10 @@
-export function handleSignUp(setValidation: any, setSent: any): void {
+import { ISignupData } from "./SignupFormConsts";
+
+export function handleSignUp(setValidation: any, setSent: any, data: ISignupData): void {
     setValidation(true);
+    if(data.name !== '' && data.surname !== '' && checkEmail(data.email) && checkPassword(data.password)) {
+        setSent(true)
+    }
 }
 
 export function checkEmail(email: string): boolean {

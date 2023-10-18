@@ -86,7 +86,8 @@ const SignupForm = () => {
                     className="flex"
                     variant="solid"
                     color="primary"
-                    onClick={() => handleSignUp(setValidation, setSent)}
+                    onClick={() => handleSignUp(setValidation, setSent, data)}
+                    isLoading={sent}
                 >
                     Sign Up
                 </Button>
