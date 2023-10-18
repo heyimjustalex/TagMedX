@@ -9,13 +9,13 @@ const NavDesktop = () => {
         <>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarBrand>
-                    <Link href="#" className="font-bold text-inherit">
+                    <Link href="/" className="font-bold text-inherit">
                         TagMedX
                     </Link>
                 </NavbarBrand>
                 {menuItems.map((e, i) => (
                     <NavbarItem key={`${e.url}-${i}`}>
-                        <Link href="#" color={e.color}>
+                        <Link href={e.url} color={e.color}>
                             {e.name}
                         </Link>
                     </NavbarItem>
@@ -24,11 +24,11 @@ const NavDesktop = () => {
 
             <NavbarContent className="hidden sm:flex" justify="end">
                 <NavbarItem>
-                    <Link href="#">Login</Link>
+                    <Link href="/signup" size="sm">Sign Up</Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Button as={Link} color="primary" href="#" variant="solid">
-                        Sign Up
+                    <Button as={Link} color="primary" href="/login" variant="solid">
+                        Login
                     </Button>
                 </NavbarItem>
             </NavbarContent>

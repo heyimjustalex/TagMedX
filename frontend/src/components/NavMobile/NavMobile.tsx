@@ -8,7 +8,7 @@ const NavMobile = () => {
         <>
             <NavbarContent className="sm:hidden w-full flex-center flex-col" justify="center">
                 <NavbarBrand>
-                    <Link href="#" className="font-bold text-inherit">
+                    <Link href="/" className="font-bold text-inherit">
                         TagMedX
                     </Link>
                 </NavbarBrand>
@@ -20,7 +20,7 @@ const NavMobile = () => {
                         <Link
                             className="w-full"
                             color={e.color}
-                            href="#"
+                            href={e.url}
                             size="lg"
                         >
                             {e.name}
