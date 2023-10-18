@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   description: "TagMedX is an open-source web app built with FastAPI, Next.js, and MySQL, designed for medical image tagging."
 }
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="light">
       <body className={inter.className}>
@@ -29,5 +29,3 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     </html>
   )
 }
-
-export default RootLayout

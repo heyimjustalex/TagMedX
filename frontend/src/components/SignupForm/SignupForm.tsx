@@ -1,11 +1,12 @@
 "use client"
 import React, { useMemo, useState } from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input, Link } from "@nextui-org/react";
+import RouteLink from "next/link";
 
 import { defaultSignupData, ISignupErrorData } from "./SignupFormConsts";
 import { checkEmail, checkPassword, handleSignUp } from "./SignupFormUtils";
 
-const SignupForm = () => {
+export default function SignupForm () {
 
     const [data, setData] = useState(defaultSignupData);
     const [validation, setValidation] = useState(false);
@@ -79,6 +80,8 @@ const SignupForm = () => {
                     className="flex"
                     variant="light"
                     color="primary"
+                    as={RouteLink}
+                    href="/login"
                 >
                     Login
                 </Button>
@@ -95,5 +98,3 @@ const SignupForm = () => {
         </Card>
     )
 }
-
-export default SignupForm

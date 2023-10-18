@@ -5,7 +5,7 @@ import {Navbar, NavbarMenuToggle, NavbarContent } from "@nextui-org/react";
 import NavMobile from "../NavMobile/NavMobile";
 import NavDesktop from "../NavDesktop/NavDesktop";
 
-const Nav = () => {
+export default function Nav () {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
@@ -23,5 +23,3 @@ const Nav = () => {
         </Navbar>
     );
 }
-
-export default Nav;

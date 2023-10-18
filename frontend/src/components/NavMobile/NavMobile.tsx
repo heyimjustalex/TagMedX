@@ -1,16 +1,17 @@
 import { NavbarBrand, NavbarMenuItem, NavbarMenu, NavbarContent } from "@nextui-org/navbar";
 import { Link } from "@nextui-org/link";
+import RouteLink from "next/link";
 
 import { menuItems } from "./NavMobileConsts";
 
-const NavMobile = () => {
+export default function NavMobile () {
     return (
         <>
             <NavbarContent className="sm:hidden w-full flex-center flex-col" justify="center">
                 <NavbarBrand>
-                    <Link href="/" className="font-bold text-inherit">
+                    <RouteLink href="/" className="font-bold text-inherit">
                         TagMedX
-                    </Link>
+                    </RouteLink>
                 </NavbarBrand>
             </NavbarContent>
 
@@ -22,6 +23,7 @@ const NavMobile = () => {
                             color={e.color}
                             href={e.url}
                             size="lg"
+                            as={RouteLink}
                         >
                             {e.name}
                         </Link>
@@ -31,5 +33,3 @@ const NavMobile = () => {
         </>
     )
 }
-
-export default NavMobile
