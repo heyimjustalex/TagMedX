@@ -1,6 +1,7 @@
 import { NavbarBrand, NavbarItem, NavbarContent } from "@nextui-org/navbar";
 import { Button } from "@nextui-org/button";
 import { Link } from "@nextui-org/link";
+import RouteLink from "next/link";
 
 import { menuItems } from "./NavDesktopConsts";
 
@@ -9,13 +10,13 @@ const NavDesktop = () => {
         <>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
                 <NavbarBrand>
-                    <Link href="/" className="font-bold text-inherit">
+                    <RouteLink href="/" className="font-bold text-inherit">
                         TagMedX
-                    </Link>
+                    </RouteLink>
                 </NavbarBrand>
                 {menuItems.map((e, i) => (
                     <NavbarItem key={`${e.url}-${i}`}>
-                        <Link href={e.url} color={e.color}>
+                        <Link as={RouteLink} href={e.url} color={e.color}>
                             {e.name}
                         </Link>
                     </NavbarItem>
@@ -24,10 +25,12 @@ const NavDesktop = () => {
 
             <NavbarContent className="hidden sm:flex" justify="end">
                 <NavbarItem>
-                    <Link href="/signup" size="sm">Sign Up</Link>
+                    <Link as={RouteLink} href="/signup">
+                        Sign Up
+                    </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Button as={Link} color="primary" href="/login" variant="solid">
+                    <Button as={RouteLink} color="primary" href="/login" variant="solid">
                         Login
                     </Button>
                 </NavbarItem>

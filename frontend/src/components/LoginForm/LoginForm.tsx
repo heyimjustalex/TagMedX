@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input, Link } from "@nextui-org/react";
+import RouteLink from "next/link";
 
 import { defaultLoginData } from "./LoginFormConsts";
 import { handleLogin } from "./LoginFormUtils";
@@ -40,7 +41,7 @@ const LoginForm = () => {
                     className="flex"
                     variant="light"
                     color="primary"
-                    as={Link}
+                    as={RouteLink}
                     href="/signup"
                 >
                     Sign Up
