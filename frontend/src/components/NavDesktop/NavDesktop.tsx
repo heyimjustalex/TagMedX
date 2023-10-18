@@ -15,7 +15,7 @@ const NavDesktop = () => {
                 </NavbarBrand>
                 {menuItems.map((e, i) => (
                     <NavbarItem key={`${e.url}-${i}`}>
-                        <Link href="#" color={e.color}>
+                        <Link href={e.url} color={e.color}>
                             {e.name}
                         </Link>
                     </NavbarItem>
@@ -24,7 +24,7 @@ const NavDesktop = () => {
 
             <NavbarContent className="hidden sm:flex" justify="end">
                 <NavbarItem>
-                    <Link href="/signup">Sign Up</Link>
+                    <Link href="/signup" size="sm">Sign Up</Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Button as={Link} color="primary" href="/login" variant="solid">
