@@ -199,12 +199,13 @@ docker-compose -f docker-compose_all.yml up --build
 
 ### Project structure
 
-Frontend source folder is divided into 3 main folders: app, components, consts. App folder defines app structure. Components contains subfolders with components. Consts folder is intended for global consts and interfaces. Frontend is dockerized and avaliable at localhost:3000.
+Frontend source folder is divided into 4 main folders: app, assets, components, consts. App folder defines app structure. Assets stores media files. Components contains subfolders with components. Consts folder is intended for global consts and interfaces. Frontend is dockerized and avaliable at localhost:3000.
 
 ```
 ├── frontend                  <- Next.js frontend
 │   ├── src                   <- Source folder
 |   |   ├── app               <- App structure
+|   |   ├── assets            <- Media folder
 |   |   ├── components        <- Components folder
 |   |   ├── consts            <- Consts folder
 │   ├── public                <- Media folder
