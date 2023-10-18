@@ -24,11 +24,11 @@ const NavDesktop = () => {
 
             <NavbarContent className="hidden sm:flex" justify="end">
                 <NavbarItem>
-                    <Link href="#">Login</Link>
+                    <Link href="/signup">Sign Up</Link>
                 </NavbarItem>
                 <NavbarItem>
                     <Button as={Link} color="primary" href="#" variant="solid">
-                        Sign Up
+                        Login
                     </Button>
                 </NavbarItem>
             </NavbarContent>

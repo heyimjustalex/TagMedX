@@ -20,7 +20,7 @@ const NavMobile = () => {
                         <Link
                             className="w-full"
                             color={e.color}
-                            href="#"
+                            href={e.url}
                             size="lg"
                         >
                             {e.name}

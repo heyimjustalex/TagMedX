@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/button"
 
-const Home = () => {
+const HomePage = () => {
   return (
     <section className="w-full flex flex-center flex-col mt-20 items-center">
       <h1 className="head-text text-center">
@@ -15,4 +15,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default HomePage
