@@ -193,7 +193,7 @@ docker-compose -f docker-compose_all.yml up --build
 
 <br>
 
-- Components: camelCase, () => {}
+- Components: camelCase, function() {}
 - Functions: camelCase, function() {}
 - CSS classes: dash-case (ex. class-name__sub-class--variant)
 
