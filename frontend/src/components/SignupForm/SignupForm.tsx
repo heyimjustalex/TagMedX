@@ -1,6 +1,6 @@
 "use client"
 import React, { useMemo, useState } from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input, Link } from "@nextui-org/react";
 
 import { defaultSignupData, ISignupErrorData } from "./SignupFormConsts";
 import { checkEmail, checkPassword, handleSignUp } from "./SignupFormUtils";
@@ -79,6 +79,8 @@ const SignupForm = () => {
                     className="flex"
                     variant="light"
                     color="primary"
+                    as={Link}
+                    href="/login"
                 >
                     Login
                 </Button>
