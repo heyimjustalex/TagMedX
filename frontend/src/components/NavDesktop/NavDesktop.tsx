@@ -5,7 +5,7 @@ import RouteLink from "next/link";
 
 import { menuItems } from "./NavDesktopConsts";
 
-const NavDesktop = () => {
+export default function NavDesktop () {
     return (
         <>
             <NavbarContent className="hidden sm:flex gap-4" justify="center">
@@ -38,5 +38,3 @@ const NavDesktop = () => {
         </>
     )
 }
-
-export default NavDesktop

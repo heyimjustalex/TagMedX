@@ -4,7 +4,7 @@ import RouteLink from "next/link";
 
 import { menuItems } from "./NavMobileConsts";
 
-const NavMobile = () => {
+export default function NavMobile () {
     return (
         <>
             <NavbarContent className="sm:hidden w-full flex-center flex-col" justify="center">
@@ -33,5 +33,3 @@ const NavMobile = () => {
         </>
     )
 }
-
-export default NavMobile

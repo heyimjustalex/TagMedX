@@ -6,7 +6,7 @@ import RouteLink from "next/link";
 import { defaultLoginData } from "./LoginFormConsts";
 import { handleLogin } from "./LoginFormUtils";
 
-const LoginForm = () => {
+export default function LoginForm() {
 
     const [data, setData] = useState(defaultLoginData);
     const [sent, setSent] = useState(false);
@@ -59,5 +59,3 @@ const LoginForm = () => {
         </Card>
     )
 }
-
-export default LoginForm

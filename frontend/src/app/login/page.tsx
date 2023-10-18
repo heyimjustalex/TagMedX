@@ -2,12 +2,10 @@ import React from "react"
 
 import LoginForm from "@/components/LoginForm/LoginForm"
 
-const LoginPage = () => {
+export default function LoginPage() {
     return (
         <section className="page">
             <LoginForm />
         </section>
     )
 }
-
-export default LoginPage

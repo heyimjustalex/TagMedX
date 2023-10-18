@@ -6,7 +6,7 @@ import RouteLink from "next/link";
 import { defaultSignupData, ISignupErrorData } from "./SignupFormConsts";
 import { checkEmail, checkPassword, handleSignUp } from "./SignupFormUtils";
 
-const SignupForm = () => {
+export default function SignupForm () {
 
     const [data, setData] = useState(defaultSignupData);
     const [validation, setValidation] = useState(false);
@@ -98,5 +98,3 @@ const SignupForm = () => {
         </Card>
     )
 }
-
-export default SignupForm

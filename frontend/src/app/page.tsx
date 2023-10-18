@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/button"
 
-const HomePage = () => {
+export default function HomePage() {
   return (
     <section className="page flex-col">
       <h1 className="head-text text-center">
@@ -14,5 +14,3 @@ const HomePage = () => {
     </section>
   )
 }
-
-export default HomePage
