@@ -5,7 +5,7 @@ from models.models import User
 from typing import List, Literal
 from features.exceptions.definitions.definitions import *
 from passlib.context import CryptContext
-from fastapi import status
+from fastapi import status, HTTPException
 
 # Inside services we want to use implementiations of our own exceptions
 # exceptions located in ./features/exceptions/definitions
