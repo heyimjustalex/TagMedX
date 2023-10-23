@@ -9,6 +9,7 @@ from ..schemas.user_schema import (
     ErrorResponse,
     UserListResponse,
     UserCreate,
+    RegisterResponse,
 )
 
 router = APIRouter()
@@ -43,7 +44,7 @@ async def read_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     )
 
 
-@router.post("/api/register/")
+@router.post("/api/register/", response_model=RegisterResponse)
 async def register_user(new_user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     user_service.register_user(
@@ -55,4 +56,4 @@ async def register_user(new_user: UserCreate, db: Annotated[Session, Depends(get
         desc=new_user.description,
         exp=new_user.experience,
     )
-    return {"message": "user created successfully"}
+    return RegisterResponse(message="User created successfully.")

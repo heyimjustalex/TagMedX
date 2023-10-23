@@ -18,6 +18,10 @@ class ErrorResponse(BaseModel):
     message: str
 
 
+class RegisterResponse(BaseModel):
+    message: str
+
+
 class UserCreate(BaseModel):
     email: str
     password: str
