@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from features.users.controllers.user_controller import router as user_router
 from features.authorization.controllers.token_controller import router as auth_router
+from features.groups.controllers.group_controller import router as group_router
 import mysql.connector
 from features.exceptions.handlers.handlers import *
 from features.exceptions.definitions.definitions import *
@@ -35,7 +36,9 @@ except mysql.connector.Error as e:
 app = FastAPI()
 # Include custom exception handler with our own exception
 app.exception_handler(UserNotFoundException)(user_not_found_exception_handler)
+app.exception_handler(GroupNotFoundException)(group_not_found_exception_handler)
 
 # Include the user router in your app
 app.include_router(user_router)
 app.include_router(auth_router)
+app.include_router(group_router)
