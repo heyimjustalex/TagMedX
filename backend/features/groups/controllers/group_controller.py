@@ -2,7 +2,6 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, MembershipCreate, User
-from features.exceptions.definitions.definitions import GroupNotFoundException, UserNotFoundException
 from ..services.group_service import GroupService, UserService
 from connectionDB.session import get_db
 
@@ -25,8 +24,6 @@ def get_groups(db: Session = Depends(get_db)):
 def get_group(group_id: int, db: Session = Depends(get_db)):
     group_service = GroupService(db)
     group = group_service.get_group(group_id)
-    if not group:
-        raise GroupNotFoundException(status_code=404, detail="Group not found")
     return group
 
 
@@ -34,8 +31,6 @@ def get_group(group_id: int, db: Session = Depends(get_db)):
 def update_group(group_id: int, group: GroupUpdate, db: Session = Depends(get_db)):
     group_service = GroupService(db)
     updated_group = group_service.update_group(group_id, group)
-    if not updated_group:
-        raise GroupNotFoundException(status_code=404, detail="Group not found")
     return updated_group
 
 
@@ -43,8 +38,6 @@ def update_group(group_id: int, group: GroupUpdate, db: Session = Depends(get_db
 def delete_group(group_id: int, db: Session = Depends(get_db)):
     group_service = GroupService(db)
     deleted_group = group_service.delete_group(group_id)
-    if not deleted_group:
-        raise GroupNotFoundException(status_code=404, detail="Group not found")
     return deleted_group
 
 
@@ -52,17 +45,11 @@ def delete_group(group_id: int, db: Session = Depends(get_db)):
 def add_user_to_group(group_id: int, user_id: int, db: Session = Depends(get_db)):
     group_service = GroupService(db)
     group = group_service.get_group(group_id)
-    if not group:
-        raise GroupNotFoundException(status_code=404, detail="Group not found")
-
-    user_service = UserService()
-    user = user_service.get_user_id(db, user_id)
-    if not user:
-        raise UserNotFoundException(status_code=404, detail="Users not found")
-
+    user_service = UserService(db)
+    user_service.get_user_id(user_id)
     membership_service = GroupService(db)
     membership_data = MembershipCreate(id_user=user_id, id_group=group_id)
-    membership_service.add_membership(db, membership_data)
+    membership_service.add_membership(membership_data)
 
     return group
 
@@ -71,18 +58,12 @@ def add_user_to_group(group_id: int, user_id: int, db: Session = Depends(get_db)
 def remove_user_from_group(group_id: int, user_id: int, db: Session = Depends(get_db)):
     group_service = GroupService(db)
     removed_group = group_service.remove_user_from_group(group_id, user_id)
-    if not removed_group:
-        raise GroupNotFoundException(status_code=404, detail="Group not found")
     return removed_group
 
 
 @router.get("/api/groups/{group_id}/users", response_model=List[User])
 def get_users_in_group(group_id: int, db: Session = Depends(get_db)):
     group_service = GroupService(db)
-    group = group_service.get_group(group_id)
-
-    if not group:
-        raise GroupNotFoundException(status_code=404, detail="Group not found")
-
-    users = group_service.get_users_in_group(db, group_id)
+    group_service.get_group(group_id)
+    users = group_service.get_users_in_group(group_id)
     return users

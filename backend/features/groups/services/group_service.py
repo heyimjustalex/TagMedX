@@ -1,73 +1,65 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import func
-from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, Membership, MembershipCreate
-from models.models import Group, User, Membership
+from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, MembershipCreate
 from features.exceptions.definitions.definitions import *
+from repositories.group_repository import GroupRepository, UserRepository
 
 
 class GroupService:
     def __init__(self, db: Session):
         self.db = db
+        self.group_repository = GroupRepository(db)
 
     def create_group(self, group: GroupCreate):
-        max_group_id = self.db.query(
-            func.max(Group.id)).scalar() or 0
-        new_group_id = max_group_id + 1
-
-        db_group = Group(id=new_group_id, **group.dict())
-        self.db.add(db_group)
-        self.db.commit()
-        self.db.refresh(db_group)
-        return db_group
+        return self.group_repository.create_group(group)
 
     def get_groups(self):
-        return self.db.query(Group).all()
+        return self.group_repository.get_groups()
 
     def get_group(self, group_id: int):
-        return self.db.query(Group).filter(Group.id == group_id).first()
+        group = self.group_repository.get_group(group_id)
+        if not group:
+            raise GroupNotFoundException(status_code=404, detail="Group not found")
+        return group
 
-    def get_users_in_group(self, db: Session, group_id: int):
-        memberships = db.query(Membership.id_user).filter(Membership.id_group == group_id).all()
-        user_ids = [membership.id_user for membership in memberships]
-
-        users = db.query(User).filter(User.id.in_(user_ids)).all()
+    def get_users_in_group(self, group_id: int):
+        users = self.group_repository.get_users_in_group(group_id)
+        if not users:
+            raise UserNotFoundException(status_code=404, detail="No users found in the group")
         return users
 
     def get_users_id(self, user_id: int):
-        return self.db.query(User).filter(User.id == user_id).first()
+        return self.group_repository.get_users_id(user_id)
 
     def update_group(self, group_id: int, group: GroupUpdate):
-        db_group = self.get_group(group_id)
-        if db_group:
-            for key, value in group.dict().items():
-                setattr(db_group, key, value)
-            self.db.commit()
-            self.db.refresh(db_group)
-        return db_group
+        updated_group = self.group_repository.update_group(group_id, group)
+        if not updated_group:
+            raise GroupNotFoundException(status_code=404, detail="Group not found")
+        return updated_group
 
     def delete_group(self, group_id: int):
-        db_group = self.get_group(group_id)
-        if db_group:
-            self.db.delete(db_group)
-            self.db.commit()
-        return db_group
+        deleted_group = self.group_repository.delete_group(group_id)
+        if not deleted_group:
+            raise GroupNotFoundException(status_code=404, detail="Group not found")
+        return deleted_group
 
-    def add_membership(self, db: Session, membership_data: MembershipCreate):
-        membership = Membership(**membership_data.dict())
-        db.add(membership)
-        db.commit()
-        db.refresh(membership)
-        return membership
+    def add_membership(self, membership_data: MembershipCreate):
+        try:
+            return self.group_repository.add_membership(membership_data)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail="Failed to add membership")
 
     def remove_user_from_group(self, group_id: int, user_id: int):
-        membership = self.db.query(Membership).filter(Membership.id_user == user_id,
-                                                      Membership.id_group == group_id).first()
-        if membership:
-            self.db.delete(membership)
-            self.db.commit()
-        return self.get_group(group_id)
+        removed_group = self.group_repository.remove_user_from_group(group_id, user_id)
+        if not removed_group:
+            raise GroupNotFoundException(status_code=404, detail="Group not found")
+        return removed_group
 
 
 class UserService:
-    def get_user_id(self, db: Session, user_id: int):
-        return db.query(User).filter(User.id == user_id).first()
+    def __init__(self, db: Session):
+        self.db = db
+        self.user_repository = UserRepository(db)
+
+    def get_user_id(self, user_id: int):
+        return self.user_repository.get_user_id(user_id)
