@@ -18,9 +18,9 @@ class User(Base):
     name = mapped_column(String)
     surname = mapped_column(String)
     title = mapped_column(String)
-    role = mapped_column(String, nullable=False, default="User")
-    description = mapped_column(String)
-    experience = mapped_column(String)
+    
+    specialization = mapped_column(String)
+    practice_start_year = mapped_column(Integer)
 
     # Define the one-to-many relationship with Membership
     Membership = relationship("Membership", back_populates="User")
@@ -34,6 +34,7 @@ class Membership(Base):
 
     id_user = mapped_column(Integer, ForeignKey("User.id"), primary_key=True)
     id_group = mapped_column(Integer, ForeignKey("Group.id"), primary_key=True)
+    role = mapped_column(String, nullable=False, default="User")
 
     # Define the many-to-one relationship with User
     User = relationship("User", back_populates="Membership")

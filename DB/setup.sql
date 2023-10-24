@@ -7,9 +7,8 @@ CREATE TABLE `User` (
   name VARCHAR(255),
   surname VARCHAR(255),
   title VARCHAR(255),
-  role VARCHAR(255) NOT NULL,
-  description VARCHAR(255),
-  experience VARCHAR(255),
+  specialization VARCHAR(255),
+  practice_start_year INT,
   PRIMARY KEY (id)
 );
 
@@ -34,6 +33,7 @@ CREATE TABLE `Task` (
 CREATE TABLE `Membership` (
   id_user INT NOT NULL,
   id_group INT NOT NULL,
+  role VARCHAR(255) NOT NULL,
   PRIMARY KEY (id_user, id_group),
   FOREIGN KEY (id_user) REFERENCES `User`(id),
   FOREIGN KEY (id_group) REFERENCES `Group`(id)
@@ -83,13 +83,13 @@ CREATE TABLE `BBox` (
 );
 
 
-INSERT INTO `User` (e_mail, password_hash, name, surname, title, role, description, experience)
+INSERT INTO `User` (e_mail, password_hash, name, surname, title, specialization, practice_start_year)
 VALUES
-    ('user1@example.com', 'hash1', 'John', 'Doe', 'Mr.', 'User', 'Description 1', 'Experience 1'),
-    ('user2@example.com', 'hash2', 'Jane', 'Smith', 'Ms.', 'User', 'Description 2', 'Experience 2'),
-    ('user3@example.com', 'hash3', 'Alice', 'Johnson', 'Dr.', 'Admin', 'Description 3', 'Experience 3'),
-    ('user4@example.com', 'hash4', 'Bob', 'Wilson', 'Mr.', 'User', 'Description 4', 'Experience 4'),
-    ('user5@example.com', 'hash5', 'Eve', 'Davis', 'Ms.', 'User', 'Description 5', 'Experience 5');
+    ('user1@example.com', 'hash1', 'John', 'Doe', 'Mr.',  'specialization 1', 2000),
+    ('user2@example.com', 'hash2', 'Jane', 'Smith', 'Ms.', 'specialization 2',2002),
+    ('user3@example.com', 'hash3', 'Alice', 'Johnson', 'Dr.',  'specialization 3', 2012),
+    ('user4@example.com', 'hash4', 'Bob', 'Wilson', 'Mr.', 'specialization 4', 2023),
+    ('user5@example.com', 'hash5', 'Eve', 'Davis', 'Ms.', 'specialization 5', 2020);
 
 
 INSERT INTO `Group` (name, description)
@@ -110,13 +110,13 @@ VALUES
     (5, 4, 'Task 5', 'Task Description 5', 'Type B');
 
 
-INSERT INTO `Membership` (id_user, id_group)
+INSERT INTO `Membership` (id_user, id_group, role)
 VALUES
-    (1, 1),
-    (2, 1),
-    (2, 2),
-    (3, 2),
-    (4, 3);
+    (1, 1, 'User'),
+    (2, 1,'Admin'),
+    (2, 2,'User'),
+    (3, 2,'Admin'),
+    (4, 3,'Admin');
 
 
 INSERT INTO `Sample` (id_task, path, format)
