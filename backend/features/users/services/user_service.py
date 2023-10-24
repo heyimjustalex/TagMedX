@@ -2,7 +2,7 @@ import re
 from sqlalchemy.orm import Session
 from repositories.user_repository import UserRepository
 from models.models import User
-from typing import List, Literal
+from typing import List
 from features.exceptions.definitions.definitions import *
 from passlib.context import CryptContext
 from fastapi import status, HTTPException
@@ -72,10 +72,6 @@ class UserService:
         password: str,
         name: str | None = None,
         surname: str | None = None,
-        title: str | None = None,
-        role: Literal["User", "Admin"] = "User",
-        desc: str | None = None,
-        exp: str | None = None,
     ):
         if not valid_email(email):
             raise HTTPException(
@@ -100,9 +96,5 @@ class UserService:
         user.password_hash = get_password_hash(password)
         user.name = name
         user.surname = surname
-        user.title = title
-        user.role = role
-        user.description = desc
-        user.experience = exp
 
         self.repository.create_user(user)

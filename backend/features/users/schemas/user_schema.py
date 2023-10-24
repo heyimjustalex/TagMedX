@@ -27,6 +27,3 @@ class UserCreate(BaseModel):
     password: str
     name: str | None = None
     surname: str | None = None
-    title: str | None = None
-    description: str | None = None
-    experience: str | None = None

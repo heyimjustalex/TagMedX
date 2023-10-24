@@ -52,8 +52,5 @@ async def register_user(new_user: UserCreate, db: Annotated[Session, Depends(get
         password=new_user.password,
         name=new_user.name,
         surname=new_user.surname,
-        title=new_user.title,
-        desc=new_user.description,
-        exp=new_user.experience,
     )
     return RegisterResponse(message="User created successfully.")
