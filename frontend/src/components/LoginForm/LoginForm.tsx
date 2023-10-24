@@ -53,7 +53,7 @@ export default function LoginForm() {
                     onClick={() => handleLogin(setSent, data)}
                     isLoading={sent}
                 >
-                    Login
+                    Login2
                 </Button>
             </CardFooter>
         </Card>
