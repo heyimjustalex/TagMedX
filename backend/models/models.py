@@ -49,7 +49,7 @@ class Group(Base):
     id = mapped_column(Integer, primary_key=True)
     name = mapped_column(String, nullable=False)
     description = mapped_column(String, nullable=False)
-
+    connection_string = mapped_column(String)
     # Define the one-to-many relationship with Task
     Task = relationship("Task", back_populates="Group")
 
@@ -66,6 +66,7 @@ class Task(Base):
     name = mapped_column(String)
     description = mapped_column(String)
     type = mapped_column(String)
+    
 
     # Define the many-to-one relationship with Group
     Group = relationship("Group", back_populates="Task")

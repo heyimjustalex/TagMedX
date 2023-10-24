@@ -16,6 +16,7 @@ CREATE TABLE `Group` (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
   description VARCHAR(255) NOT NULL,
+  connection_string VARCHAR (255) NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -92,13 +93,13 @@ VALUES
     ('user5@example.com', 'hash5', 'Eve', 'Davis', 'Ms.', 'specialization 5', 2020);
 
 
-INSERT INTO `Group` (name, description)
+INSERT INTO `Group` (name, description,connection_string)
 VALUES
-    ('Group 1', 'Description 1'),
-    ('Group 2', 'Description 2'),
-    ('Group 3', 'Description 3'),
-    ('Group 4', 'Description 4'),
-    ('Group 5', 'Description 5');
+    ('Group 1', 'Description 1','password1'),
+    ('Group 2', 'Description 2','password2'),
+    ('Group 3', 'Description 3','password3'),
+    ('Group 4', 'Description 4','password4'),
+    ('Group 5', 'Description 5','password5');
 
 
 INSERT INTO `Task` (id_group, max_samples_for_user, name, description, type)
