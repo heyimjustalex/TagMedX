@@ -71,7 +71,9 @@ The structure of the database is as follows:
 - Fields: id, id_task, path, format
 - Purpose: Represents samples, which contain information about added photos to be examined.
 - Relationships: 
-  - Many-to-One with Task       
+  - Many-to-One with Task
+  - Many-to-One with User - each sample has a user that it was firstly assigned to
+  - One-to-Many with Examination - each sample might have different examination by different users, with different BBox        
 
 **Examination:**
 - Fields: id, id_user, id_sample, to_further_verification, bad_quality
