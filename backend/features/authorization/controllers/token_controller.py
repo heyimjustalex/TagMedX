@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from ...users.services.user_service import UserService
 from connectionDB.session import get_db
 from ..services.token_service import TokenService
-from ..schemas.token_schema import TokenResponse, TokenCreate
+from ..schemas.token_schema import TokenCreate
 from ...users.schemas.user_schema import UserResponse
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -14,7 +14,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 router = APIRouter()
 
 
-@router.post("/api/login/", tags=["Authorization"], response_model=TokenResponse)
+@router.post("/api/login/", tags=["Authorization"], response_model=UserResponse)
 async def login(
     form_data: TokenCreate,
     db: Annotated[Session, Depends(get_db)],
