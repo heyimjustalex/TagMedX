@@ -43,10 +43,12 @@ CREATE TABLE `Membership` (
 CREATE TABLE `Sample` (
   id INT NOT NULL AUTO_INCREMENT,
   id_task INT NOT NULL,
+  id_user INT,
   path VARCHAR(255),
   format VARCHAR(255),
   PRIMARY KEY (id),
-  FOREIGN KEY (id_task) REFERENCES `Task`(id)
+  FOREIGN KEY (id_task) REFERENCES `Task`(id),
+  FOREIGN KEY (id_user) REFERENCES `User`(id)
 );
 
 CREATE TABLE `Examination` (
@@ -120,13 +122,13 @@ VALUES
     (4, 3,'Admin');
 
 
-INSERT INTO `Sample` (id_task, path, format)
+INSERT INTO `Sample` (id_task,id_user, path, format)
 VALUES
-    (1, '/path/to/sample1', 'Format A'),
-    (2, '/path/to/sample2', 'Format B'),
-    (3, '/path/to/sample3', 'Format A'),
-    (4, '/path/to/sample4', 'Format C'),
-    (2, '/path/to/sample5', 'Format B');
+    (1, NULL, '/path/to/sample1', 'Format A'),
+    (2, NULL, '/path/to/sample2', 'Format B'),
+    (3, NULL, '/path/to/sample3', 'Format A'),
+    (4, NULL, '/path/to/sample4', 'Format C'),
+    (2, NULL, '/path/to/sample5', 'Format B');
 
 
 INSERT INTO `Examination` (id_user, id_sample, to_further_verification, bad_quality)
