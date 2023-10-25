@@ -17,8 +17,7 @@ class User(Base):
     password_hash = mapped_column(String, nullable=False)
     name = mapped_column(String)
     surname = mapped_column(String)
-    title = mapped_column(String)
-    
+    title = mapped_column(String)    
     specialization = mapped_column(String)
     practice_start_year = mapped_column(Integer)
 
@@ -83,12 +82,14 @@ class Sample(Base):
 
     id = mapped_column(Integer, primary_key=True)
     id_task = mapped_column(Integer, ForeignKey("Task.id"), nullable=False)
+    id_user = mapped_column(Integer, ForeignKey("User.id"), nullable=True)
     path = mapped_column(String)
     format = mapped_column(String)
 
     # Define the many-to-one relationship with Task
     Task = relationship("Task", back_populates="Sample")
-
+    # Define the many-to-one relationship with User
+    User = relationship("User", back_populates="Sample")
     # Define the one-to-many relationship with Examination
     Examination = relationship("Examination", back_populates="Sample")
 

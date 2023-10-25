@@ -5,9 +5,8 @@ Table User {
   name varchar
   surname varchar
   title varchar
-  role varchar
-  decription varchar
-  experience varchar
+  specialization varchar
+  practice_start_year integer
 
 }
 
@@ -23,7 +22,7 @@ Table Task {
   id_group integer
   max_samples_for_user integer
   name varchar
-  decription varchar
+  description varchar
   type varchar
 
 }
@@ -31,6 +30,7 @@ Table Task {
 Table Membership{
   id_user integer
   id_group integer
+  role varchar
 }
 
 
@@ -38,6 +38,7 @@ Table Sample
 {
   id integer [ primary key ]
   id_task integer
+  id_user integer
   path varchar
   format varchar
 
@@ -108,3 +109,5 @@ Ref: "Sample"."id" < "Examination"."id_sample"
 Ref: "Task"."id" < "Label"."id_task"
 
 Ref: "Label"."id" < "BBox"."label_id"
+
+Ref: "User"."id" < "Sample"."id_user"
