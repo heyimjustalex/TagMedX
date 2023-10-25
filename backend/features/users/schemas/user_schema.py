@@ -7,7 +7,7 @@ from typing import List
 class UserResponse(BaseModel):
     user_id: int
     name: str
-    password_hash: str
+    surname: str
 
 
 class UserListResponse(BaseModel):

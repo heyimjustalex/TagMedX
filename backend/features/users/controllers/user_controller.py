@@ -21,7 +21,7 @@ async def read_users(db: Annotated[Session, Depends(get_db)]):
     users = user_service.get_users()
 
     user_responses = [
-        UserResponse(user_id=user.id, name=user.name, password_hash=user.password_hash)
+        UserResponse(user_id=user.id, name=user.name, surname=user.surname)
         for user in users
     ]
 
@@ -40,7 +40,7 @@ async def read_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     # exception handling moved to service (so there is no if in controller)
     user = user_service.get_user(user_id)
     return UserResponse(
-        user_id=user.id, name=user.name, password_hash=user.password_hash
+        user_id=user.id, name=user.name, surname=user.surname
     )
 
 
