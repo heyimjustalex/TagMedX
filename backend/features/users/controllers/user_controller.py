@@ -15,7 +15,7 @@ from ..schemas.user_schema import (
 router = APIRouter()
 
 
-@router.get("/api/users/", response_model=UserListResponse)
+@router.get("/api/users/", tags=["Users"], response_model=UserListResponse)
 async def read_users(db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     users = user_service.get_users()
@@ -34,7 +34,7 @@ async def read_users(db: Annotated[Session, Depends(get_db)]):
         return [ErrorResponse(message="Users not found")]
 
 
-@router.get("/api/users/{user_id}", response_model=UserResponse)
+@router.get("/api/users/{user_id}", tags=["Users"], response_model=UserResponse)
 async def read_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     # exception handling moved to service (so there is no if in controller)
@@ -44,7 +44,7 @@ async def read_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     )
 
 
-@router.post("/api/register/", response_model=RegisterResponse)
+@router.post("/api/register/", tags=["Authorization"], response_model=RegisterResponse)
 async def register_user(new_user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     user_service.register_user(

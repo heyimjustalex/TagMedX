@@ -14,7 +14,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 router = APIRouter()
 
 
-@router.post("/api/login/", response_model=TokenResponse)
+@router.post("/api/login/", tags=["Authorization"], response_model=TokenResponse)
 async def login(
     form_data: TokenCreate,
     db: Annotated[Session, Depends(get_db)],
