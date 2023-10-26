@@ -15,13 +15,13 @@ from ..schemas.user_schema import (
 router = APIRouter()
 
 
-@router.get("/api/users/", response_model=UserListResponse)
+@router.get("/api/users/", tags=["Users"], response_model=UserListResponse)
 async def read_users(db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     users = user_service.get_users()
 
     user_responses = [
-        UserResponse(user_id=user.id, name=user.name, password_hash=user.password_hash)
+        UserResponse(user_id=user.id, name=user.name, surname=user.surname)
         for user in users
     ]
 
@@ -34,17 +34,17 @@ async def read_users(db: Annotated[Session, Depends(get_db)]):
         return [ErrorResponse(message="Users not found")]
 
 
-@router.get("/api/users/{user_id}", response_model=UserResponse)
+@router.get("/api/users/{user_id}", tags=["Users"], response_model=UserResponse)
 async def read_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     # exception handling moved to service (so there is no if in controller)
     user = user_service.get_user(user_id)
     return UserResponse(
-        user_id=user.id, name=user.name, password_hash=user.password_hash
+        user_id=user.id, name=user.name, surname=user.surname
     )
 
 
-@router.post("/api/register/", response_model=RegisterResponse)
+@router.post("/api/register/", tags=["Authorization"], response_model=RegisterResponse)
 async def register_user(new_user: UserCreate, db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     user_service.register_user(
@@ -52,8 +52,5 @@ async def register_user(new_user: UserCreate, db: Annotated[Session, Depends(get
         password=new_user.password,
         name=new_user.name,
         surname=new_user.surname,
-        title=new_user.title,
-        desc=new_user.description,
-        exp=new_user.experience,
     )
     return RegisterResponse(message="User created successfully.")
