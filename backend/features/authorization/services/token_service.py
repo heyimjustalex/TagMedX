@@ -4,9 +4,9 @@ from fastapi.security import OAuth2PasswordBearer
 
 SECRET_KEY = "74caa9bf0fa881601db5ea5dfd2db14fd0dbd8908e40118a3a6beba43f75900d"
 ALGORITHM = "HS256"
-DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES = 15
+DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token/")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login/")
 
 
 class TokenService:
