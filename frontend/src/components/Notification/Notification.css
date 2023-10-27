@@ -1,0 +1,6 @@
+.notification {
+    span {
+        width: 15rem;
+        padding: 0 0 0 .5rem;
+    }
+}

@@ -1,4 +1,4 @@
-export {}
+export {};
 
 declare global {
 
@@ -7,4 +7,6 @@ declare global {
         name: string
         surname: string
     }
+
+    // type NextColor = "default" | "primary" | "secondary" | "success" | "warning" | "danger";
 }
