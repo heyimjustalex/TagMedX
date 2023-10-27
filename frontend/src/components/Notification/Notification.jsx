@@ -4,11 +4,9 @@ import React from 'react'
 import { Chip } from "@nextui-org/chip"
 import { IconInfoCircleFilled, IconX } from '@tabler/icons-react';
 
-import { NextColor } from '@/consts/NextColor';
-
 import './Notification.css'
 
-export default function Notification({ type }: { type?: NextColor }) {
+export default function Notification({ type }) {
   return (
     <Chip
         color={type}

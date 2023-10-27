@@ -3,7 +3,7 @@ import React, { useMemo, useState } from "react";
 import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input, Link } from "@nextui-org/react";
 import RouteLink from "next/link";
 
-import { defaultSignupData, ISignupErrorData } from "./SignupFormConsts";
+import { defaultSignupData } from "./SignupFormConsts";
 import { checkEmail, checkPassword, handleSignUp } from "./SignupFormUtils";
 
 export default function SignupForm () {
@@ -18,7 +18,7 @@ export default function SignupForm () {
             surname: data.surname === '',
             email: !checkEmail(data.email),
             password: !checkPassword(data.password)
-        } as ISignupErrorData;
+        };
     }, [data]);
 
     return (

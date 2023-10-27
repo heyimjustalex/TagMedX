@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input, Link } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Input } from "@nextui-org/react";
 import RouteLink from "next/link";
 
 import { defaultLoginData } from "./LoginFormConsts";

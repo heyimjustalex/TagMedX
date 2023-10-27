@@ -1,6 +1,6 @@
-import { Button } from "@nextui-org/button"
-import Notification from "@/components/Notification/Notification"
-import { NextColor } from "@/consts/NextColor"
+// import { Button } from "@nextui-org/button"
+import Notification from "../components/Notification/Notification"
+import { NextColor } from "../consts/NextColor"
 
 export default function HomePage() {
   return (
