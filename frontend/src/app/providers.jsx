@@ -1,11 +1,14 @@
 "use client"
 
-import {NextUIProvider} from "@nextui-org/react";
+import { NextUIProvider } from "@nextui-org/react";
+import { NotificationProvider } from "../contexts/NotificationContext";
 
 export default function Providers({ children }) {
   return (
     <NextUIProvider>
-      {children}
+      <NotificationProvider>
+        {children}
+      </NotificationProvider>
     </NextUIProvider>
   )
 }
