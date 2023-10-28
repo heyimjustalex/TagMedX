@@ -1,6 +1,7 @@
 .notification {
   position: absolute;
   right: 0;
+  color: white!important;
   transform: translate(calc(var(--gone) * (100% + .5rem)), var(--y, 0));
   opacity: calc(1 - var(--gone));
   transition: transform 0.2s ease, opacity 0.2s ease;

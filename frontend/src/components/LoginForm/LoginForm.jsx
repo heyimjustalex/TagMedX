@@ -1,13 +1,17 @@
 'use client'
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input } from '@nextui-org/react';
 import RouteLink from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { defaultLoginData } from './LoginFormConsts';
 import { handleLogin } from './LoginFormUtils';
+import { NotificationContext } from '../../contexts/NotificationContext';
 
 export default function LoginForm() {
 
+  const router = useRouter();
+  const notification = useContext(NotificationContext);
   const [data, setData] = useState(defaultLoginData);
   const [sent, setSent] = useState(false);
 
@@ -50,7 +54,7 @@ export default function LoginForm() {
           className='flex'
           variant='solid'
           color='primary'
-          onClick={() => handleLogin(setSent, data)}
+          onClick={() => handleLogin(setSent, data, router, notification)}
           isLoading={sent}
         >
           Login

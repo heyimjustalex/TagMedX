@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from features.users.controllers.user_controller import router as user_router
 from features.authorization.controllers.token_controller import router as auth_router
 from features.groups.controllers.group_controller import router as group_router
@@ -30,6 +31,11 @@ try:
 except mysql.connector.Error as e:
     print("Error: ", e)
 
+# define CORS domain white list
+origins = [
+  "http://localhost:3000"
+]
+
 
 # this cannot be removed
 
@@ -42,3 +48,12 @@ app.exception_handler(GroupNotFoundException)(group_not_found_exception_handler)
 app.include_router(user_router)
 app.include_router(auth_router)
 app.include_router(group_router)
+
+# Add CORS rules
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
