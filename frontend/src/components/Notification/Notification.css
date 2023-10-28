@@ -1,0 +1,26 @@
+.notification {
+  position: absolute;
+  right: 0;
+  color: white!important;
+  transform: translate(calc(var(--gone) * (100% + .5rem)), var(--y, 0));
+  opacity: calc(1 - var(--gone));
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  z-index: 10;
+
+  span {
+    width: 15rem;
+    padding: 0 0 0 .5rem;
+  }
+}
+
+.notification-context__wrapper {
+  position: fixed;
+  right: .5rem;
+  top: 4.5rem;
+  z-index: 10;
+}
+
+.notification-context__wrapper--relative {
+  position: relative;
+  z-index: 10;
+}
