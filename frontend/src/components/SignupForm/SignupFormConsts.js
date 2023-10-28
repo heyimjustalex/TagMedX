@@ -1,6 +1,6 @@
 export const defaultSignupData = {
-    name: '',
-    surname: '',
-    email: '',
-    password: ''
+  name: '',
+  surname: '',
+  email: '',
+  password: ''
 };

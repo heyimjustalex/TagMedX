@@ -1,4 +1,4 @@
 export const defaultLoginData = {
-    email: '',
-    password: ''
+  email: '',
+  password: ''
 }
