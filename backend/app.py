@@ -36,18 +36,9 @@ origins = [
   "http://localhost:3000"
 ]
 
-
 # this cannot be removed
 
 app = FastAPI()
-# Include custom exception handler with our own exception
-app.exception_handler(UserNotFoundException)(user_not_found_exception_handler)
-app.exception_handler(GroupNotFoundException)(group_not_found_exception_handler)
-
-# Include the user router in your app
-app.include_router(user_router)
-app.include_router(auth_router)
-app.include_router(group_router)
 
 # Add CORS rules
 app.add_middleware(
@@ -57,3 +48,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include custom exception handler with our own exception
+app.exception_handler(UserNotFoundException)(user_not_found_exception_handler)
+app.exception_handler(GroupNotFoundException)(group_not_found_exception_handler)
+
+# Include the user router in your app
+app.include_router(user_router)
+app.include_router(auth_router)
+app.include_router(group_router)
