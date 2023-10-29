@@ -1,5 +1,6 @@
 from sqlalchemy import ForeignKey, Integer, String, Float, Boolean
-from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column
+from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
+from typing import List
 
 
 class Base(DeclarativeBase):
@@ -26,6 +27,8 @@ class User(Base):
 
     # Define the one-to-many relationship with Examination
     Examination = relationship("Examination", back_populates="User")
+    
+    Samples: Mapped[List["Sample"]] = relationship(back_populates="User")
 
 
 class Membership(Base):
@@ -89,7 +92,7 @@ class Sample(Base):
     # Define the many-to-one relationship with Task
     Task = relationship("Task", back_populates="Sample")
     # Define the many-to-one relationship with User
-    User = relationship("User", back_populates="Sample")
+    User = relationship("User", back_populates="Samples")
     # Define the one-to-many relationship with Examination
     Examination = relationship("Examination", back_populates="Sample")
 
