@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, MembershipCreate
+from ..schemas.group_schema import GroupCreate, GroupUpdate, MembershipCreate
 from features.exceptions.definitions.definitions import *
 from repositories.group_repository import GroupRepository
 
@@ -59,8 +59,8 @@ class GroupService:
             raise GroupNotFoundException(status_code=404, detail="Group not found")
 
         if group.connection_string != connection_string:
-            raise HTTPException(status_code=400, detail="Nieprawidłowy connection string")
+            raise InvalidConnectionString(status_code=400, detail="Invalid connection string")
 
-        membership_data = MembershipCreate(id_user=user_id, id_group=group.id, role="user")
+        membership_data = MembershipCreate(id_user=user_id, id_group=group.id, role="User")
         self.add_membership(membership_data)
         return group

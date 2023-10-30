@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from models.models import Group, User, Membership
+from models.models import Group, User, Membership, Task
 from features.groups.schemas.group_schema import GroupCreate, GroupUpdate, MembershipCreate
 
 
@@ -51,6 +51,8 @@ class GroupRepository:
     def delete_group(self, group_id: int):
         db_group = self.get_group(group_id)
         if db_group:
+            self.db.query(Task).filter(Task.id_group == group_id).delete(synchronize_session=False)
+            self.db.query(Membership).filter(Membership.id_group == group_id).delete(synchronize_session=False)
             self.db.delete(db_group)
             self.db.commit()
         return db_group
