@@ -1,18 +1,17 @@
 'use client'
-import { useContext, useState } from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input } from '@nextui-org/react';
 import RouteLink from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { defaultLoginData } from './LoginFormConsts';
 import { handleLogin } from './LoginFormUtils';
-import { NotificationContext } from '../../contexts/NotificationContext';
 
 export default function LoginForm() {
 
   const router = useRouter();
-  const notification = useContext(NotificationContext);
   const [data, setData] = useState(defaultLoginData);
+  const [error, setError] = useState({ email: false, user: false, password: false })
   const [sent, setSent] = useState(false);
 
   return (
@@ -29,14 +28,24 @@ export default function LoginForm() {
           size='sm'
           label='Email'
           value={data.email}
-          onChange={e => setData(prev => { return { ...prev, email: e.target.value }})}
+          isInvalid={error.email || error.user}
+          errorMessage={error.email ? 'Invalid email.' : error.user ? 'This user does not exist.' : ''}
+          onChange={e => {
+            setData(prev => { return { ...prev, email: e.target.value }})
+            if(error.email || error.user) setError({ email: false, user: false, password: false })
+          }}
         />
         <Input
           type='password'
           size='sm'
           label='Password'
           value={data.password}
-          onChange={e => setData(prev => { return { ...prev, password: e.target.value }})}
+          isInvalid={error.password}
+          errorMessage={error.password ? 'Invalid password.' : null}
+          onChange={e => {
+            setData(prev => { return { ...prev, password: e.target.value }})
+            if(error.password) setError({ email: false, password: false })
+          }}
         />
       </CardBody>
       <Divider/>
@@ -54,7 +63,7 @@ export default function LoginForm() {
           className='flex'
           variant='solid'
           color='primary'
-          onClick={() => handleLogin(setSent, data, router, notification)}
+          onClick={() => handleLogin(setSent, data, setError, router)}
           isLoading={sent}
         >
           Login

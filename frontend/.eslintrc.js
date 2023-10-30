@@ -24,7 +24,6 @@ module.exports = {
     'no-console': ['warn', { allow: ['warn', 'error'] }],
     // Best practices
     'dot-notation': 'error',
-    'no-else-return': 'error',
     'no-floating-decimal': 'error',
     'no-sequences': 'error',
     'no-unused-vars': 'warn',

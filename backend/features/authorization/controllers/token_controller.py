@@ -23,12 +23,14 @@ async def login(
     user = user_service.check_user(form_data.email, form_data.password)
 
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    print(access_token_expires)
     access_token = TokenService.create_access_token(
         data={"sub": user.e_mail}, expires_delta=access_token_expires
     )
 
     user_data = {"user_id": user.id, "name": user.name, "surname": user.surname}
     response = JSONResponse(content=user_data)
-    response.set_cookie(key="token", value=access_token)
+    response.set_cookie(key="token", value=access_token, max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    # response.set_cookie(key="user", value=user_data)
 
     return response

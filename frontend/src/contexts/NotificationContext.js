@@ -50,7 +50,7 @@ const NotificationProvider = ({ children }) => {
   }, [notifications.elements])
 
   return (
-    <NotificationContext.Provider value={{ make, clear, notifications, setNotifications }}>
+    <NotificationContext.Provider value={{ make, clear }}>
       {children}
       <div className='notification-context__wrapper'>
         <div className='notification-context__wrapper--relative'>
