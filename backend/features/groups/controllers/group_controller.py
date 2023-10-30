@@ -10,7 +10,6 @@ from features.authorization.services.token_service import TokenService, UserData
 router = APIRouter()
 
 
-
 @router.post("/api/groups/create", tags=["Groups"], response_model=Group)
 def create_group(group: GroupCreate, db: Session = Depends(get_db),
                  user_data: UserData = Depends(TokenService.get_user_data)):
@@ -18,7 +17,6 @@ def create_group(group: GroupCreate, db: Session = Depends(get_db),
     group_service = GroupService(db)
     group = group_service.create_group(group, creator_user_id)
     return group
-
 
 
 @router.get("/api/groups", tags=["Groups"], response_model=List[Group])

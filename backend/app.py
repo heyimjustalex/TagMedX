@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from features.users.controllers.user_controller import router as user_router
 from features.authorization.controllers.token_controller import router as auth_router
 from features.groups.controllers.group_controller import router as group_router
+from features.tasks.controllers.task_controller import router as task_router
 import mysql.connector
 from features.exceptions.handlers.handlers import *
 from features.exceptions.definitions.definitions import *
@@ -52,8 +53,11 @@ app.add_middleware(
 # Include custom exception handler with our own exception
 app.exception_handler(UserNotFoundException)(user_not_found_exception_handler)
 app.exception_handler(GroupNotFoundException)(group_not_found_exception_handler)
+app.exception_handler(InvalidConnectionString)(invalid_connection_string)
+app.exception_handler(PermissionDenied)(permission_denied)
 
 # Include the user router in your app
 app.include_router(user_router)
 app.include_router(auth_router)
 app.include_router(group_router)
+app.include_router(task_router)
