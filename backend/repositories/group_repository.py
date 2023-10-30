@@ -8,15 +8,23 @@ class GroupRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def create_group(self, group: GroupCreate):
+    def create_group(self, group: GroupCreate, creator_user_id: int):
         max_group_id = self.db.query(func.max(Group.id)).scalar() or 0
         new_group_id = max_group_id + 1
 
-        db_group = Group(id=new_group_id, **group.dict())
+        db_group = Group(id=new_group_id, connection_string=group.connection_string, name=group.name,
+                         description=group.description)
         self.db.add(db_group)
         self.db.commit()
         self.db.refresh(db_group)
+
+        membership_data = MembershipCreate(id_user=creator_user_id, id_group=db_group.id, role="Admin")
+        self.add_membership(membership_data)
+
         return db_group
+
+    def get_group_by_name(self, group_name: str):
+        return self.db.query(Group).filter(Group.name == group_name).first()
 
     def get_groups(self):
         return self.db.query(Group).all()
@@ -30,9 +38,6 @@ class GroupRepository:
 
         users = self.db.query(User).filter(User.id.in_(user_ids)).all()
         return users
-
-    def get_users_id(self, user_id: int):
-        return self.db.query(User).filter(User.id == user_id).first()
 
     def update_group(self, group_id: int, group: GroupUpdate):
         db_group = self.get_group(group_id)
@@ -64,11 +69,3 @@ class GroupRepository:
             self.db.delete(membership)
             self.db.commit()
         return self.get_group(group_id)
-
-
-class UserRepository:
-    def __init__(self, db: Session):
-        self.db = db
-
-    def get_user_id(self, user_id: int):
-        return self.db.query(User).filter(User.id == user_id).first()
