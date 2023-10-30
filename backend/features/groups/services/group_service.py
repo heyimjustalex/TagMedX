@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, MembershipCreate
 from features.exceptions.definitions.definitions import *
-from repositories.group_repository import GroupRepository, UserRepository
+from repositories.group_repository import GroupRepository
 
 
 class GroupService:
@@ -10,8 +10,9 @@ class GroupService:
         self.db = db
         self.group_repository = GroupRepository(db)
 
-    def create_group(self, group: GroupCreate):
-        return self.group_repository.create_group(group)
+    def create_group(self, group: GroupCreate, creator_user_id: int):
+        group = self.group_repository.create_group(group, creator_user_id)
+        return group
 
     def get_groups(self):
         return self.group_repository.get_groups()
@@ -27,9 +28,6 @@ class GroupService:
         if not users:
             raise UserNotFoundException(status_code=404, detail="No users found in the group")
         return users
-
-    def get_users_id(self, user_id: int):
-        return self.group_repository.get_users_id(user_id)
 
     def update_group(self, group_id: int, group: GroupUpdate):
         updated_group = self.group_repository.update_group(group_id, group)
@@ -55,11 +53,14 @@ class GroupService:
             raise GroupNotFoundException(status_code=404, detail="Group not found")
         return removed_group
 
+    def join_group(self, group_name: str, user_id: int, connection_string: str):
+        group = self.group_repository.get_group_by_name(group_name)
+        if not group:
+            raise GroupNotFoundException(status_code=404, detail="Group not found")
 
-class UserService:
-    def __init__(self, db: Session):
-        self.db = db
-        self.user_repository = UserRepository(db)
+        if group.connection_string != connection_string:
+            raise HTTPException(status_code=400, detail="Nieprawidłowy connection string")
 
-    def get_user_id(self, user_id: int):
-        return self.user_repository.get_user_id(user_id)
+        membership_data = MembershipCreate(id_user=user_id, id_group=group.id, role="user")
+        self.add_membership(membership_data)
+        return group

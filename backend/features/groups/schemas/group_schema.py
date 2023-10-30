@@ -20,6 +20,7 @@ class User(UserBase):
 class GroupBase(BaseModel):
     name: str
     description: str
+    connection_string: str
 
 
 class GroupCreate(GroupBase):
@@ -37,6 +38,7 @@ class Group(GroupBase):
 class MembershipBase(BaseModel):
     id_user: int
     id_group: int
+    role: str
 
 
 class MembershipCreate(MembershipBase):
