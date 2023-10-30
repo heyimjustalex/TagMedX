@@ -5,14 +5,20 @@ from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, MembershipCr
 from ..services.group_service import GroupService
 from features.users.services.user_service import UserService
 from connectionDB.session import get_db
+from features.authorization.services.token_service import TokenService, UserData
 
 router = APIRouter()
 
 
-@router.post("/api/groups/{id_user}/create", tags=["Groups"], response_model=Group)
-def create_group(id_user: int, group: GroupCreate, db: Session = Depends(get_db)):
-    group_service = GroupService(db)  # here should be returned the current user who wants to create the group
-    return group_service.create_group(group, id_user)
+
+@router.post("/api/groups/create", tags=["Groups"], response_model=Group)
+def create_group(group: GroupCreate, db: Session = Depends(get_db),
+                 user_data: UserData = Depends(TokenService.get_user_data)):
+    creator_user_id = user_data.id
+    group_service = GroupService(db)
+    group = group_service.create_group(group, creator_user_id)
+    return group
+
 
 
 @router.get("/api/groups", tags=["Groups"], response_model=List[Group])
@@ -71,9 +77,9 @@ def get_users_in_group(group_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/api/groups/{group_name}/join", tags=["Groups"], response_model=Group)
-def join_group(group_name: str, connection_string: str, user_id: int, db: Session = Depends(get_db)):
+def join_group(group_name: str, connection_string: str, db: Session = Depends(get_db),
+               user_data: UserData = Depends(TokenService.get_user_data)):
     group_service = GroupService(db)
-    user_service = UserService(db)  # here should be returned the current user who wants to join the group
-    user_service.get_user(user_id)
+    user_id = user_data.id
     group = group_service.join_group(group_name, user_id, connection_string)
     return group
