@@ -1,7 +1,7 @@
 export default function Groups() {
   return (
     <section className='page'>
-      Groups
+      {typeof window !== 'undefined' ? window?.location?.pathname : 'Server component'}
     </section>
   )
 }

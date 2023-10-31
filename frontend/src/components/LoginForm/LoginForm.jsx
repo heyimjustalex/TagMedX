@@ -6,12 +6,14 @@ import { useState } from 'react';
 
 import { defaultLoginData } from './LoginFormConsts';
 import { handleLogin } from './LoginFormUtils';
+import { useNotification } from '../../hooks/useNotification';
 
 export default function LoginForm() {
 
   const router = useRouter();
+  const notification = useNotification();
   const [data, setData] = useState(defaultLoginData);
-  const [error, setError] = useState({ email: false, user: false, password: false })
+  const [error, setError] = useState({ email: false, user: false, password: false });
   const [sent, setSent] = useState(false);
 
   return (
@@ -63,7 +65,7 @@ export default function LoginForm() {
           className='flex'
           variant='solid'
           color='primary'
-          onClick={() => handleLogin(setSent, data, setError, router)}
+          onClick={() => handleLogin(setSent, data, setError, router, notification)}
           isLoading={sent}
         >
           Login
