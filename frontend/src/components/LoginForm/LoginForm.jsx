@@ -1,20 +1,26 @@
 'use client'
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input } from '@nextui-org/react';
 import RouteLink from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 import { defaultLoginData } from './LoginFormConsts';
 import { handleLogin } from './LoginFormUtils';
 import { useNotification } from '../../hooks/useNotification';
+import { NextColor } from '../../consts/NextColor';
 
 export default function LoginForm() {
 
   const router = useRouter();
   const notification = useNotification();
+  const searchParams = useSearchParams();
   const [data, setData] = useState(defaultLoginData);
   const [error, setError] = useState({ email: false, user: false, password: false });
   const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    if(searchParams.get('expired')) notification.make(NextColor.WARNING, 'Session expired', 'Please log in.');
+  }, [searchParams])
 
   return (
     <Card className='w-full max-w-xl min-w-0 h-fit'>

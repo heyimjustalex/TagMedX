@@ -1,22 +1,15 @@
-'use client'
-import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
-
-import { useNotification } from '../../hooks/useNotification';
-import { NextColor } from '../../consts/NextColor';
-import { getCookie } from '../../utils/cookie';
+import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 
 export default function ProtectedRoute({ children }) {
-  const router = useRouter();
-  const notification = useNotification();
-  const cookie = getCookie('token');
+  const cookieStore = cookies()
+  const cookie = cookieStore.get('token')
   const jwt = cookie ? jwtDecode(cookie) : null;
 
   if (jwt && jwt?.exp > Date.now() / 1000) {
     return <>{children}</>
   } else {
-    notification.make(NextColor.WARNING, 'Session expired', 'Please log in.');
-    router.replace('/login');
-    return null;
+    redirect('/login?expired=1')
   }
 }
