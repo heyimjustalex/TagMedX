@@ -1,5 +1,6 @@
 'use client'
-import { Suspense, useState } from 'react';
+
+import { useState } from 'react';
 import {Navbar, NavbarContent, NavbarMenuToggle } from '@nextui-org/react';
 
 import NavMobile from '../NavMobile/NavMobile';
@@ -9,7 +10,6 @@ export default function Nav () {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <Suspense>
       <Navbar
         isBordered
         isMenuOpen={isMenuOpen}
@@ -22,6 +22,5 @@ export default function Nav () {
         <NavDesktop />
         <NavMobile />
       </Navbar>
-    </Suspense>
   );
 }

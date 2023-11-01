@@ -29,6 +29,6 @@ async def login(
 
     user_data = {"user_id": user.id, "name": user.name, "surname": user.surname}
     response = JSONResponse(content=user_data)
-    response.set_cookie(key="token", value=access_token, max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    response.set_cookie(key="token", value=access_token, max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60, secure=True, samesite="none")
 
     return response

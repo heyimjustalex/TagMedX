@@ -2,16 +2,26 @@
 
 import { NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/navbar';
 import { Button } from '@nextui-org/button';
+import { useRouter } from 'next/navigation';
 import { Link } from '@nextui-org/link';
 import RouteLink from 'next/link';
+import { useEffect, useState } from 'react';
 
+import { handleLogout } from '../Nav/NavUtils';
 import { menuItems } from './NavDesktopConsts';
 import { useUserId } from '../../hooks/useUserId';
+import { useNotification } from '../../hooks/useNotification';
 
 export default function NavDesktop () {
 
-  const { userId } = useUserId();
-  console.log(userId)
+  const router = useRouter();
+  const notification = useNotification();
+  const { userId, setUserId } = useUserId();
+  const [isClient, setIsClient] = useState(false);
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   return (
     <>
@@ -21,7 +31,7 @@ export default function NavDesktop () {
             TagMedX
           </RouteLink>
         </NavbarBrand>
-        {userId ? menuItems.map((e, i) => (
+        {isClient && userId ? menuItems.map((e, i) => (
           <NavbarItem key={`${e.url}-${i}`}>
             <Link as={RouteLink} href={e.url} color={e.color}>
               {e.name}
@@ -31,18 +41,18 @@ export default function NavDesktop () {
       </NavbarContent>
 
       <NavbarContent className='hidden sm:flex' justify='end'>
-        {userId ? <>
+        {isClient && userId ? <>
           <NavbarItem>
             <Button
-                className='w-full'
-                color='danger'
-                variant='ghost'
-                onClick={() => console.log('logout')}
-              >
-                Logout
-              </Button>
+              className='w-full'
+              color='danger'
+              variant='ghost'
+              onClick={() => handleLogout(setUserId, router, notification)}
+            >
+              Logout
+            </Button>
           </NavbarItem>
-        </> : <>
+        </> : isClient ? <>
           <NavbarItem>
             <Link as={RouteLink} href='/signup'>
               Sign Up
@@ -53,7 +63,7 @@ export default function NavDesktop () {
               Login
             </Button>
           </NavbarItem>
-        </>}
+        </> : <NavbarItem>Loading...</NavbarItem>}
       </NavbarContent>
     </>
   )

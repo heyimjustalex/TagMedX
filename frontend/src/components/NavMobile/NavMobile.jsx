@@ -1,29 +1,40 @@
 'use client'
 
 import { NavbarBrand, NavbarContent, NavbarMenu, NavbarMenuItem } from '@nextui-org/navbar';
+import { useRouter } from 'next/navigation';
 import { Link } from '@nextui-org/link';
 import RouteLink from 'next/link';
+import { useEffect, useState } from 'react';
 
-import { menuItems } from './NavMobileConsts';
 import { Button } from '@nextui-org/react';
+import { menuItems, menuItemsUnlogged } from './NavMobileConsts';
+import { handleLogout } from '../Nav/NavUtils';
 import { useUserId } from '../../hooks/useUserId';
+import { useNotification } from '../../hooks/useNotification';
 
 export default function NavMobile () {
 
-  const { userId } = useUserId();
+  const router = useRouter();
+  const notification = useNotification();
+  const { userId, setUserId } = useUserId();
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   return (
     <>
       <NavbarContent className='sm:hidden w-full flex-center flex-col' justify='center'>
-          <NavbarBrand>
-              <RouteLink href='/' className='font-bold text-inherit'>
-                  TagMedX
-              </RouteLink>
-          </NavbarBrand>
+        <NavbarBrand>
+          <RouteLink href='/' className='font-bold text-inherit'>
+            TagMedX
+          </RouteLink>
+        </NavbarBrand>
       </NavbarContent>
 
       <NavbarMenu>
-        {userId ?
+        {isClient && userId ?
           <>
             {menuItems.map((e, i) => (
               <NavbarMenuItem key={`${e.url}-${i}`}>
@@ -42,15 +53,14 @@ export default function NavMobile () {
               <Button
                 className='w-full'
                 color='danger'
-                // size='lg'
                 variant='ghost'
-                onClick={() => console.log('logout')}
+                onClick={() => handleLogout(setUserId, router, notification)}
               >
                 Logout
               </Button>
             </NavbarMenuItem>
           </>
-        : menuItems.map((e, i) => (
+        : menuItemsUnlogged.map((e, i) => (
           <NavbarMenuItem key={`${e.url}-${i}`}>
             <Link
               className='w-full'
