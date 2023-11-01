@@ -8,18 +8,23 @@ import { defaultLoginData } from './LoginFormConsts';
 import { handleLogin } from './LoginFormUtils';
 import { useNotification } from '../../hooks/useNotification';
 import { NextColor } from '../../consts/NextColor';
+import { useUserId } from '../../hooks/useUserId';
 
 export default function LoginForm() {
 
   const router = useRouter();
   const notification = useNotification();
   const searchParams = useSearchParams();
+  const { setUserId } = useUserId();
   const [data, setData] = useState(defaultLoginData);
   const [error, setError] = useState({ email: false, user: false, password: false });
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    if(searchParams.get('expired')) notification.make(NextColor.WARNING, 'Session expired', 'Please log in.');
+    if(searchParams.get('expired')) {
+      setUserId(false)
+      notification.make(NextColor.WARNING, 'Session expired', 'Please log in.');
+    }
   }, [searchParams])
 
   return (
@@ -71,7 +76,7 @@ export default function LoginForm() {
           className='flex'
           variant='solid'
           color='primary'
-          onClick={() => handleLogin(setSent, data, setError, router, notification)}
+          onClick={() => handleLogin(setSent, data, setError, setUserId, router, notification)}
           isLoading={sent}
         >
           Login
