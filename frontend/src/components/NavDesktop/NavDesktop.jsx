@@ -2,6 +2,7 @@
 
 import { NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/navbar';
 import { Button } from '@nextui-org/button';
+import { Skeleton } from '@nextui-org/skeleton';
 import { useRouter } from 'next/navigation';
 import { Link } from '@nextui-org/link';
 import RouteLink from 'next/link';
@@ -63,7 +64,12 @@ export default function NavDesktop () {
               Login
             </Button>
           </NavbarItem>
-        </> : <NavbarItem>Loading...</NavbarItem>}
+        </> : <NavbarItem>
+          <Skeleton className="rounded-lg">
+            <div className="h-10 w-20 rounded-lg bg-default-300" />
+          </Skeleton>
+        </NavbarItem>
+        }
       </NavbarContent>
     </>
   )
