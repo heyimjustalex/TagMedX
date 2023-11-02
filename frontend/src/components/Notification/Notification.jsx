@@ -1,11 +1,12 @@
 'use client'
 
 import { Chip } from '@nextui-org/chip'
-import { IconInfoCircleFilled, IconX } from '@tabler/icons-react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { IconX } from '@tabler/icons-react';
 
 import './Notification.css'
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { getIcon } from './NotificationUtils';
 import { NotificationContext } from '../../contexts/NotificationContext';
 
 export default function Notification ({ type, id, title, text, setHeight, closing, top }) {
@@ -40,7 +41,7 @@ export default function Notification ({ type, id, title, text, setHeight, closin
         color={type}
         radius='md'
         variant='shadow'
-        startContent={<IconInfoCircleFilled />}
+        startContent={getIcon(type)}
         endContent={<IconX size={15} className='cursor-pointer' onClick={() => notification.clear(id)} />}
         className='w-96 p-2 mb-2 h-auto notification'
       >
