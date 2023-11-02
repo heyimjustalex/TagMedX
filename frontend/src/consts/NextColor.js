@@ -1,10 +1,10 @@
 const NextColor = {
-  Default: 'default',
-  Primary: 'primary',
-  Secondary: 'secondary',
-  Success: 'success',
-  Warning: 'warning',
-  Danger: 'danger'
+  DEFAULT: 'default',
+  PRIMARY: 'primary',
+  SECONDARY: 'secondary',
+  SUCCESS: 'success',
+  WARNING: 'warning',
+  DANGER: 'danger'
 }
 
 export { NextColor }

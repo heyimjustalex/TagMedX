@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
@@ -9,7 +9,7 @@ from ..services.token_service import TokenService
 from ..schemas.token_schema import TokenCreate
 from ...users.schemas.user_schema import UserResponse
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 1
 
 router = APIRouter()
 
@@ -29,6 +29,6 @@ async def login(
 
     user_data = {"user_id": user.id, "name": user.name, "surname": user.surname}
     response = JSONResponse(content=user_data)
-    response.set_cookie(key="token", value=access_token)
+    response.set_cookie(key="token", value=access_token, max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60, secure=True, samesite="none")
 
     return response

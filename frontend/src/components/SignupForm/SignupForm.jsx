@@ -2,12 +2,16 @@
 import { useMemo, useState } from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, Input } from '@nextui-org/react';
 import RouteLink from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { defaultSignupData } from './SignupFormConsts';
 import { checkEmail, checkPassword, handleSignUp } from './SignupFormUtils';
+import { useNotification } from '../../hooks/useNotification';
 
 export default function SignupForm () {
 
+  const router = useRouter();
+  const notification = useNotification();
   const [data, setData] = useState(defaultSignupData);
   const [validation, setValidation] = useState(false);
   const [sent, setSent] = useState(false);
@@ -89,7 +93,7 @@ export default function SignupForm () {
           className='flex'
           variant='solid'
           color='primary'
-          onClick={() => handleSignUp(setValidation, setSent, data)}
+          onClick={() => handleSignUp(setValidation, setSent, data, router, notification) }
           isLoading={sent}
         >
           Sign Up
