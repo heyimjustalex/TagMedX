@@ -1,12 +1,11 @@
 'use client'
 
 import { Button } from '@nextui-org/button'
-import { useContext } from 'react';
-import { NotificationContext } from '../contexts/NotificationContext';
-import { NextColor } from '../consts/NextColor';
+import { checkSession } from '../utils/localSession';
+import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
-  const notification = useContext(NotificationContext);
+  const router = useRouter();
   return (
     <section className='page flex-col'>
       <h1 className='head-text text-center'>
@@ -16,7 +15,14 @@ export default function HomePage() {
         TagMedX is an open-source web app built with FastAPI,
         Next.js and MySQL, designed for medical image tagging.
       </p>
-      <Button className='flex w-30 mt-4' color='primary' variant='ghost' onClick={() => notification.make(NextColor.PRIMARY, 'Information', 'Textjsndi asndi uasdi ansdi nasiud ')}>Let's tag!</Button>
+      <Button
+        className='flex w-30 mt-4'
+        color='primary'
+        variant='ghost'
+        onClick={checkSession() ? () => router.push('/groups') : () => router.push('/login')}
+      >
+        Let's tag!
+      </Button>
     </section>
   )
 }

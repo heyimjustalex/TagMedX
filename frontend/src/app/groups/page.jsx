@@ -1,7 +1,9 @@
+import GroupsTable from '../../components/GroupsTable/GroupsTable'
+
 export default function Groups() {
   return (
-    <section className='page'>
-      {typeof window !== 'undefined' ? window?.location?.pathname : 'Server component'}
+    <section className='content-page'>
+      <GroupsTable />
     </section>
   )
 }

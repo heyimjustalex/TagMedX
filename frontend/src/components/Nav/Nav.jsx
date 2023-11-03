@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import {Navbar, NavbarContent, NavbarMenuToggle } from '@nextui-org/react';
 
-import NavMobile from '../NavMobile/NavMobile';
-import NavDesktop from '../NavDesktop/NavDesktop';
+import NavMobile from './NavMobile/NavMobile';
+import NavDesktop from './NavDesktop/NavDesktop';
 
 export default function Nav () {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +14,7 @@ export default function Nav () {
         isBordered
         isMenuOpen={isMenuOpen}
         onMenuOpenChange={setIsMenuOpen}
+        maxWidth='full'
       >
         <NavbarContent className='sm:hidden' justify='start'>
           <NavbarMenuToggle />
