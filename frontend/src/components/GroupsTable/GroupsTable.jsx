@@ -108,7 +108,7 @@ export default function GroupsTable() {
         items={sortedItems}
         emptyContent={data.ready ? 'No groups found' : true}
         isLoading={!data.ready}
-        loadingContent={<Spinner className='mt-8' label='Loading groups...' />}
+        loadingContent={<Spinner className='mt-10' label='Loading groups...' />}
       >
         {(item) => (
           <TableRow key={item.id} className='cursor-pointer'>
