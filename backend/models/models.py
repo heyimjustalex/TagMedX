@@ -34,9 +34,9 @@ class User(Base):
 class Membership(Base):
     __tablename__ = "Membership"
 
-    id_user = mapped_column(Integer, ForeignKey("User.id"), primary_key=True)
-    id_group = mapped_column(Integer, ForeignKey("Group.id"), primary_key=True)
-    role = mapped_column(String, nullable=False, default="User")
+    id_user: Mapped[int] = mapped_column(ForeignKey("User.id"), primary_key=True)
+    id_group: Mapped[int] = mapped_column(ForeignKey("Group.id"), primary_key=True)
+    role: Mapped[str] = mapped_column(nullable=False, default="User")
 
     # Define the many-to-one relationship with User
     User = relationship("User", back_populates="Membership")
@@ -48,10 +48,10 @@ class Membership(Base):
 class Group(Base):
     __tablename__ = "Group"
 
-    id = mapped_column(Integer, primary_key=True)
-    name = mapped_column(String, nullable=False)
-    description = mapped_column(String, nullable=False)
-    connection_string = mapped_column(String)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str]
+    description: Mapped[str | None]
+    connection_string: Mapped[str]
     # Define the one-to-many relationship with Task
     Task = relationship("Task", back_populates="Group")
 
