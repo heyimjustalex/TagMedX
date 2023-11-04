@@ -16,7 +16,7 @@ export default function HomePage() {
         TagMedX is an open-source web app built with FastAPI,
         Next.js and MySQL, designed for medical image tagging.
       </p>
-      <Button className='flex w-30 mt-4' color='primary' variant='ghost' onClick={() => notification.make(NextColor.Primary, 'Information', 'Textjsndi asndi uasdi ansdi nasiud ')}>Let's tag!</Button>
+      <Button className='flex w-30 mt-4' color='primary' variant='ghost' onClick={() => notification.make(NextColor.PRIMARY, 'Information', 'Textjsndi asndi uasdi ansdi nasiud ')}>Let's tag!</Button>
     </section>
   )
 }
