@@ -12,6 +12,7 @@
     "@nextui-org/react": "^2.1.13",
     "@tabler/icons-react": "^2.40.0",
     "framer-motion": "^10.16.4",
+    "jwt-decode": "^4.0.0",
     "next": "14",
     "react": "^18",
     "react-dom": "^18"

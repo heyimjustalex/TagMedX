@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, MembershipCreate, User
 from ..services.group_service import GroupService

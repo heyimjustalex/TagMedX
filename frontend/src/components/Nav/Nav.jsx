@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react';
 import {Navbar, NavbarContent, NavbarMenuToggle } from '@nextui-org/react';
 
@@ -9,17 +10,17 @@ export default function Nav () {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <Navbar
-      isBordered
-      isMenuOpen={isMenuOpen}
-      onMenuOpenChange={setIsMenuOpen}
-    >
-      <NavbarContent className='sm:hidden' justify='start'>
-        <NavbarMenuToggle />
-      </NavbarContent>
+      <Navbar
+        isBordered
+        isMenuOpen={isMenuOpen}
+        onMenuOpenChange={setIsMenuOpen}
+      >
+        <NavbarContent className='sm:hidden' justify='start'>
+          <NavbarMenuToggle />
+        </NavbarContent>
 
-      <NavDesktop />
-      <NavMobile />
-    </Navbar>
+        <NavDesktop />
+        <NavMobile />
+      </Navbar>
   );
 }

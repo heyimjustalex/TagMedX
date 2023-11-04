@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session, aliased
+from sqlalchemy.orm import Session
 from sqlalchemy import func
 from models.models import Group, User, Membership, Task
 from features.groups.schemas.group_schema import GroupCreate, GroupUpdate, MembershipCreate
