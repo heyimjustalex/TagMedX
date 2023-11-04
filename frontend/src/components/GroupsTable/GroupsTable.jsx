@@ -7,7 +7,8 @@ import {
   TableCell,
   TableColumn,
   TableHeader,
-  TableRow
+  TableRow,
+  useDisclosure
 } from '@nextui-org/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -15,11 +16,15 @@ import { useNotification } from '../../hooks/useNotification';
 import { columns, roleOptions } from './GroupsTableConsts';
 import GroupsTableTopContent from './GroupsTableTopContent';
 import { getGroups, renderCell } from './GroupsTableUtils';
+import GroupsTableAddModal from './GroupsTableAddModal';
+import GroupsTableJoinModal from './GroupsTableJoinModal';
 
 export default function GroupsTable() {
   const [filterValue, setFilterValue] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [data, setData] = useState({ elements: [], ready: false })
+  const [data, setData] = useState({ elements: [], ready: false });
+  const addModal = useDisclosure();
+  const joinModal = useDisclosure();
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
   const hasSearchFilter = Boolean(filterValue);
   const notification = useNotification();
@@ -68,9 +73,11 @@ export default function GroupsTable() {
     <GroupsTableTopContent
       filterValue={filterValue}
       onClear={onClear}
-      onSearchChange={onClear}
+      onSearchChange={onSearchChange}
       statusFilter={statusFilter}
       setStatusFilter={setStatusFilter}
+      onAddOpen={addModal.onOpen}
+      onJoinOpen={joinModal.onOpen}
     />
   ,[
     filterValue,
@@ -78,44 +85,60 @@ export default function GroupsTable() {
     data.elements.length,
     onSearchChange,
     hasSearchFilter,
+    addModal.onOpen,
+    joinModal.onOpen
   ]);
 
   return (
-    <Table
-      aria-label='Table with groups'
-      isHeaderSticky
-      bottomContentPlacement='outside'
-      classNames={{ wrapper: 'max-h-full' }}
-      selectionMode='single'
-      showSelectionCheckboxes={false}
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement='outside'
-      onSortChange={setSortDescriptor}
-      onRowAction={(e) => console.log(e)}
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        items={sortedItems}
-        emptyContent={data.ready ? 'No groups found' : true}
-        isLoading={!data.ready}
-        loadingContent={<Spinner className='mt-10' label='Loading groups...' />}
+    <>
+      <Table
+        aria-label='Table with groups'
+        isHeaderSticky
+        bottomContentPlacement='outside'
+        classNames={{ wrapper: 'max-h-full' }}
+        selectionMode='single'
+        showSelectionCheckboxes={false}
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement='outside'
+        onSortChange={setSortDescriptor}
+        onRowAction={(e) => console.log(e)}
       >
-        {(item) => (
-          <TableRow key={item.id} className='cursor-pointer'>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          items={sortedItems}
+          emptyContent={data.ready ? 'No groups found' : true}
+          isLoading={!data.ready}
+          loadingContent={<Spinner className='mt-10' label='Loading groups...' />}
+        >
+          {(item) => (
+            <TableRow key={item.id} className='cursor-pointer'>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <GroupsTableAddModal
+        isOpen={addModal.isOpen}
+        onOpenChange={addModal.onOpenChange}
+        setData={setData}
+        notification={notification}
+      />
+      <GroupsTableJoinModal
+        isOpen={joinModal.isOpen}
+        onOpenChange={joinModal.onOpenChange}
+        setData={setData}
+        notification={notification}
+      />
+    </>
   );
 }

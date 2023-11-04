@@ -10,7 +10,7 @@ import { IconChevronDown, IconPlus, IconSearch, IconUsersGroup } from '@tabler/i
 
 import { roleOptions } from './GroupsTableConsts';
 
-export default function GroupsTableTopContent({ filterValue, onClear, onSearchChange, statusFilter, setStatusFilter }) {
+export default function GroupsTableTopContent({ filterValue, onClear, onSearchChange, statusFilter, setStatusFilter, onAddOpen, onJoinOpen }) {
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex flex-col sm:flex-row justify-between gap-3 items-end'>
@@ -45,10 +45,10 @@ export default function GroupsTableTopContent({ filterValue, onClear, onSearchCh
               ))}
             </DropdownMenu>
           </Dropdown>
-          <Button className='min-w-fit' color='primary' variant='flat' endContent={<IconPlus />}>
+          <Button className='min-w-fit' color='primary' variant='flat' endContent={<IconPlus />} onPress={onAddOpen}>
             Add New
           </Button>
-          <Button className='min-w-fit' color='primary' endContent={<IconUsersGroup />}>
+          <Button className='min-w-fit' color='primary' endContent={<IconUsersGroup />} onPress={onJoinOpen}>
             Join Group
           </Button>
         </div>
