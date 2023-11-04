@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, MembershipCreate, User
+from ..schemas.group_schema import Group, GroupCreate, GroupUpdate, MembershipCreate, User, GroupWithRole
 from ..services.group_service import GroupService
 from features.users.services.user_service import UserService
 from connectionDB.session import get_db
@@ -19,11 +19,20 @@ def create_group(group: GroupCreate, db: Session = Depends(get_db),
     return group
 
 
-@router.get("/api/groups", tags=["Groups"], response_model=List[Group])
+@router.get("/api/groups", tags=["Groups"], response_model=List[GroupWithRole])
 def get_groups(db: Session = Depends(get_db), user_data: UserData = Depends(TokenService.get_user_data)):
     group_service = GroupService(db)
     user_id = user_data.id
-    return group_service.get_groups(user_id)
+    groups = group_service.get_groups(user_id)
+
+    groups_with_roles = []
+    for group in groups:
+        role = group_service.get_role_in_group(user_id, group.id)
+        group_dict = group.__dict__
+        group_with_role = GroupWithRole(group=group_dict, role=role)
+        groups_with_roles.append(group_with_role)
+
+    return groups_with_roles
 
 
 @router.get("/api/groups/{group_id}", tags=["Groups"], response_model=Group)
@@ -75,10 +84,10 @@ def get_users_in_group(group_id: int, db: Session = Depends(get_db)):
     return users
 
 
-@router.post("/api/groups/{group_id}/join", tags=["Groups"], response_model=Group)
-def join_group(group_id: int, connection_string: str, db: Session = Depends(get_db),
+@router.post("/api/groups/join", tags=["Groups"], response_model=Group)
+def join_group(connection_string: str, db: Session = Depends(get_db),
                user_data: UserData = Depends(TokenService.get_user_data)):
     group_service = GroupService(db)
     user_id = user_data.id
-    group = group_service.join_group(group_id, user_id, connection_string)
+    group = group_service.join_group(connection_string, user_id)
     return group

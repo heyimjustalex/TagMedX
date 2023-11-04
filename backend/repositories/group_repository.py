@@ -1,7 +1,9 @@
-from sqlalchemy.orm import Session, aliased
+from sqlalchemy.orm import Session
 from sqlalchemy import func
 from models.models import Group, User, Membership, Task
 from features.groups.schemas.group_schema import GroupCreate, GroupUpdate, MembershipCreate
+import secrets
+import string
 
 
 class GroupRepository:
@@ -12,7 +14,10 @@ class GroupRepository:
         max_group_id = self.db.query(func.max(Group.id)).scalar() or 0
         new_group_id = max_group_id + 1
 
-        db_group = Group(id=new_group_id, connection_string=group.connection_string, name=group.name,
+        characters = string.ascii_letters + string.digits
+        connection_string = ''.join(secrets.choice(characters) for i in range(10))
+
+        db_group = Group(id=new_group_id, connection_string=connection_string, name=group.name,
                          description=group.description)
         self.db.add(db_group)
         self.db.commit()
@@ -29,6 +34,13 @@ class GroupRepository:
     def get_groups(self, user_id):
         return self.db.query(Group).join(Membership, Group.id == Membership.id_group).filter(
             Membership.id_user == user_id).all()
+
+    def get_group_by_connection_string(self, connection_string: str):
+        return self.db.query(Group).filter(Group.connection_string == connection_string).first()
+
+    def get_role_in_group(self, user_id, group_id):
+        membership = self.db.query(Membership).filter_by(id_user=user_id, id_group=group_id).first()
+        return membership.role
 
     def get_group(self, group_id: int):
         return self.db.query(Group).filter(Group.id == group_id).first()

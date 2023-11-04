@@ -17,6 +17,9 @@ class GroupService:
     def get_groups(self, user_id):
         return self.group_repository.get_groups(user_id)
 
+    def get_role_in_group(self, user_id, group_id):
+        return self.group_repository.get_role_in_group(user_id, group_id)
+
     def get_group(self, group_id: int):
         group = self.group_repository.get_group(group_id)
         if not group:
@@ -53,13 +56,10 @@ class GroupService:
             raise GroupNotFoundException(status_code=404, detail="Group not found")
         return removed_group
 
-    def join_group(self, group_id: int, user_id: int, connection_string: str):
-        group = self.group_repository.get_group(group_id)
+    def join_group(self, connection_string: str, user_id: int):
+        group = self.group_repository.get_group_by_connection_string(connection_string)
         if not group:
             raise GroupNotFoundException(status_code=404, detail="Group not found")
-
-        if group.connection_string != connection_string:
-            raise InvalidConnectionString(status_code=400, detail="Invalid connection string")
 
         membership_data = MembershipCreate(id_user=user_id, id_group=group.id, role="User")
         self.add_membership(membership_data)

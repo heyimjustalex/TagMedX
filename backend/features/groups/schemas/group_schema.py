@@ -23,8 +23,9 @@ class GroupBase(BaseModel):
     connection_string: str
 
 
-class GroupCreate(GroupBase):
-    pass
+class GroupCreate(BaseModel):
+    name: str
+    description: str
 
 
 class GroupUpdate(GroupBase):
@@ -33,6 +34,11 @@ class GroupUpdate(GroupBase):
 
 class Group(GroupBase):
     id: int
+
+
+class GroupWithRole(BaseModel):
+    group: GroupBase
+    role: str
 
 
 class MembershipBase(BaseModel):
