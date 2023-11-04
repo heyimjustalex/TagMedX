@@ -20,9 +20,10 @@ def create_group(group: GroupCreate, db: Session = Depends(get_db),
 
 
 @router.get("/api/groups", tags=["Groups"], response_model=List[Group])
-def get_groups(db: Session = Depends(get_db)):
+def get_groups(db: Session = Depends(get_db), user_data: UserData = Depends(TokenService.get_user_data)):
     group_service = GroupService(db)
-    return group_service.get_groups()
+    user_id = user_data.id
+    return group_service.get_groups(user_id)
 
 
 @router.get("/api/groups/{group_id}", tags=["Groups"], response_model=Group)
@@ -74,10 +75,10 @@ def get_users_in_group(group_id: int, db: Session = Depends(get_db)):
     return users
 
 
-@router.post("/api/groups/{group_name}/join", tags=["Groups"], response_model=Group)
-def join_group(group_name: str, connection_string: str, db: Session = Depends(get_db),
+@router.post("/api/groups/{group_id}/join", tags=["Groups"], response_model=Group)
+def join_group(group_id: int, connection_string: str, db: Session = Depends(get_db),
                user_data: UserData = Depends(TokenService.get_user_data)):
     group_service = GroupService(db)
     user_id = user_data.id
-    group = group_service.join_group(group_name, user_id, connection_string)
+    group = group_service.join_group(group_id, user_id, connection_string)
     return group

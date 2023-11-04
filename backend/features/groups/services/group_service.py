@@ -14,8 +14,8 @@ class GroupService:
         group = self.group_repository.create_group(group, creator_user_id)
         return group
 
-    def get_groups(self):
-        return self.group_repository.get_groups()
+    def get_groups(self, user_id):
+        return self.group_repository.get_groups(user_id)
 
     def get_group(self, group_id: int):
         group = self.group_repository.get_group(group_id)
@@ -53,8 +53,8 @@ class GroupService:
             raise GroupNotFoundException(status_code=404, detail="Group not found")
         return removed_group
 
-    def join_group(self, group_name: str, user_id: int, connection_string: str):
-        group = self.group_repository.get_group_by_name(group_name)
+    def join_group(self, group_id: int, user_id: int, connection_string: str):
+        group = self.group_repository.get_group(group_id)
         if not group:
             raise GroupNotFoundException(status_code=404, detail="Group not found")
 

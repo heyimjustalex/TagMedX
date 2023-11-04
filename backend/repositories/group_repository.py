@@ -26,8 +26,9 @@ class GroupRepository:
     def get_group_by_name(self, group_name: str):
         return self.db.query(Group).filter(Group.name == group_name).first()
 
-    def get_groups(self):
-        return self.db.query(Group).all()
+    def get_groups(self, user_id):
+        return self.db.query(Group).join(Membership, Group.id == Membership.id_group).filter(
+            Membership.id_user == user_id).all()
 
     def get_group(self, group_id: int):
         return self.db.query(Group).filter(Group.id == group_id).first()
