@@ -1,4 +1,3 @@
-from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from connectionDB.session import get_db
@@ -10,8 +9,11 @@ router = APIRouter()
 
 
 @router.post("/api/tasks/", tags=["Task"], response_model=TaskResponse)
-def create_task(task_data: TaskCreate, db: Session = Depends(get_db),
-                user_data: UserData = Depends(TokenService.get_user_data)):
+def create_task(
+    task_data: TaskCreate,
+    db: Session = Depends(get_db),
+    user_data: UserData = Depends(TokenService.get_user_data),
+):
     task_service = TaskService(db)
     current_user_id = user_data.id
     task = task_service.create_task_with_permission_check(task_data, current_user_id)

@@ -10,9 +10,11 @@ DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/login/")
 
+
 class UserData(BaseModel):
     id: int
     email: str
+
 
 class TokenService:
     @staticmethod
@@ -48,5 +50,5 @@ class TokenService:
                 raise credentials_exception
         except JWTError:
             raise credentials_exception
-        
-        return UserData(id = id, email=email)
+
+        return UserData(id=id, email=email)

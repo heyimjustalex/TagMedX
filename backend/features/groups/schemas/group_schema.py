@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class GroupBase(BaseModel):
     name: str
     description: str | None
@@ -19,7 +20,8 @@ class GroupResposne(GroupBase):
 
 class GroupWithRoleResponse(GroupResposne):
     role: str
-    
+
+
 class AdminGroupResponse(GroupWithRoleResponse):
     connection_string: str
 
@@ -36,6 +38,7 @@ class MembershipCreate(MembershipBase):
 
 class MembershipResponse(MembershipBase):
     id: int
-    
+
+
 class GroupJoin(BaseModel):
     connection_string: str

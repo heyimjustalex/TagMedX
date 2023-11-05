@@ -22,10 +22,13 @@ class GroupService:
 
     def get_role_in_group(self, user_id: int, group_id: int) -> str:
         role = self.group_repository.get_role_in_group(user_id, group_id)
-        
+
         if not role:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="The specified user could not be found in the group.")
-        
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The specified user could not be found in the group.",
+            )
+
         return role
 
     def get_group(self, group_id: int) -> Group:
@@ -37,7 +40,9 @@ class GroupService:
     def get_users_in_group(self, group_id: int) -> List[User]:
         users = self.group_repository.get_users_in_group(group_id)
         if len(users) == 0:
-            raise UserNotFoundException(status_code=404, detail="No users found in the group")
+            raise UserNotFoundException(
+                status_code=404, detail="No users found in the group"
+            )
         return users
 
     def update_group(self, group_id: int, group: GroupUpdate) -> Group:
@@ -69,12 +74,17 @@ class GroupService:
         if not group:
             raise GroupNotFoundException(status_code=404, detail="Group not found")
 
-        membership_data = MembershipCreate(id_user=user_id, id_group=group.id, role=Roles.USER)
+        membership_data = MembershipCreate(
+            id_user=user_id, id_group=group.id, role=Roles.USER
+        )
         self.add_membership(membership_data)
         return group
-    
+
     def check_if_admin(self, id_user: int, id_group: int):
         _ = self.get_group(id_group)
         role = self.group_repository.get_role_in_group(id_user, id_group)
         if role != Roles.ADMIN:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="No authority to perform this operation.")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="No authority to perform this operation.",
+            )

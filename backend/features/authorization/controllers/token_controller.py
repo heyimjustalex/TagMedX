@@ -15,9 +15,7 @@ router = APIRouter()
 
 @router.post("/api/login/", tags=["Authorization"], response_model=UserResponse)
 async def login(
-    form_data: TokenCreate,
-    db: Annotated[Session, Depends(get_db)],
-    response: Response
+    form_data: TokenCreate, db: Annotated[Session, Depends(get_db)], response: Response
 ):
     user_service = UserService(db)
     user = user_service.check_user(form_data.email, form_data.password)
@@ -28,6 +26,12 @@ async def login(
     )
 
     user_data = UserResponse(user_id=user.id, name=user.name, surname=user.surname)
-    response.set_cookie(key="token", value=access_token, max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60, secure=True, samesite="none")
+    response.set_cookie(
+        key="token",
+        value=access_token,
+        max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        secure=True,
+        samesite="none",
+    )
 
     return user_data

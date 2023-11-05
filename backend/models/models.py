@@ -18,7 +18,7 @@ class User(Base):
     password_hash = mapped_column(String, nullable=False)
     name = mapped_column(String)
     surname = mapped_column(String)
-    title = mapped_column(String)    
+    title = mapped_column(String)
     specialization = mapped_column(String)
     practice_start_year = mapped_column(Integer)
 
@@ -27,7 +27,7 @@ class User(Base):
 
     # Define the one-to-many relationship with Examination
     Examination = relationship("Examination", back_populates="User")
-    
+
     Samples: Mapped[List["Sample"]] = relationship(back_populates="User")
 
 
@@ -68,7 +68,6 @@ class Task(Base):
     name = mapped_column(String)
     description = mapped_column(String)
     type = mapped_column(String)
-    
 
     # Define the many-to-one relationship with Group
     Group = relationship("Group", back_populates="Task")

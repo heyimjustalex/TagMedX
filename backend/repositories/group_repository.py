@@ -1,14 +1,20 @@
+import secrets
+import string
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from models.models import Group, User, Membership, Task
-from features.groups.schemas.group_schema import GroupCreate, GroupUpdate, MembershipCreate
 from typing import List
-import secrets
-import string
+from features.groups.schemas.group_schema import (
+    GroupCreate,
+    GroupUpdate,
+    MembershipCreate,
+)
+
 
 class Roles:
     ADMIN = "Admin"
     USER = "User"
+
 
 class GroupRepository:
     def __init__(self, db: Session):
@@ -19,14 +25,18 @@ class GroupRepository:
         new_group_id = max_group_id + 1
 
         characters = string.ascii_letters + string.digits
-        connection_string = ''.join(secrets.choice(characters) for i in range(10))
+        connection_string = "".join(secrets.choice(characters) for i in range(10))
 
-        db_group = Group(id=new_group_id, connection_string=connection_string, name=group.name)
+        db_group = Group(
+            id=new_group_id, connection_string=connection_string, name=group.name
+        )
         self.db.add(db_group)
         self.db.commit()
         self.db.refresh(db_group)
 
-        membership_data = MembershipCreate(id_user=creator_user_id, id_group=db_group.id, role=Roles.ADMIN)
+        membership_data = MembershipCreate(
+            id_user=creator_user_id, id_group=db_group.id, role=Roles.ADMIN
+        )
         self.add_membership(membership_data)
 
         return db_group
@@ -35,13 +45,26 @@ class GroupRepository:
         return self.db.query(Group).filter(Group.name == group_name).first()
 
     def get_groups(self, user_id) -> List[Group]:
-        return self.db.query(Group).join(Membership, Group.id == Membership.id_group).filter(Membership.id_user == user_id).all()
+        return (
+            self.db.query(Group)
+            .join(Membership, Group.id == Membership.id_group)
+            .filter(Membership.id_user == user_id)
+            .all()
+        )
 
     def get_group_by_connection_string(self, connection_string: str) -> Group | None:
-        return self.db.query(Group).filter(Group.connection_string == connection_string).first()
+        return (
+            self.db.query(Group)
+            .filter(Group.connection_string == connection_string)
+            .first()
+        )
 
     def get_role_in_group(self, user_id: int, group_id: int) -> str | None:
-        membership = self.db.query(Membership).filter_by(id_user=user_id, id_group=group_id).first()
+        membership = (
+            self.db.query(Membership)
+            .filter_by(id_user=user_id, id_group=group_id)
+            .first()
+        )
         if not membership:
             return None
         return membership.role
@@ -50,7 +73,11 @@ class GroupRepository:
         return self.db.query(Group).filter(Group.id == group_id).first()
 
     def get_users_in_group(self, group_id: int) -> List[User]:
-        memberships = self.db.query(Membership.id_user).filter(Membership.id_group == group_id).all()
+        memberships = (
+            self.db.query(Membership.id_user)
+            .filter(Membership.id_group == group_id)
+            .all()
+        )
         user_ids = [membership.id_user for membership in memberships]
 
         users = self.db.query(User).filter(User.id.in_(user_ids)).all()
@@ -68,8 +95,12 @@ class GroupRepository:
     def delete_group(self, group_id: int) -> Group | None:
         db_group = self.get_group(group_id)
         if db_group:
-            self.db.query(Task).filter(Task.id_group == group_id).delete(synchronize_session=False)
-            self.db.query(Membership).filter(Membership.id_group == group_id).delete(synchronize_session=False)
+            self.db.query(Task).filter(Task.id_group == group_id).delete(
+                synchronize_session=False
+            )
+            self.db.query(Membership).filter(Membership.id_group == group_id).delete(
+                synchronize_session=False
+            )
             self.db.delete(db_group)
             self.db.commit()
         return db_group
@@ -82,8 +113,11 @@ class GroupRepository:
         return membership
 
     def remove_user_from_group(self, group_id: int, user_id: int) -> Group | None:
-        membership = self.db.query(Membership).filter(Membership.id_user == user_id,
-                                                      Membership.id_group == group_id).first()
+        membership = (
+            self.db.query(Membership)
+            .filter(Membership.id_user == user_id, Membership.id_group == group_id)
+            .first()
+        )
         if membership:
             self.db.delete(membership)
             self.db.commit()
