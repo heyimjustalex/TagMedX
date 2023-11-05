@@ -39,9 +39,7 @@ async def read_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     # exception handling moved to service (so there is no if in controller)
     user = user_service.get_user(user_id)
-    return UserResponse(
-        user_id=user.id, name=user.name, surname=user.surname
-    )
+    return UserResponse(user_id=user.id, name=user.name, surname=user.surname)
 
 
 @router.post("/api/register/", tags=["Authorization"], response_model=RegisterResponse)

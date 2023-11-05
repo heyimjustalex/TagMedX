@@ -1,12 +1,12 @@
+import mysql.connector
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from features.exceptions.handlers.handlers import *
+from features.exceptions.definitions.definitions import *
 from features.users.controllers.user_controller import router as user_router
 from features.authorization.controllers.token_controller import router as auth_router
 from features.groups.controllers.group_controller import router as group_router
 from features.tasks.controllers.task_controller import router as task_router
-import mysql.connector
-from features.exceptions.handlers.handlers import *
-from features.exceptions.definitions.definitions import *
 
 # Quick connection check, you can remove it if you don't want it
 # Setting up connection is in database.py and session.py
@@ -33,9 +33,7 @@ except mysql.connector.Error as e:
     print("Error: ", e)
 
 # define CORS domain white list
-origins = [
-  "http://localhost:3000"
-]
+origins = ["http://localhost:3000"]
 
 # this cannot be removed
 
