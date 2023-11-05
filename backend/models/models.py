@@ -13,20 +13,20 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "User"
 
-    id = mapped_column(Integer, primary_key=True)
-    e_mail = mapped_column(String, nullable=False)
-    password_hash = mapped_column(String, nullable=False)
-    name = mapped_column(String)
-    surname = mapped_column(String)
-    title = mapped_column(String)
-    specialization = mapped_column(String)
-    practice_start_year = mapped_column(Integer)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    e_mail: Mapped[str]
+    password_hash: Mapped[str]
+    name: Mapped[str | None]
+    surname: Mapped[str | None]
+    title: Mapped[str | None]
+    specialization: Mapped[str | None]
+    practice_start_year: Mapped[int | None]
 
     # Define the one-to-many relationship with Membership
-    Membership = relationship("Membership", back_populates="User")
+    Membership: Mapped[List["Membership"]] = relationship(back_populates="User")
 
     # Define the one-to-many relationship with Examination
-    Examination = relationship("Examination", back_populates="User")
+    Examination: Mapped[List["Examination"]] = relationship(back_populates="User")
 
     Samples: Mapped[List["Sample"]] = relationship(back_populates="User")
 
@@ -36,13 +36,13 @@ class Membership(Base):
 
     id_user: Mapped[int] = mapped_column(ForeignKey("User.id"), primary_key=True)
     id_group: Mapped[int] = mapped_column(ForeignKey("Group.id"), primary_key=True)
-    role: Mapped[str] = mapped_column(nullable=False, default="User")
+    role: Mapped[str] = mapped_column(default="User")
 
     # Define the many-to-one relationship with User
-    User = relationship("User", back_populates="Membership")
+    User: Mapped["User"] = relationship(back_populates="Membership")
 
     # Define the many-to-one relationship with Group
-    Group = relationship("Group", back_populates="Membership")
+    Group: Mapped["Group"] = relationship(back_populates="Membership")
 
 
 class Group(Base):
@@ -53,99 +53,97 @@ class Group(Base):
     description: Mapped[str | None]
     connection_string: Mapped[str]
     # Define the one-to-many relationship with Task
-    Task = relationship("Task", back_populates="Group")
+    Task: Mapped[List["Task"]] = relationship(back_populates="Group")
 
     # Define the one-to-many relationship with Group
-    Membership = relationship("Membership", back_populates="Group")
+    Membership: Mapped[List["Membership"]] = relationship(back_populates="Group")
 
 
 class Task(Base):
     __tablename__ = "Task"
 
-    id = mapped_column(Integer, primary_key=True)
-    id_group = mapped_column(Integer, ForeignKey("Group.id"), nullable=False)
-    max_samples_for_user = mapped_column(Integer)
-    name = mapped_column(String)
-    description = mapped_column(String)
-    type = mapped_column(String)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    id_group: Mapped[int] = mapped_column(ForeignKey("Group.id"))
+    max_samples_for_user: Mapped[int | None]
+    name: Mapped[str | None]
+    description: Mapped[str | None]
+    type: Mapped[str | None]
 
     # Define the many-to-one relationship with Group
-    Group = relationship("Group", back_populates="Task")
+    Group: Mapped["Group"] = relationship(back_populates="Task")
 
     # Define the one-to-many relationship with Sample
-    Sample = relationship("Sample", back_populates="Task")
+    Sample: Mapped[List["Sample"]] = relationship(back_populates="Task")
 
     # Define the one-to-many relationship with Label
-    Label = relationship("Label", back_populates="Task")
+    Label: Mapped[List["Label"]] = relationship(back_populates="Task")
 
 
 class Sample(Base):
     __tablename__ = "Sample"
 
-    id = mapped_column(Integer, primary_key=True)
-    id_task = mapped_column(Integer, ForeignKey("Task.id"), nullable=False)
-    id_user = mapped_column(Integer, ForeignKey("User.id"), nullable=True)
-    path = mapped_column(String)
-    format = mapped_column(String)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    id_task: Mapped[int] = mapped_column(ForeignKey("Task.id"))
+    id_user: Mapped[int | None] = mapped_column(ForeignKey("User.id"))
+    path: Mapped[str | None]
+    format: Mapped[str | None]
 
     # Define the many-to-one relationship with Task
-    Task = relationship("Task", back_populates="Sample")
+    Task: Mapped["Task"] = relationship(back_populates="Sample")
     # Define the many-to-one relationship with User
-    User = relationship("User", back_populates="Samples")
+    User: Mapped["User"] = relationship(back_populates="Samples")
     # Define the one-to-many relationship with Examination
-    Examination = relationship("Examination", back_populates="Sample")
+    Examination: Mapped[List["Examination"]] = relationship(back_populates="Sample")
 
 
 class Examination(Base):
     __tablename__ = "Examination"
 
-    id = mapped_column(Integer, primary_key=True)
-    id_user = mapped_column(Integer, ForeignKey("User.id"), nullable=False)
-    id_sample = mapped_column(Integer, ForeignKey("Sample.id"), nullable=False)
-    to_further_verification = mapped_column(Boolean)
-    bad_quality = mapped_column(Boolean)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    id_user: Mapped[int] = mapped_column(ForeignKey("User.id"))
+    id_sample: Mapped[int] = mapped_column(ForeignKey("Sample.id"))
+    to_further_verification: Mapped[bool | None]
+    bad_quality: Mapped[bool | None]
 
     # Define the many-to-one relationship with User
-    User = relationship("User", back_populates="Examination")
+    User: Mapped["User"] = relationship(back_populates="Examination")
 
     # Define the many-to-one relationship with Sample
-    Sample = relationship("Sample", back_populates="Examination")
+    Sample: Mapped["Sample"] = relationship(back_populates="Examination")
 
     # Define the one-to-many relationship with BBox
-    BBox = relationship("BBox", back_populates="Examination")
+    BBox: Mapped[List["BBox"]] = relationship(back_populates="Examination")
 
 
 class Label(Base):
     __tablename__ = "Label"
 
-    id = mapped_column(Integer, primary_key=True)
-    id_task = mapped_column(Integer, ForeignKey("Task.id"), nullable=False)
-    name = mapped_column(String)
-    description = mapped_column(String)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    id_task: Mapped[int] = mapped_column(ForeignKey("Task.id"))
+    name: Mapped[str | None]
+    description: Mapped[str | None]
 
     # Define the many-to-one relationship with Task
-    Task = relationship("Task", back_populates="Label")
+    Task: Mapped["Task"] = relationship(back_populates="Label")
 
     # Define the one-to-many relationship with BBox
-    BBox = relationship("BBox", back_populates="Label")
+    BBox: Mapped[List["BBox"]] = relationship(back_populates="Label")
 
 
 class BBox(Base):
     __tablename__ = "BBox"
 
-    id = mapped_column(Integer, primary_key=True)
-    id_examination = mapped_column(
-        Integer, ForeignKey("Examination.id"), nullable=False
-    )
-    id_label = mapped_column(Integer, ForeignKey("Label.id"), nullable=False)
-    comment = mapped_column(String)
-    x1 = mapped_column(Float)
-    y1 = mapped_column(Float)
-    x2 = mapped_column(Float)
-    y2 = mapped_column(Float)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    id_examination: Mapped[int] = mapped_column(ForeignKey("Examination.id"))
+    id_label: Mapped[int] = mapped_column(ForeignKey("Label.id"))
+    comment: Mapped[str | None]
+    x1: Mapped[float | None]
+    y1: Mapped[float | None]
+    x2: Mapped[float | None]
+    y2: Mapped[float | None]
 
     # Define the many-to-one relationship with Examination
-    Examination = relationship("Examination", back_populates="BBox")
+    Examination: Mapped["Examination"] = relationship(back_populates="BBox")
 
     # Define the many-to-one relationship with Label
-    Label = relationship("Label", back_populates="BBox")
+    Label: Mapped["Label"] = relationship(back_populates="BBox")
