@@ -10,13 +10,15 @@ import { IconChevronDown, IconPlus, IconSearch, IconUsersGroup } from '@tabler/i
 
 import { roleOptions } from './GroupsTableConsts';
 
-export default function GroupsTableTopContent({ filterValue, onClear, onSearchChange, statusFilter, setStatusFilter, onAddOpen, onJoinOpen }) {
+export default function GroupsTableTopContent({ filterValue, onClear, onSearchChange, roleFilter, setRoleFilter, onAddOpen, onJoinOpen }) {
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex flex-col sm:flex-row justify-between gap-3 items-end'>
         <Input
           isClearable
-          className='w-full sm:max-w-full'
+          radius='md'
+          className='h-10 w-full sm:max-w-full'
+          classNames={{ inputWrapper: 'h-10' }}
           placeholder='Search by name...'
           startContent={<IconSearch />}
           value={filterValue}
@@ -34,13 +36,13 @@ export default function GroupsTableTopContent({ filterValue, onClear, onSearchCh
               disallowEmptySelection
               aria-label='Table Columns'
               closeOnSelect={false}
-              selectedKeys={statusFilter}
+              selectedKeys={roleFilter}
               selectionMode='multiple'
-              onSelectionChange={setStatusFilter}
+              onSelectionChange={setRoleFilter}
             >
-              {roleOptions.map((status) => (
-                <DropdownItem key={status.uid} className='capitalize'>
-                  {status.name}
+              {roleOptions.map((role) => (
+                <DropdownItem key={role.uid} className='capitalize'>
+                  {role.name}
                 </DropdownItem>
               ))}
             </DropdownMenu>

@@ -25,7 +25,7 @@ export default function GroupsTable() {
   const joinModal = useDisclosure();
   const notification = useNotification();
   const [filterValue, setFilterValue] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [roleFilter, setRoleFilter] = useState('all');
   const [data, setData] = useState({ elements: [], ready: false });
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
   const hasSearchFilter = Boolean(filterValue);
@@ -42,14 +42,14 @@ export default function GroupsTable() {
         group.name.toLowerCase().includes(filterValue.toLowerCase()),
       );
     }
-    if (statusFilter !== 'all' && Array.from(statusFilter).length !== roleOptions.length) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status),
+    if (roleFilter !== 'all' && Array.from(roleFilter).length !== roleOptions.length) {
+      filteredUsers = filteredUsers.filter((user) => 
+        Array.from(roleFilter).includes(user.role.toLowerCase())
       );
     }
 
     return filteredUsers;
-  }, [data.elements, filterValue, statusFilter]);
+  }, [data.elements, filterValue, roleFilter]);
 
   const sortedItems = useMemo(() => {
     return [...filteredItems].sort((a, b) => {
@@ -75,14 +75,14 @@ export default function GroupsTable() {
       filterValue={filterValue}
       onClear={onClear}
       onSearchChange={onSearchChange}
-      statusFilter={statusFilter}
-      setStatusFilter={setStatusFilter}
+      roleFilter={roleFilter}
+      setRoleFilter={setRoleFilter}
       onAddOpen={addModal.onOpen}
       onJoinOpen={joinModal.onOpen}
     />
   ,[
     filterValue,
-    statusFilter,
+    roleFilter,
     data.elements.length,
     onSearchChange,
     hasSearchFilter,
@@ -103,7 +103,6 @@ export default function GroupsTable() {
         topContent={topContent}
         topContentPlacement='outside'
         onSortChange={setSortDescriptor}
-        // onRowAction={(e) => router.push('groups/' + e)}
       >
         <TableHeader columns={columns}>
           {(column) => (
