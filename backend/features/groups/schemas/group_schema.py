@@ -1,38 +1,29 @@
 from pydantic import BaseModel
 
 
-class UserBase(BaseModel):
-    name: str
-    surname: str
-
-
-class UserCreate(UserBase):
-    pass
-
-
-class User(UserBase):
-    id: int
-
-    class Config:
-        from_attributes = True
-
-
 class GroupBase(BaseModel):
     name: str
-    description: str
-    connection_string: str
+    description: str | None
 
 
-class GroupCreate(GroupBase):
-    pass
+class GroupCreate(BaseModel):
+    name: str
 
 
 class GroupUpdate(GroupBase):
     pass
 
 
-class Group(GroupBase):
+class GroupResposne(GroupBase):
     id: int
+
+
+class GroupWithRoleResponse(GroupResposne):
+    role: str
+
+
+class AdminGroupResponse(GroupWithRoleResponse):
+    connection_string: str
 
 
 class MembershipBase(BaseModel):
@@ -45,5 +36,9 @@ class MembershipCreate(MembershipBase):
     pass
 
 
-class Membership(MembershipBase):
+class MembershipResponse(MembershipBase):
     id: int
+
+
+class GroupJoin(BaseModel):
+    connection_string: str

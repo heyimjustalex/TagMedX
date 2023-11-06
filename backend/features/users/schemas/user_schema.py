@@ -6,8 +6,8 @@ from typing import List
 
 class UserResponse(BaseModel):
     user_id: int
-    name: str
-    surname: str
+    name: str | None = None
+    surname: str | None = None
 
 
 class UserListResponse(BaseModel):

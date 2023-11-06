@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from models.models import Task, Membership
-from features.tasks.schemas.task_schema import TaskCreate, TaskResponse
+from features.tasks.schemas.task_schema import TaskCreate
+from .group_repository import Roles
 
 
 class TaskRepository:
@@ -12,12 +13,12 @@ class TaskRepository:
             self.db.query(Membership)
             .filter(Membership.id_user == user_id)
             .filter(Membership.id_group == group_id)
-            .filter(Membership.role == "Admin")
+            .filter(Membership.role == Roles.ADMIN)
             .first()
         )
         return membership is not None
 
-    def create_task(self, task_data: TaskCreate) -> TaskResponse:
+    def create_task(self, task_data: TaskCreate) -> Task:
         task = Task(**task_data.dict())
         self.db.add(task)
         self.db.commit()
