@@ -11,6 +11,7 @@ import {
   useDisclosure
 } from '@nextui-org/react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 
 import { useNotification } from '../../hooks/useNotification';
 import { columns, roleOptions } from './GroupsTableConsts';
@@ -20,14 +21,14 @@ import GroupsTableAddModal from './GroupsTableAddModal';
 import GroupsTableJoinModal from './GroupsTableJoinModal';
 
 export default function GroupsTable() {
+  const addModal = useDisclosure();
+  const joinModal = useDisclosure();
+  const notification = useNotification();
   const [filterValue, setFilterValue] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [data, setData] = useState({ elements: [], ready: false });
-  const addModal = useDisclosure();
-  const joinModal = useDisclosure();
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
   const hasSearchFilter = Boolean(filterValue);
-  const notification = useNotification();
 
   useEffect(() => {
     getGroups(setData, notification)
@@ -102,7 +103,7 @@ export default function GroupsTable() {
         topContent={topContent}
         topContentPlacement='outside'
         onSortChange={setSortDescriptor}
-        onRowAction={(e) => console.log(e)}
+        // onRowAction={(e) => router.push('groups/' + e)}
       >
         <TableHeader columns={columns}>
           {(column) => (
@@ -121,7 +122,7 @@ export default function GroupsTable() {
           loadingContent={<Spinner className='mt-10' label='Loading groups...' />}
         >
           {(item) => (
-            <TableRow key={item.id} className='cursor-pointer'>
+            <TableRow key={item.id} className='cursor-pointer' as={Link} href={`groups/${item.id}`}>
               {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
             </TableRow>
           )}
