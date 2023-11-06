@@ -7,10 +7,11 @@ import RouteLink from 'next/link';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@nextui-org/react';
-import { menuItems, menuItemsUnlogged } from './NavMobileConsts';
-import { handleLogout } from '../Nav/NavUtils';
-import { useUserId } from '../../hooks/useUserId';
-import { useNotification } from '../../hooks/useNotification';
+import { menuItems } from '../NavConsts';
+import { menuItemsUnlogged } from './NavMobileConsts';
+import { handleLogout } from '../NavUtils';
+import { useUserId } from '../../../hooks/useUserId';
+import { useNotification } from '../../../hooks/useNotification';
 
 export default function NavMobile () {
 

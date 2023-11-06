@@ -2,19 +2,21 @@
 
 import { NavbarBrand, NavbarContent, NavbarItem } from '@nextui-org/navbar';
 import { Button } from '@nextui-org/button';
-import { useRouter } from 'next/navigation';
+import { Skeleton } from '@nextui-org/skeleton';
+import { usePathname, useRouter } from 'next/navigation';
 import { Link } from '@nextui-org/link';
 import RouteLink from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { handleLogout } from '../Nav/NavUtils';
-import { menuItems } from './NavDesktopConsts';
-import { useUserId } from '../../hooks/useUserId';
-import { useNotification } from '../../hooks/useNotification';
+import { handleLogout } from '../NavUtils';
+import { menuItems } from '../NavConsts';
+import { useUserId } from '../../../hooks/useUserId';
+import { useNotification } from '../../../hooks/useNotification';
 
 export default function NavDesktop () {
 
   const router = useRouter();
+  const path = usePathname();
   const notification = useNotification();
   const { userId, setUserId } = useUserId();
   const [isClient, setIsClient] = useState(false);
@@ -25,15 +27,15 @@ export default function NavDesktop () {
 
   return (
     <>
+      <NavbarBrand>
+        <RouteLink href='/' className='hidden sm:flex font-bold text-inherit'>
+          TagMedX
+        </RouteLink>
+      </NavbarBrand>
       <NavbarContent className='hidden sm:flex gap-4' justify='center'>
-        <NavbarBrand>
-          <RouteLink href='/' className='font-bold text-inherit'>
-            TagMedX
-          </RouteLink>
-        </NavbarBrand>
         {isClient && userId ? menuItems.map((e, i) => (
-          <NavbarItem key={`${e.url}-${i}`}>
-            <Link as={RouteLink} href={e.url} color={e.color}>
+          <NavbarItem key={`${e.url}-${i}`} isActive={e.url === path}>
+            <Link as={RouteLink} href={e.url} color={e.url !== path ? 'foreground' : ''}>
               {e.name}
             </Link>
           </NavbarItem>
@@ -63,7 +65,12 @@ export default function NavDesktop () {
               Login
             </Button>
           </NavbarItem>
-        </> : <NavbarItem>Loading...</NavbarItem>}
+        </> : <NavbarItem>
+          <Skeleton className="rounded-lg">
+            <div className="h-10 w-20 rounded-lg bg-default-300" />
+          </Skeleton>
+        </NavbarItem>
+        }
       </NavbarContent>
     </>
   )

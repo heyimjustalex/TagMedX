@@ -71,6 +71,15 @@
   padding: 1.25rem;
 }
 
+.content-page {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 4.05rem);
+  /* justify-content: left;
+  align-items: center; */
+  padding: 1.25rem;
+}
+
 .main {
   @apply relative z-10 flex justify-center items-center flex-col w-full;
 }
