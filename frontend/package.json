@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nextui-org/react": "^2.1.13",
+    "@nextui-org/react": "^2.2.4",
     "@tabler/icons-react": "^2.40.0",
     "framer-motion": "^10.16.4",
     "jwt-decode": "^4.0.0",
