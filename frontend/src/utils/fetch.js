@@ -1,6 +1,7 @@
 async function get(url) {
   const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
     method: 'GET',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' }
   })
 
@@ -17,6 +18,7 @@ async function get(url) {
 async function post(url, data) {
   const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
     method: 'POST',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
@@ -34,6 +36,7 @@ async function post(url, data) {
 async function put(url, data) {
   const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
     method: 'PUT',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })
@@ -51,6 +54,7 @@ async function put(url, data) {
 async function patch(url, data) {
   const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
     method: 'PATCH',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   })

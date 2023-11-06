@@ -26,7 +26,7 @@ export async function getGroups(setData, notification) {
 
 export async function addGroup(name, setSent, onClose, setData, notification) {
   setSent(true);
-  const res = await post('groups/join', { name: name });
+  const res = await post('groups/create', { name: name });
   if(res.ok) {
     setData(prev => { return { elements: [res.body, ...prev.elements], ready: true }});
     setSent(false);
