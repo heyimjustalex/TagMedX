@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from repositories.task_repository import TaskRepository
 from ..schemas.task_schema import TaskCreate
@@ -21,4 +22,19 @@ class TaskService:
         return task
 
     def get_task_by_id(self, task_id):
-        return self.task_repository.get_task_by_id(task_id)
+        task = self.task_repository.get_task_by_id(task_id)
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+        return task
+
+    def get_user_tasks(self, user_id: int):
+        return self.task_repository.get_user_tasks(user_id)
+
+    def update_task(self, task_id: int, new_task_data):
+        update_task = self.task_repository.update_task(task_id, new_task_data)
+        if not update_task:
+            raise HTTPException(status_code=404, detail="Task not found")
+        return update_task
+
+    def delete_task(self, task_id: int):
+        return self.task_repository.delete_task(task_id)

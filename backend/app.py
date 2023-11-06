@@ -7,6 +7,7 @@ from features.users.controllers.user_controller import router as user_router
 from features.authorization.controllers.token_controller import router as auth_router
 from features.groups.controllers.group_controller import router as group_router
 from features.tasks.controllers.task_controller import router as task_router
+from features.label.controllers.label_controller import router as label_router
 
 # Quick connection check, you can remove it if you don't want it
 # Setting up connection is in database.py and session.py
@@ -59,3 +60,4 @@ app.include_router(user_router)
 app.include_router(auth_router)
 app.include_router(group_router)
 app.include_router(task_router)
+app.include_router(label_router)
