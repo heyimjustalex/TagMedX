@@ -16,8 +16,8 @@ class LabelService:
             raise PermissionDenied(status_code=403, detail="No authorization to create a label")
         return label
 
-    def get_labels_for_task(self, task_id: int) -> List[LabelSchema]:
-        labels = self.label_repository.get_labels_for_task(task_id)
+    def get_labels_for_set(self, set_id: int) -> List[LabelSchema]:
+        labels = self.label_repository.get_labels_for_set(set_id)
         if not labels:
             raise HTTPException(status_code=404, detail="Brak etykiet dla podanego zadania")
         return labels

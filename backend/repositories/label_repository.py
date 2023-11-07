@@ -1,6 +1,6 @@
 from typing import List
 from sqlalchemy.orm import Session
-from models.models import Label, Membership, Group, Task
+from models.models import Label, Membership, Group, Set
 from features.label.schemas.label_schema import LabelSchema
 
 
@@ -8,7 +8,7 @@ class LabelRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def can_create_label(self, user_id, task_id):
+    def can_create_label(self, user_id, set_id):
         groups = (
             self.db.query(Group)
             .join(Membership, Group.id == Membership.id_group)
@@ -17,14 +17,14 @@ class LabelRepository:
         )
 
         group_ids = [group.id for group in groups]
-        task = self.db.query(Task).filter(Task.id == task_id).first()
-        if not task or task.id_group not in group_ids:
+        set = self.db.query(Set).filter(Set.id == set_id).first()
+        if not set or set.id_group not in group_ids:
             return False
 
         return True
 
     def create_label(self, user_id, label_data):
-        if not self.can_create_label(user_id, label_data.id_task):
+        if not self.can_create_label(user_id, label_data.id_set):
             return None
 
         label = Label(**label_data.dict())
@@ -33,5 +33,5 @@ class LabelRepository:
         self.db.refresh(label)
         return label
 
-    def get_labels_for_task(self, task_id: int) -> List[LabelSchema]:
-        return self.db.query(Label).filter(Label.id_task == task_id).all()
+    def get_labels_for_set(self, set_id: int) -> List[LabelSchema]:
+        return self.db.query(Label).filter(Label.id_set == set_id).all()

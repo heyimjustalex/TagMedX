@@ -19,11 +19,11 @@ def create_label(label_data: LabelSchema, db: Session = Depends(get_db),
     return label
 
 
-@router.get("/labels/{task_id}", tags=["Label"], response_model=List[LabelSchema])
-def get_labels_for_task(
-        task_id: int,
+@router.get("/labels/{set_id}", tags=["Label"], response_model=List[LabelSchema])
+def get_labels_for_set(
+        set_id: int,
         db: Session = Depends(get_db)
 ):
     label_service = LabelService(db)
-    labels = label_service.get_labels_for_task(task_id)
+    labels = label_service.get_labels_for_set(set_id)
     return labels

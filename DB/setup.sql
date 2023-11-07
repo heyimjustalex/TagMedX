@@ -20,16 +20,19 @@ CREATE TABLE `Group` (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE `Task` (
+CREATE TABLE `Set` (
   id INT NOT NULL AUTO_INCREMENT,
   id_group INT NOT NULL,
   max_samples_for_user INT,
   name VARCHAR(255),
   description VARCHAR(255),
   type VARCHAR(255),
+  package_size INT,
   PRIMARY KEY (id),
   FOREIGN KEY (id_group) REFERENCES `Group`(id)
 );
+
+
 
 CREATE TABLE `Membership` (
   id_user INT NOT NULL,
@@ -40,16 +43,26 @@ CREATE TABLE `Membership` (
   FOREIGN KEY (id_group) REFERENCES `Group`(id)
 );
 
+CREATE TABLE `Package` (
+  id INT NOT NULL AUTO_INCREMENT,
+  id_set INT NOT NULL,
+  id_user INT,
+  is_ready BOOLEAN,
+  PRIMARY KEY (id),
+  FOREIGN KEY (id_set) REFERENCES `Set`(id),
+  FOREIGN KEY (id_user) REFERENCES `User`(id)
+);
+
 CREATE TABLE `Sample` (
   id INT NOT NULL AUTO_INCREMENT,
-  id_task INT NOT NULL,
-  id_user INT,
+  id_package INT,
   path VARCHAR(255),
   format VARCHAR(255),
   PRIMARY KEY (id),
-  FOREIGN KEY (id_task) REFERENCES `Task`(id),
-  FOREIGN KEY (id_user) REFERENCES `User`(id)
+  FOREIGN KEY (id_package) REFERENCES `Package`(id)
 );
+
+
 
 CREATE TABLE `Examination` (
   id INT NOT NULL AUTO_INCREMENT,
@@ -64,11 +77,11 @@ CREATE TABLE `Examination` (
 
 CREATE TABLE `Label` (
   id INT NOT NULL AUTO_INCREMENT,
-  id_task INT NOT NULL,
+  id_set INT NOT NULL,
   name VARCHAR(255),
   description VARCHAR(255),
   PRIMARY KEY (id),
-  FOREIGN KEY (id_task) REFERENCES `Task`(id)
+  FOREIGN KEY (id_set) REFERENCES `Set`(id)
 );
 
 CREATE TABLE `BBox` (
@@ -104,13 +117,21 @@ VALUES
     ('Group 5', 'Description 5','password5');
 
 
-INSERT INTO `Task` (id_group, max_samples_for_user, name, description, type)
+INSERT INTO `Set` (id_group, name, description, type, package_size)
 VALUES
-    (1, 1, 'Task 1', 'Task Description 1', 'Type A'),
-    (2, 2, 'Task 2', 'Task Description 2', 'Type B'),
-    (3, 2, 'Task 3', 'Task Description 3', 'Type A'),
-    (4, 3, 'Task 4', 'Task Description 4', 'Type C'),
-    (5, 4, 'Task 5', 'Task Description 5', 'Type B');
+    (1, 'set 1', 'set Description 1', 'Type A', 100),
+    (2, 'set 2', 'set Description 2', 'Type B', 10),
+    (3, 'set 3', 'set Description 3', 'Type A', 100),
+    (4, 'set 4', 'set Description 4', 'Type C', 10),
+    (5, 'set 5', 'set Description 5', 'Type B', 100);
+
+INSERT INTO `Package` (id_set, id_user, is_ready)
+VALUES
+    (1, NULL, 0),
+    (1, NULL, 0),
+    (2, 1, 1),
+    (2, 2, 1),
+    (3, 3, 1);
 
 
 INSERT INTO `Membership` (id_user, id_group, role)
@@ -122,13 +143,13 @@ VALUES
     (4, 3,'Admin');
 
 
-INSERT INTO `Sample` (id_task,id_user, path, format)
+INSERT INTO `Sample` (id_package, path, format)
 VALUES
-    (1, NULL, '/path/to/sample1', 'Format A'),
-    (2, NULL, '/path/to/sample2', 'Format B'),
-    (3, NULL, '/path/to/sample3', 'Format A'),
-    (4, NULL, '/path/to/sample4', 'Format C'),
-    (2, NULL, '/path/to/sample5', 'Format B');
+    (NULL, '/path/to/sample1', 'Format A'),
+    (NULL, '/path/to/sample2', 'Format B'),
+    (NULL, '/path/to/sample3', 'Format A'),
+    (NULL, '/path/to/sample4', 'Format C'),
+    (NULL, '/path/to/sample5', 'Format B');
 
 
 INSERT INTO `Examination` (id_user, id_sample, to_further_verification, bad_quality)
@@ -139,7 +160,7 @@ VALUES
     (4, 4, 1, 0),
     (2, 5, 0, 0);
 
-INSERT INTO `Label` (id_task, name, description)
+INSERT INTO `Label` (id_set, name, description)
 VALUES
     (1, 'Label 1', 'Label Description 1'),
     (2, 'Label 2', 'Label Description 2'),
