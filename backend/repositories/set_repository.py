@@ -45,7 +45,8 @@ class SetRepository:
         )
 
         set_data = [
-            {"max_samples_for_user": set.max_samples_for_user, "name": set.name, "description": set.description,
+            {#"max_samples_for_user": set.max_samples_for_user, 
+             "name": set.name, "description": set.description,
              "type": set.type} for set in sets]
 
         return set_data

@@ -21,14 +21,14 @@ class SetResponse(BaseModel):
 
 
 class SetSchema(BaseModel):
-    max_samples_for_user: int
+    # max_samples_for_user: int
     name: str
     description: str
     type: str
 
 
 class SetUpdateSchema(BaseModel):
-    max_samples_for_user: int = None
+    # max_samples_for_user: int = None
     name: str = None
     description: str = None
     type: str = None
