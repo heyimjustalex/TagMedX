@@ -100,7 +100,7 @@ class Package(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     id_set: Mapped[int] = mapped_column(ForeignKey("Set.id"))
     id_user: Mapped[int | None] = mapped_column(ForeignKey("User.id"))
-
+    is_ready: Mapped[bool | None]
     # Define the one-to-many relationship with Sample
     Sample: Mapped["Sample"] = relationship(back_populates="Package")
     # Define the many-to-one relationship with Set

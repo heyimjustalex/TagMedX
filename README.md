@@ -48,6 +48,7 @@ The structure of the database is as follows:
 - Relationships:
   - One-to-Many with Membership
   - One-to-Many with Examination
+  - One-to-Many with Package
 
 **Group:**
 
@@ -67,19 +68,28 @@ The structure of the database is as follows:
 
 **Set:**
 
-- Fields: id, id_group, max_samples_for_user, name, description, type
+- Fields: id, id_group, name, description, type
 - Purpose: Represents sets that are created by users with the role "admin/manager." A Group is linked with Set, allowing a group of doctors to have many sets assigned. Set is a representation of activity dataset marking.
 - Relationships:
   - Many-to-One with Group
-  - One-to-Many with Sample (each set has multiple packages)
+  - One-to-Many with Package (each set has multiple packages)
   - One-to-Many with Label (a set has some labels assigned by the admin, which doctors can later choose from)
+
+**Package:**
+
+- Fields: id, id_set, id_user, is_ready
+- Purpose: Represents sets that are created by users with the role "admin/manager." A Group is linked with Set, allowing a group of doctors to have many sets assigned. Set is a representation of activity dataset marking.
+- Relationships:
+  - Many-to-One with Set (Package belongs to a Set (previously called Task))
+  - Many-to-One with User (Package has user that owns it)
+  - One-to-Many with Sample (each Package has multiple Samples)
 
 **Sample:**
 
 - Fields: id, id_set, path, format
 - Purpose: Represents samples, which contain information about added photos to be examined.
 - Relationships:
-  - Many-to-One with Set
+  - Many-to-One with Package
   - Many-to-One with User - each sample has a user that it was firstly assigned to
   - One-to-Many with Examination - each sample might have different examination by different users, with different BBox
 
@@ -113,13 +123,6 @@ The structure of the database is as follows:
 ### General
 
 Project has hot-reload with Docker and it gets started with compose. Written with FastAPI.
-
-### TODO - Deadline: 2.11.2023 but it would be better to end this part up to 26.10.2023
-
-- Register/Login with JWT (ask @wybieracz how to do it)
-- Adding user to a group, getting users that are part of a group
-- File (photos) upload (create some new assets folder for uploaded photos)
-- Possibility to print information about photos
 
 ### Naming conventions
 
