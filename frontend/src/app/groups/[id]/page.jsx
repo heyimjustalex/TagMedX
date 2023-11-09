@@ -1,4 +1,5 @@
 import { get } from '../../../utils/serverFetch';
+import Group from '../../../components/Group/Group';
 
 async function getData(id) {
   const res = await get(`groups/${id}`);
@@ -6,16 +7,13 @@ async function getData(id) {
   else console.error(`${res.code} ${res.status}`);
 }
 
-export default async function Groups({ params }) {
+export default async function GroupPage({ params }) {
 
   const data = await getData(params.id);
 
   return (
     <section className='content-page flex flex-col'>
-      <div className='flex'>
-        <h1 className='text-5xl font-bold'>{data?.name}</h1>
-      </div>
-      <div className='flex text-sm py-4 px-1'>{data?.description}</div>
+      <Group data={data} />
     </section>
   )
 }
