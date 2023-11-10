@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.models import Set, Membership, Group, Label, Sample
+from models.models import Set, Membership, Group, Label, Sample, Package
 from features.sets.schemas.set_schema import SetCreate
 from .group_repository import Roles
 
@@ -38,16 +38,16 @@ class SetRepository:
 
         group_ids = [group.id for group in groups]
 
-        sets = (
-            self.db.query(Set)
-            .filter(Set.id_group.in_(group_ids))
-            .all()
-        )
+        sets = self.db.query(Set).filter(Set.id_group.in_(group_ids)).all()
 
         set_data = [
-            {#"max_samples_for_user": set.max_samples_for_user, 
-             "name": set.name, "description": set.description,
-             "type": set.type} for set in sets]
+            {  # "max_samples_for_user": set.max_samples_for_user,
+                "name": set.name,
+                "description": set.description,
+                "type": set.type,
+            }
+            for set in sets
+        ]
 
         return set_data
 
@@ -65,9 +65,9 @@ class SetRepository:
             self.db.query(Label).filter(Label.id_set == set_id).delete(
                 synchronize_session=False
             )
-            self.db.query(Sample).filter(Sample.id_set == set_id).delete(
-                synchronize_session=False
-            )
+            self.db.query(Sample).filter(
+                Sample.Package.has(Package.id_set == set_id)
+            ).delete(synchronize_session=False)
             self.db.delete(db_set)
             self.db.commit()
         return db_set
