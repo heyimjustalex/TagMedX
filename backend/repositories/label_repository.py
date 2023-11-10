@@ -1,14 +1,13 @@
 from typing import List
 from sqlalchemy.orm import Session
 from models.models import Label, Membership, Group, Set
-from features.label.schemas.label_schema import LabelSchema
 
 
 class LabelRepository:
     def __init__(self, db: Session):
         self.db = db
 
-    def can_create_label(self, user_id, set_id):
+    def can_create_label(self, user_id, set_id) -> bool:
         groups = (
             self.db.query(Group)
             .join(Membership, Group.id == Membership.id_group)
@@ -23,7 +22,7 @@ class LabelRepository:
 
         return True
 
-    def create_label(self, user_id, label_data):
+    def create_label(self, user_id, label_data) -> Label | None:
         if not self.can_create_label(user_id, label_data.id_set):
             return None
 
@@ -33,5 +32,5 @@ class LabelRepository:
         self.db.refresh(label)
         return label
 
-    def get_labels_for_set(self, set_id: int) -> List[LabelSchema]:
+    def get_labels_for_set(self, set_id: int) -> List[Label]:
         return self.db.query(Label).filter(Label.id_set == set_id).all()

@@ -29,6 +29,6 @@ class SetSchema(BaseModel):
 
 class SetUpdateSchema(BaseModel):
     # max_samples_for_user: int = None
-    name: str = None
-    description: str = None
-    type: str = None
+    name: str | None = None
+    description: str | None = None
+    type: str | None = None
