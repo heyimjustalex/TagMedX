@@ -2,7 +2,7 @@ import secrets
 import string
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from models.models import Group, User, Membership, Task
+from models.models import Group, User, Membership, Set
 from typing import List
 from features.groups.schemas.group_schema import (
     GroupCreate,
@@ -95,7 +95,7 @@ class GroupRepository:
     def delete_group(self, group_id: int) -> Group | None:
         db_group = self.get_group(group_id)
         if db_group:
-            self.db.query(Task).filter(Task.id_group == group_id).delete(
+            self.db.query(Set).filter(Set.id_group == group_id).delete(
                 synchronize_session=False
             )
             self.db.query(Membership).filter(Membership.id_group == group_id).delete(

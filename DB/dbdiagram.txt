@@ -17,14 +17,21 @@ Table Group {
 
 }
 
-Table Task {
+Table Set {
   id integer  [primary key]
-  id_group integer
-  max_samples_for_user integer
+  id_group integer  
   name varchar
   description varchar
   type varchar
+  package_size integer
 
+}
+
+Table Package{
+  id integer  [primary key]
+  id_set integer
+  id_user integer
+  is_ready bool
 }
 
 Table Membership{
@@ -37,8 +44,8 @@ Table Membership{
 Table Sample
 {
   id integer [ primary key ]
-  id_task integer
-  id_user integer
+  id_package integer
+ 
   path varchar
   format varchar
 
@@ -55,7 +62,7 @@ Table Examination{
 
 Table Label{
   id integer [primary key]
-  id_task integer
+  id_set integer
   name varchar
   description varchar
 
@@ -79,8 +86,6 @@ Table BBox{
 
 
 
-Ref: "Sample"."id_task" > "Task"."id"
-
 
 Ref: "User"."id" < "Membership"."id_user"
 
@@ -96,7 +101,7 @@ Ref: "User"."id" < "Examination"."id_user"
 
 
 
-Ref: "Task"."id_group" > "Group"."id"
+Ref: "Set"."id_group" > "Group"."id"
 
 
 
@@ -106,8 +111,14 @@ Ref: "Sample"."id" < "Examination"."id_sample"
 
 
 
-Ref: "Task"."id" < "Label"."id_task"
+Ref: "Set"."id" < "Label"."id_set"
 
 Ref: "Label"."id" < "BBox"."label_id"
 
-Ref: "User"."id" < "Sample"."id_user"
+
+
+Ref: "Set"."id" < "Package"."id_set"
+
+Ref: "Package"."id" < "Sample"."id_package"
+
+Ref: "User"."id" < "Package"."id_user"
