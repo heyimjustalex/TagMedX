@@ -12,7 +12,7 @@ class SampleService:
         self.repository: SampleRepository = SampleRepository(db)
 
     def create_sample(
-        self, file_content: bytes, content_type: str | None, id_task: int
+        self, file_content: bytes, content_type: str | None, id_package: int
     ) -> Sample:
         if not content_type:
             raise HTTPException(
@@ -26,12 +26,12 @@ class SampleService:
                 detail=f"The {content_type} file type is not supported.",
             )
 
-        path = f"/images/task{id_task}_{uuid4()}.{IMAGE_TYPES.get(content_type)}"
+        path = f"/images/task{id_package}_{uuid4()}.{IMAGE_TYPES.get(content_type)}"
         with open(path, "wb") as image_file:
             image_file.write(file_content)
 
         sample = Sample()
-        sample.id_task = id_task
+        sample.id_package = id_package
         sample.path = path
         sample.format = content_type
 
