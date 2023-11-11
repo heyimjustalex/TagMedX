@@ -9,7 +9,7 @@ export function renderCell(item, columnKey) {
   switch (columnKey) {
     case 'role':
       return (
-        <Chip className='capitalize' color={NextColorMap[item.status]} size='sm' variant='flat'>
+        <Chip className='capitalize' color={NextColorMap[item.role.toLowerCase()]} size='sm' variant='flat'>
           {cellValue}
         </Chip>
       );
@@ -26,12 +26,12 @@ export async function getGroups(setData, notification) {
 
 export async function addGroup(name, setSent, onClose, setData, notification) {
   setSent(true);
-  const res = await post('groups/join', { name: name });
+  const res = await post('groups/create', { name: name });
   if(res.ok) {
     setData(prev => { return { elements: [res.body, ...prev.elements], ready: true }});
     setSent(false);
     onClose();
-    notification.make(NextColor.DANGER, 'Group created', `You have successfully created ${res.body.name}.`);
+    notification.make(NextColor.SUCCESS, 'Group created', `You have successfully created ${res.body.name}.`);
   }
   else {
     setSent(false);
@@ -47,7 +47,7 @@ export async function joinGroup(connectionString, setSent, onClose, setData, not
     setData(prev => { return { elements: [res.body, ...prev.elements], ready: true }});
     setSent(false);
     onClose();
-    notification.make(NextColor.DANGER, 'Joined group', `You have successfully join to ${res.body.name}`);
+    notification.make(NextColor.SUCCESS, 'Joined group', `You have successfully join to ${res.body.name}`);
   }
   else {
     setSent(false);
