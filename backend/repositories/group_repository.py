@@ -25,7 +25,7 @@ class GroupRepository:
         new_group_id = max_group_id + 1
 
         characters = string.ascii_letters + string.digits
-        connection_string = "".join(secrets.choice(characters) for i in range(10))
+        connection_string = "".join(secrets.choice(characters) for i in range(32))
 
         db_group = Group(
             id=new_group_id, connection_string=connection_string, name=group.name

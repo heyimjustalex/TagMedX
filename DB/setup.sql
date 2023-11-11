@@ -23,7 +23,6 @@ CREATE TABLE `Group` (
 CREATE TABLE `Set` (
   id INT NOT NULL AUTO_INCREMENT,
   id_group INT NOT NULL,
-  max_samples_for_user INT,
   name VARCHAR(255),
   description VARCHAR(255),
   type VARCHAR(255),
