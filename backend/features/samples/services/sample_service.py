@@ -1,6 +1,10 @@
+from uuid import uuid4
 from sqlalchemy.orm import Session
 from repositories.sample_repository import SampleRepository
 from models.models import Sample
+from fastapi import HTTPException, status
+
+IMAGE_TYPES = {"image/jpeg": "jpg", "image/png": "png"}
 
 
 class SampleService:
@@ -10,7 +14,19 @@ class SampleService:
     def create_sample(
         self, file_content: bytes, content_type: str | None, id_task: int
     ) -> Sample:
-        path = "/images/image.jpg"
+        if not content_type:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="The file type is not specified.",
+            )
+
+        if content_type not in IMAGE_TYPES.keys():
+            raise HTTPException(
+                status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                detail=f"The {content_type} file type is not supported.",
+            )
+
+        path = f"/images/task{id_task}_{uuid4()}.{IMAGE_TYPES.get(content_type)}"
         with open(path, "wb") as image_file:
             image_file.write(file_content)
 
