@@ -11,7 +11,7 @@ class GroupCreate(BaseModel):
 
 
 class GroupUpdate(GroupBase):
-    pass
+    connection_string: str
 
 
 class GroupResposne(GroupBase):

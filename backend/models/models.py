@@ -65,10 +65,10 @@ class Set(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     id_group: Mapped[int] = mapped_column(ForeignKey("Group.id"))
-    max_samples_for_user: Mapped[int | None]
     name: Mapped[str | None]
     description: Mapped[str | None]
     type: Mapped[str | None]
+    package_size: Mapped[int | None]
 
     # Define the many-to-one relationship with Group
     Group: Mapped["Group"] = relationship(back_populates="Set")

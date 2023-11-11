@@ -40,14 +40,7 @@ class SetRepository:
 
         sets = self.db.query(Set).filter(Set.id_group.in_(group_ids)).all()
 
-        set_data = [
-            {  # "max_samples_for_user": set.max_samples_for_user,
-                "name": set.name,
-                "description": set.description,
-                "type": set.type,
-            }
-            for set in sets
-        ]
+        set_data = [{"name": set.name, "description": set.description, "type": set.type, "package_size": set.package_size} for set in sets]
 
         return set_data
 
