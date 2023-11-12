@@ -35,7 +35,7 @@ export default function GroupSettings({ data, setData }) {
       variant='light'
       radius='sm'
       className='min-w-min w-8 h-7 mx-1'
-      onClick={() => setSettings({ ...settings, connectionString: generateRandomString(10) })}
+      onClick={() => setSettings({ ...settings, connectionString: generateRandomString(32) })}
     >
       <IconRefresh size={16} className='cursor-pointer' />
     </Button>

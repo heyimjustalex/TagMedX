@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { Card, CardBody, Tab, Tabs } from '@nextui-org/react';
 
 import GroupSettings from './GroupSettings/GroupSettings';
+import GroupUsers from './GroupUsers/GroupUsers';
 
 export default function Group({ data }) {
   const searchParams = useSearchParams();
@@ -29,18 +30,20 @@ export default function Group({ data }) {
             </CardBody>
           </Card>
         </Tab>
-        <Tab key="users" title="Users" href={`/groups/${data.id}?tab=users`} as={RouteLink}>
-          <Card>
-            <CardBody>
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-              commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-              dolore eu fugiat nulla pariatur.
-            </CardBody>
-          </Card>
-        </Tab>
-        <Tab key="settings" title="Settings" href={`/groups/${data.id}?tab=settings`} as={RouteLink}>
-          <GroupSettings data={groupData} setData={setGroupData} />
-        </Tab>
+        {data?.role === 'Admin' ? 
+          <Tab key="users" title="Users" href={`/groups/${data.id}?tab=users`} as={RouteLink}>
+            <Card>
+              <CardBody>
+                <GroupUsers data={groupData} setData={setGroupData} />
+              </CardBody>
+            </Card>
+          </Tab>
+        : null }
+        {data?.role === 'Admin' ? 
+          <Tab key="settings" title="Settings" href={`/groups/${data.id}?tab=settings`} as={RouteLink}>
+            <GroupSettings data={groupData} setData={setGroupData} />
+          </Tab>
+        : null }
       </Tabs>
     </>
   );

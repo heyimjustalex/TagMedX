@@ -8,7 +8,7 @@ async function get(url) {
     method: 'GET',
     credentials: 'include',
     headers: {
-      'Cookie': `${cookie.name}=${cookie.value}`,
+      'Cookie': `${cookie?.name}=${cookie?.value}`,
       'Content-Type': 'application/json'
     }
   })
@@ -28,7 +28,7 @@ async function post(url, data, cookie) {
     method: 'POST',
     credentials: 'include',
     headers: {
-      'Cookie': `${cookie.name}=${cookie.value}`,
+      'Cookie': `${cookie?.name}=${cookie?.value}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
@@ -49,7 +49,7 @@ async function put(url, data, cookie) {
     method: 'PUT',
     credentials: 'include',
     headers: {
-      'Cookie': `${cookie.name}=${cookie.value}`,
+      'Cookie': `${cookie?.name}=${cookie?.value}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
@@ -70,7 +70,7 @@ async function patch(url, data, cookie) {
     method: 'PATCH',
     credentials: 'include',
     headers: {
-      'Cookie': `${cookie.name}=${cookie.value}`,
+      'Cookie': `${cookie?.name}=${cookie?.value}`,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
