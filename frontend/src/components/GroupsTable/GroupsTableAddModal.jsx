@@ -29,7 +29,6 @@ export default function GroupsTableAddModal({ isOpen, onOpenChange, setData, not
             </ModalBody>
             <ModalFooter>
               <Button
-                color='danger'
                 onPress={onClose}
               >
                 Close

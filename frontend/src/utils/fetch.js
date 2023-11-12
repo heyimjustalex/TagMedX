@@ -69,4 +69,21 @@ async function patch(url, data) {
   }
 }
 
-export { get, post, put, patch }
+async function del(url) {
+  const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
+    method: 'DELETE',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  const body = await res.json();
+
+  return {
+    ok: res.ok,
+    body: body,
+    code: res.status,
+    status: res.statusText
+  }
+}
+
+export { get, post, put, patch, del }
