@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
 
 import { columns } from './GroupUsersConsts';
@@ -6,10 +6,12 @@ import { useNotification } from '../../../hooks/useNotification';
 import { titleOptions } from './GroupUsersConsts';
 import GroupUsersTopContent from './GroupUsersTopContent';
 import { renderCell } from './GroupUsersUtils';
+import GroupUsersModal from './GroupUsersModal';
 
 export default function GroupUsers({ data, setData }) {
 
   const notification = useNotification();
+  const [modal, setModal] = useState({ open: false, user: { user_id: '', name: '' }})
   const [filterValue, setFilterValue] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
@@ -70,38 +72,48 @@ export default function GroupUsers({ data, setData }) {
   ]);
 
   return (
-    <Table
-      aria-label='Table with users'
-      isHeaderSticky
-      bottomContentPlacement='outside'
-      classNames={{ wrapper: 'max-h-full' }}
-      selectionMode='single'
-      showSelectionCheckboxes={false}
-      sortDescriptor={sortDescriptor}
-      topContent={topContent}
-      topContentPlacement='outside'
-      onSortChange={setSortDescriptor}
-    >
-      <TableHeader columns={columns}>
-        {(column) => (
-          <TableColumn
-            key={column.uid}
-            allowsSorting={column.sortable}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody
-        items={sortedItems}
-        emptyContent={data.ready ? 'No users found' : true}
+    <>
+      <Table
+        aria-label='Table with users'
+        isHeaderSticky
+        bottomContentPlacement='outside'
+        classNames={{ wrapper: 'max-h-full' }}
+        selectionMode='single'
+        showSelectionCheckboxes={false}
+        sortDescriptor={sortDescriptor}
+        topContent={topContent}
+        topContentPlacement='outside'
+        onSortChange={setSortDescriptor}
       >
-        {(item) => (
-          <TableRow key={item.user_id} className='cursor-pointer'>
-            {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn
+              key={column.uid}
+              allowsSorting={column.sortable}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          items={sortedItems}
+          emptyContent={data.ready ? 'No users found' : true}
+        >
+          {(item) => (
+            <TableRow key={item.user_id} className='cursor-pointer'>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey, setModal)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <GroupUsersModal
+        modal={modal}
+        setModal={setModal}
+        groupId={data?.id}
+        groupName={data?.name}
+        setData={setData}
+        notification={notification}
+      />
+    </>
   )
 }

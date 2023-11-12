@@ -29,7 +29,6 @@ export default function GroupsTableJoinModal({ isOpen, onOpenChange, setData, no
             </ModalBody>
             <ModalFooter>
               <Button
-                color='danger'
                 onPress={onClose}
               >
                 Close
