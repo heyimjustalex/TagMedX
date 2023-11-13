@@ -29,7 +29,7 @@ export default function GroupsTableTopContent({ filterValue, onClear, onSearchCh
           <Dropdown>
             <DropdownTrigger className='flex w-full sm:w-min justify-end sm:justify-end'>
               <Button endContent={<IconChevronDown className='text-small' />} variant='flat'>
-                Status
+                Role
               </Button>
             </DropdownTrigger>
             <DropdownMenu

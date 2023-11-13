@@ -3,7 +3,6 @@ import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from 
 
 import { columns } from './GroupUsersConsts';
 import { useNotification } from '../../../hooks/useNotification';
-import { titleOptions } from './GroupUsersConsts';
 import GroupUsersTopContent from './GroupUsersTopContent';
 import { renderCell } from './GroupUsersUtils';
 import GroupUsersModal from './GroupUsersModal';
@@ -13,12 +12,10 @@ export default function GroupUsers({ data, setData }) {
   const notification = useNotification();
   const [modal, setModal] = useState({ open: false, user: { user_id: '', name: '' }})
   const [filterValue, setFilterValue] = useState('');
-  const [roleFilter, setRoleFilter] = useState('all');
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
   const hasSearchFilter = Boolean(filterValue);
 
   const filteredItems = useMemo(() => {
-    // let filteredUsers = [];
     let filteredUsers = [...data.users];
 
     if (hasSearchFilter) {
@@ -26,12 +23,6 @@ export default function GroupUsers({ data, setData }) {
         group.name.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
-
-    // if (roleFilter !== 'all' && Array.from(roleFilter).length !== titleOptions.length) {
-    //   filteredUsers = filteredUsers.filter((user) => 
-    //     Array.from(roleFilter).includes(user.role.toLowerCase())
-    //   );
-    // }
 
     return filteredUsers;
   }, [data.users, filterValue]);
@@ -60,12 +51,9 @@ export default function GroupUsers({ data, setData }) {
       filterValue={filterValue}
       onClear={onClear}
       onSearchChange={onSearchChange}
-      roleFilter={roleFilter}
-      setRoleFilter={setRoleFilter}
     />
   ,[
     filterValue,
-    roleFilter,
     data.users.length,
     onSearchChange,
     hasSearchFilter
@@ -90,6 +78,7 @@ export default function GroupUsers({ data, setData }) {
             <TableColumn
               key={column.uid}
               allowsSorting={column.sortable}
+              className={column.uid === 'action' ? 'text-end' : ''}
             >
               {column.name}
             </TableColumn>

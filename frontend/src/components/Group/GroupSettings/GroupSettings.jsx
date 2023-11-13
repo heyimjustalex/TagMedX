@@ -15,7 +15,7 @@ export default function GroupSettings({ data, setData }) {
     description: data.description,
     connectionString: data.connection_string
   });
-
+  
   const copyBtn = useMemo(() =>
     <Button
       isIconOnly
