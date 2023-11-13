@@ -9,7 +9,7 @@ async function getData(id) {
 
 async function getUsers(id) {
   const res = await get(`groups/${id}/users`);
-  if(res.ok) return res.body.users;
+  if(res.ok) return res.body.members;
   else console.error(`${res.code} ${res.status}`);
 }
 

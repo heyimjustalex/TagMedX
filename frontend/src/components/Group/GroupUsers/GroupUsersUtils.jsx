@@ -18,8 +18,8 @@ export function renderCell(item, columnKey, setModal) {
             fallback: `${cellValue[0]}${item.surname[0]}`,
             color: NextColorMap[(cellValue.codePointAt(0) + item.surname.codePointAt(0)) % 6]
           }}
-          description={item.email}
-          name={`${cellValue} ${item.surname}`}
+          description={item.e_mail}
+          name={`${item.title || ''} ${cellValue} ${item.surname}`}
         >
           {item.email}
         </User>
@@ -46,6 +46,8 @@ export function renderCell(item, columnKey, setModal) {
         }
         </div>
       );
+    case 'practice_start_year':
+      return cellValue ? new Date().getFullYear() - parseInt(cellValue) : 0;
     default:
       return cellValue;
   }
