@@ -1,21 +1,21 @@
 from pydantic import BaseModel
-
-
-class GroupBase(BaseModel):
-    name: str
-    description: str | None
+from ...users.schemas.user_schema import UserResponse
 
 
 class GroupCreate(BaseModel):
     name: str
 
 
-class GroupUpdate(GroupBase):
-    connection_string: str
+class GroupUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None
+    connection_string: str | None = None
 
 
-class GroupResposne(GroupBase):
+class GroupResposne(BaseModel):
     id: int
+    name: str
+    description: str | None = None
 
 
 class GroupWithRoleResponse(GroupResposne):
@@ -26,18 +26,18 @@ class AdminGroupResponse(GroupWithRoleResponse):
     connection_string: str
 
 
-class MembershipBase(BaseModel):
+class MembershipCreate(BaseModel):
     id_user: int
     id_group: int
     role: str
 
 
-class MembershipCreate(MembershipBase):
-    pass
+class GroupMemberResponse(UserResponse):
+    role: str
 
 
-class MembershipResponse(MembershipBase):
-    id: int
+class GroupMemberListResponse(BaseModel):
+    members: list[GroupMemberResponse]
 
 
 class GroupJoin(BaseModel):

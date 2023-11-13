@@ -25,7 +25,16 @@ async def login(
         data={"id": user.id, "sub": user.e_mail}, expires_delta=access_token_expires
     )
 
-    user_data = UserResponse(user_id=user.id, name=user.name, surname=user.surname)
+    user_data = UserResponse(
+        user_id=user.id,
+        e_mail=user.e_mail,
+        name=user.name,
+        surname=user.surname,
+        title=user.title,
+        specialization=user.specialization,
+        practice_start_year=user.practice_start_year,
+    )
+
     response.set_cookie(
         key="token",
         value=access_token,

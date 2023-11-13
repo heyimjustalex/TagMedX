@@ -44,8 +44,10 @@ class UserService:
         return user
 
     def get_users(self) -> List[User]:
-        # zwroc se pusta liste
         return self.repository.get_all_users()
+
+    def get_users_in_group(self, id_group) -> List[User]:
+        return self.repository.get_users_by_group(id_group)
 
     def check_user(self, email: str, password: str) -> User:
         if not valid_email(email):
