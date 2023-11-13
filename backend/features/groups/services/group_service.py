@@ -102,10 +102,11 @@ class GroupService:
         self.group_repository.create_membership(membership)
         return group
 
-    def check_if_admin(self, id_user: int, id_group: int):
+    def check_if_admin(self, id_user: int, id_group: int) -> str:
         role = self.get_role_in_group(id_user, id_group)
         if role != Roles.ADMIN:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="No authority to perform this operation.",
             )
+        return role

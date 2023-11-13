@@ -86,7 +86,9 @@ def get_group(
     )
 
 
-@router.put("/api/groups/{group_id}", tags=["Groups"], response_model=GroupResposne)
+@router.put(
+    "/api/groups/{group_id}", tags=["Groups"], response_model=AdminGroupResponse
+)
 def update_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
@@ -94,40 +96,46 @@ def update_group(
     db: Session = Depends(get_db),
 ):
     group_service = GroupService(db)
-    group_service.check_if_admin(user_data.id, group_id)
+    role = group_service.check_if_admin(user_data.id, group_id)
     updated_group = group_service.update_group(
         group_id,
         group_update.name,
         group_update.description,
         group_update.connection_string,
     )
-    return GroupResposne(
+    return AdminGroupResponse(
         name=updated_group.name,
         description=updated_group.description,
         id=updated_group.id,
+        connection_string=updated_group.connection_string,
+        role=role,
     )
 
 
-@router.delete("/api/groups/{group_id}", tags=["Groups"], response_model=GroupResposne)
+@router.delete(
+    "/api/groups/{group_id}", tags=["Groups"], response_model=AdminGroupResponse
+)
 def delete_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
     db: Session = Depends(get_db),
 ):
     group_service = GroupService(db)
-    group_service.check_if_admin(user_data.id, group_id)
+    role = group_service.check_if_admin(user_data.id, group_id)
     deleted_group = group_service.delete_group(group_id)
-    return GroupResposne(
+    return AdminGroupResponse(
         name=deleted_group.name,
         description=deleted_group.description,
         id=deleted_group.id,
+        connection_string=deleted_group.connection_string,
+        role=role,
     )
 
 
 @router.delete(
     "/api/groups/{group_id}/remove-user/{user_id}",
     tags=["Groups"],
-    response_model=GroupResposne,
+    response_model=AdminGroupResponse,
 )
 def remove_user_from_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
@@ -136,9 +144,15 @@ def remove_user_from_group(
     db: Session = Depends(get_db),
 ):
     group_service = GroupService(db)
-    group_service.check_if_admin(user_data.id, group_id)
+    role = group_service.check_if_admin(user_data.id, group_id)
     removed_group = group_service.remove_user_from_group(group_id, user_id)
-    return removed_group
+    return AdminGroupResponse(
+        id=removed_group.id,
+        name=removed_group.name,
+        description=removed_group.description,
+        role=role,
+        connection_string=removed_group.connection_string,
+    )
 
 
 @router.get(
