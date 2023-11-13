@@ -6,7 +6,6 @@ from connectionDB.session import get_db
 from typing import Annotated
 from ..schemas.user_schema import (
     UserResponse,
-    ErrorResponse,
     UserListResponse,
     UserCreate,
     RegisterResponse,
@@ -20,26 +19,36 @@ async def read_users(db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     users = user_service.get_users()
 
-    user_responses = [
-        UserResponse(user_id=user.id, name=user.name, surname=user.surname)
-        for user in users
-    ]
+    response = UserListResponse(users=[])
+    for user in users:
+        response.users.append(
+            UserResponse(
+                user_id=user.id,
+                e_mail=user.e_mail,
+                name=user.name,
+                surname=user.surname,
+                title=user.title,
+                specialization=user.specialization,
+                practice_start_year=user.practice_start_year,
+            )
+        )
 
-    if user_responses:
-        return UserListResponse(users=user_responses)
-    else:
-        # here we should probably return empty list but not sure how
-        # i dont think there is need for exception, but if there is
-        # do it inside user_service
-        return [ErrorResponse(message="Users not found")]
+    return response
 
 
 @router.get("/api/users/{user_id}", tags=["Users"], response_model=UserResponse)
 async def read_user(user_id: int, db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
-    # exception handling moved to service (so there is no if in controller)
     user = user_service.get_user(user_id)
-    return UserResponse(user_id=user.id, name=user.name, surname=user.surname)
+    return UserResponse(
+        user_id=user.id,
+        e_mail=user.e_mail,
+        name=user.name,
+        surname=user.surname,
+        title=user.title,
+        specialization=user.specialization,
+        practice_start_year=user.practice_start_year,
+    )
 
 
 @router.post("/api/register/", tags=["Authorization"], response_model=RegisterResponse)

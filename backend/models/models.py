@@ -27,7 +27,7 @@ class User(Base):
 
     # Define the one-to-many relationship with Examination
     Examination: Mapped[List["Examination"]] = relationship(back_populates="User")
-    
+
     # Define the one-to-many relationship with Package
     Package: Mapped[List["Package"]] = relationship(back_populates="User")
 
@@ -95,6 +95,7 @@ class Sample(Base):
     # Define the one-to-many relationship with Examination
     Examination: Mapped[List["Examination"]] = relationship(back_populates="Sample")
 
+
 class Package(Base):
     __tablename__ = "Package"
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -102,11 +103,12 @@ class Package(Base):
     id_user: Mapped[int | None] = mapped_column(ForeignKey("User.id"))
     is_ready: Mapped[bool | None]
     # Define the one-to-many relationship with Sample
-    Sample: Mapped["Sample"] = relationship(back_populates="Package")
+    Sample: Mapped[List["Sample"]] = relationship(back_populates="Package")
     # Define the many-to-one relationship with Set
     Set: Mapped["Set"] = relationship(back_populates="Package")
-     # Define the many-to-one relationship with User
+    # Define the many-to-one relationship with User
     User: Mapped["User"] = relationship(back_populates="Package")
+
 
 class Examination(Base):
     __tablename__ = "Examination"

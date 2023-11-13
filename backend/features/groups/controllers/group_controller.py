@@ -1,7 +1,6 @@
 from typing import List, Annotated
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from ...users.schemas.user_schema import UserListResponse, UserResponse
 from ..services.group_service import GroupService
 from repositories.group_repository import Roles
 from features.users.services.user_service import UserService
@@ -11,10 +10,11 @@ from ..schemas.group_schema import (
     GroupResposne,
     GroupCreate,
     GroupUpdate,
-    MembershipCreate,
     GroupWithRoleResponse,
     GroupJoin,
     AdminGroupResponse,
+    GroupMemberListResponse,
+    GroupMemberResponse,
 )
 
 router = APIRouter()
@@ -28,7 +28,7 @@ def create_group(
 ):
     creator_user_id = user_data.id
     group_service = GroupService(db)
-    group = group_service.create_group(group_create, creator_user_id)
+    group = group_service.create_group(group_create.name, creator_user_id)
     role = group_service.get_role_in_group(creator_user_id, group.id)
     return AdminGroupResponse(
         name=group.name,
@@ -46,7 +46,7 @@ def get_groups(
 ):
     group_service = GroupService(db)
     user_id = user_data.id
-    groups = group_service.get_groups(user_id)
+    groups = group_service.get_groups_by_user(user_id)
 
     groups_with_roles = []
     for group in groups:
@@ -90,12 +90,17 @@ def get_group(
 def update_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
-    group: GroupUpdate,
+    group_update: GroupUpdate,
     db: Session = Depends(get_db),
 ):
     group_service = GroupService(db)
     group_service.check_if_admin(user_data.id, group_id)
-    updated_group = group_service.update_group(group_id, group)
+    updated_group = group_service.update_group(
+        group_id,
+        group_update.name,
+        group_update.description,
+        group_update.connection_string,
+    )
     return GroupResposne(
         name=updated_group.name,
         description=updated_group.description,
@@ -119,30 +124,6 @@ def delete_group(
     )
 
 
-@router.post(
-    "/api/groups/{group_id}/add-user/{user_id}",
-    tags=["Groups"],
-    response_model=GroupResposne,
-)
-def add_user_to_group(
-    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
-    group_id: int,
-    user_id: int,
-    role: str,
-    db: Session = Depends(get_db),
-):
-    group_service = GroupService(db)
-    group_service.check_if_admin(user_data.id, group_id)
-    group = group_service.get_group(group_id)
-    user_service = UserService(db)
-    user_service.get_user(user_id)
-    membership_service = GroupService(db)
-    membership_data = MembershipCreate(id_user=user_id, id_group=group_id, role=role)
-    membership_service.add_membership(membership_data)
-
-    return group
-
-
 @router.delete(
     "/api/groups/{group_id}/remove-user/{user_id}",
     tags=["Groups"],
@@ -161,17 +142,37 @@ def remove_user_from_group(
 
 
 @router.get(
-    "/api/groups/{group_id}/users", tags=["Groups"], response_model=UserListResponse
+    "/api/groups/{group_id}/users",
+    tags=["Groups"],
+    response_model=GroupMemberListResponse,
 )
-def get_users_in_group(group_id: int, db: Session = Depends(get_db)):
+def get_users_in_group(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    group_id: int,
+    db: Session = Depends(get_db),
+):
     group_service = GroupService(db)
-    group_service.get_group(group_id)
-    users = group_service.get_users_in_group(group_id)
-    response = UserListResponse(users=[])
+    _ = group_service.get_role_in_group(user_data.id, group_id)
+
+    user_service = UserService(db)
+    users = user_service.get_users_in_group(group_id)
+
+    response = GroupMemberListResponse(members=[])
     for user in users:
-        response.users.append(
-            UserResponse(user_id=user.id, name=user.name, surname=user.surname)
+        role = group_service.get_role_in_group(user.id, group_id)
+        response.members.append(
+            GroupMemberResponse(
+                user_id=user.id,
+                e_mail=user.e_mail,
+                name=user.name,
+                surname=user.surname,
+                title=user.title,
+                specialization=user.specialization,
+                practice_start_year=user.practice_start_year,
+                role=role,
+            )
         )
+
     return response
 
 
