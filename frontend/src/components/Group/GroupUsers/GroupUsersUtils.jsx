@@ -35,10 +35,12 @@ export function renderCell(item, columnKey, setModal) {
         <div className="relative flex justify-end items-center gap-2">
         {
           item.role === 'Admin'
-          ? <span className="text-lg text-default cursor-pointer active:opacity-50">
-              <IconTrash />
-            </span>
-          : <Tooltip color="danger" content="Delete user">
+          ? <Tooltip content="Cannot remove admin" placement='left-start'>
+              <span className="text-lg text-default cursor-pointer active:opacity-50">
+                <IconTrash />
+              </span>
+          </Tooltip>
+          : <Tooltip color="danger" content="Remove user" placement='left-start'>
             <span className="text-lg text-danger cursor-pointer active:opacity-50">
               <IconTrash onClick={() => setModal({ open: true, user: item })} />
             </span>
