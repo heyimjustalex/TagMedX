@@ -85,6 +85,21 @@ def get_group(
         name=group.name, description=group.description, id=group.id, role=role
     )
 
+@router.get(
+    "/api/groups/{group_id}/name",
+    tags=["Groups"],
+    response_model=str
+)
+def get_group_name(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    group_id: int,
+    db: Session = Depends(get_db),
+):
+    group_service = GroupService(db)
+    group = group_service.get_group(group_id)
+
+    return group.name
+
 
 @router.put(
     "/api/groups/{group_id}", tags=["Groups"], response_model=AdminGroupResponse

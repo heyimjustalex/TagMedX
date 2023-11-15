@@ -30,6 +30,24 @@ export default function Group({ data }) {
             </CardBody>
           </Card>
         </Tab>
+        <Tab key="sets" title="Sets" href={`/groups/${data.id}?tab=sets`} as={RouteLink}>
+          <Card>
+            <CardBody>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </CardBody>
+          </Card>
+        </Tab>
+        <Tab key="packages" title="Packages" href={`/groups/${data.id}?tab=packages`} as={RouteLink}>
+          <Card>
+            <CardBody>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </CardBody>
+          </Card>
+        </Tab>
         {data?.role === 'Admin' ? 
           <Tab key="users" title="Users" href={`/groups/${data.id}?tab=users`} as={RouteLink}>
             <Card>
