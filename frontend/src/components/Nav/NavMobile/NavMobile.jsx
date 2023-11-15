@@ -55,7 +55,7 @@ export default function NavMobile () {
                 className='w-full'
                 color='danger'
                 variant='ghost'
-                onClick={() => handleLogout(setUserId, router, notification)}
+                onPress={() => handleLogout(setUserId, router, notification)}
               >
                 Logout
               </Button>

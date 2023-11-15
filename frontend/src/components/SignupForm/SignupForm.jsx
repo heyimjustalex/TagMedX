@@ -94,7 +94,7 @@ export default function SignupForm () {
           variant='solid'
           color='primary'
           isDisabled={!data.name || !data.surname || !data.email || !data.password}
-          onClick={() => handleSignUp(setValidation, setSent, data, router, notification) }
+          onPress={() => handleSignUp(setValidation, setSent, data, router, notification) }
           isLoading={sent}
         >
           Sign Up

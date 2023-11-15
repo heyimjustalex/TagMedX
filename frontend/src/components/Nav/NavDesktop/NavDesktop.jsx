@@ -49,7 +49,7 @@ export default function NavDesktop () {
               className='w-full'
               color='danger'
               variant='ghost'
-              onClick={() => handleLogout(setUserId, router, notification)}
+              onPress={() => handleLogout(setUserId, router, notification)}
             >
               Logout
             </Button>
