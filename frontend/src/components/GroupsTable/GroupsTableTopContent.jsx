@@ -47,10 +47,10 @@ export default function GroupsTableTopContent({ filterValue, onClear, onSearchCh
               ))}
             </DropdownMenu>
           </Dropdown>
-          <Button className='min-w-fit' color='primary' variant='flat' endContent={<IconPlus />} onPress={onAddOpen}>
+          <Button className='min-w-fit' color='primary' variant='flat' endContent={<IconPlus className='hidden sm:flex' />} onPress={onAddOpen}>
             Add New
           </Button>
-          <Button className='min-w-fit' color='primary' endContent={<IconUsersGroup />} onPress={onJoinOpen}>
+          <Button className='min-w-fit' color='primary' endContent={<IconUsersGroup className='hidden sm:flex' />} onPress={onJoinOpen}>
             Join Group
           </Button>
         </div>
