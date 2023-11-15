@@ -21,7 +21,7 @@ export default function Nav () {
         </NavbarContent>
 
         <NavDesktop />
-        <NavMobile />
+        <NavMobile setIsMenuOpen={setIsMenuOpen}/>
       </Navbar>
   );
 }
