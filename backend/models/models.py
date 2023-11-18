@@ -110,7 +110,7 @@ class Package(Base):
     Set: Mapped["Set"] = relationship(back_populates="Package")
 
     # Define the many-to-one relationship with User
-    User: Mapped["User" | None] = relationship(back_populates="Package")
+    User: Mapped["User | None"] = relationship(back_populates="Package")
 
 
 
