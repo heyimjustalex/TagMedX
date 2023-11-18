@@ -85,7 +85,6 @@ class Sample(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     id_package: Mapped[int] = mapped_column(ForeignKey("Package.id"))
-    id_user: Mapped[int | None] = mapped_column(ForeignKey("User.id"))
     path: Mapped[str | None]
     format: Mapped[str | None]
 
@@ -98,16 +97,22 @@ class Sample(Base):
 
 class Package(Base):
     __tablename__ = "Package"
+
     id: Mapped[int] = mapped_column(primary_key=True)
     id_set: Mapped[int] = mapped_column(ForeignKey("Set.id"))
     id_user: Mapped[int | None] = mapped_column(ForeignKey("User.id"))
     is_ready: Mapped[bool | None]
+
     # Define the one-to-many relationship with Sample
     Sample: Mapped[List["Sample"]] = relationship(back_populates="Package")
+
     # Define the many-to-one relationship with Set
     Set: Mapped["Set"] = relationship(back_populates="Package")
+
     # Define the many-to-one relationship with User
-    User: Mapped["User"] = relationship(back_populates="Package")
+    User: Mapped["User" | None] = relationship(back_populates="Package")
+
+
 
 
 class Examination(Base):
