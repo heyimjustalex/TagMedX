@@ -26,3 +26,12 @@ class UserCreate(BaseModel):
     password: str
     name: str | None = None
     surname: str | None = None
+
+
+class UserUpdate(BaseModel):
+    e_mail: str | None = None
+    name: str | None = None
+    surname: str | None = None
+    title: str | None = None
+    specialization: str | None = None
+    practice_start_year: int | None = None

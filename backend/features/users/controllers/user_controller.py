@@ -4,10 +4,12 @@ from features.exceptions.definitions.definitions import *
 from ..services.user_service import UserService
 from connectionDB.session import get_db
 from typing import Annotated
+from ...authorization.services.token_service import UserData, TokenService
 from ..schemas.user_schema import (
     UserResponse,
     UserListResponse,
     UserCreate,
+    UserUpdate,
     RegisterResponse,
 )
 
@@ -61,3 +63,30 @@ async def register_user(new_user: UserCreate, db: Annotated[Session, Depends(get
         surname=new_user.surname,
     )
     return RegisterResponse(message="User created successfully.")
+
+
+@router.put("/api/users/update", tags=["Users"], response_model=UserResponse)
+async def update_user(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    user_update: UserUpdate,
+    db: Annotated[Session, Depends(get_db)],
+):
+    user_service = UserService(db)
+    user = user_service.update_user(
+        user_data.id,
+        user_update.e_mail,
+        user_update.name,
+        user_update.surname,
+        user_update.title,
+        user_update.specialization,
+        user_update.practice_start_year,
+    )
+    return UserResponse(
+        user_id=user.id,
+        e_mail=user.e_mail,
+        name=user.name,
+        surname=user.surname,
+        title=user.title,
+        specialization=user.specialization,
+        practice_start_year=user.practice_start_year,
+    )

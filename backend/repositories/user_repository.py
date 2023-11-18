@@ -28,3 +28,6 @@ class UserRepository:
     def create_user(self, user: User):
         self.db.add(user)
         self.db.commit()
+
+    def update(self):
+        self.db.commit()
