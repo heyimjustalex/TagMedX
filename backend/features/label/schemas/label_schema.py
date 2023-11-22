@@ -12,3 +12,8 @@ class LabelResponse(BaseModel):
     id_set: int
     name: str
     description: str
+
+
+class LabelUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None

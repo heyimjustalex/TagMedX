@@ -27,7 +27,7 @@ class SetSchema(BaseModel):
 
 
 class SetUpdateSchema(BaseModel):
-    # max_samples_for_user: int = None
+    id_group: int | None = None
     name: str | None = None
     description: str | None = None
     type: str | None = None

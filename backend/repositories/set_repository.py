@@ -28,29 +28,16 @@ class SetRepository:
     def get_set_by_id(self, set_id):
         return self.db.query(Set).filter(Set.id == set_id).first()
 
-    def get_user_sets(self, user_id: int):
-        groups = (
-            self.db.query(Group)
-            .join(Membership, Group.id == Membership.id_group)
-            .filter(Membership.id_user == user_id)
+    def get_set_by_group(self, group_id: int):
+        sets = (
+            self.db.query(Set)
+            .filter_by(id_group=group_id)
             .all()
         )
+        return sets
 
-        group_ids = [group.id for group in groups]
-
-        sets = self.db.query(Set).filter(Set.id_group.in_(group_ids)).all()
-
-        set_data = [{"name": set.name, "description": set.description, "type": set.type, "package_size": set.package_size} for set in sets]
-
-        return set_data
-
-    def update_set(self, set_id: int, new_set_data):
-        set = self.get_set_by_id(set_id)
-        if set:
-            for key, value in new_set_data.items():
-                setattr(set, key, value)
-            self.db.commit()
-        return set
+    def update_set(self):
+        self.db.commit()
 
     def delete_set(self, set_id: int):
         db_set = self.get_set_by_id(set_id)
