@@ -7,7 +7,6 @@ from features.users.services.user_service import UserService
 from connectionDB.session import get_db
 from features.authorization.services.token_service import TokenService, UserData
 from ..schemas.group_schema import (
-    GroupResposne,
     GroupCreate,
     GroupUpdate,
     GroupWithRoleResponse,
@@ -46,7 +45,7 @@ def get_groups(
 ):
     group_service = GroupService(db)
     user_id = user_data.id
-    groups = group_service.get_groups_by_user(user_id)
+    groups = group_service.get_user_groups(user_id)
 
     groups_with_roles = []
     for group in groups:
@@ -166,7 +165,7 @@ def get_users_in_group(
     db: Session = Depends(get_db),
 ):
     group_service = GroupService(db)
-    _ = group_service.get_role_in_group(user_data.id, group_id)
+    _ = group_service.get_membership(group_id, user_data.id)
 
     user_service = UserService(db)
     users = user_service.get_users_in_group(group_id)
