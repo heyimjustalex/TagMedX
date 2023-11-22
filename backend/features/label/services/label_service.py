@@ -23,6 +23,32 @@ class LabelService:
         labels = self.label_repository.get_labels_for_set(set_id)
         if not labels:
             raise HTTPException(
-                status_code=404, detail="Brak etykiet dla podanego zadania"
+                status_code=404, detail="No labels for the specified task"
             )
         return labels
+
+    def update_label(self,
+                     label_id: int,
+                     name: str | None = None,
+                     description: str | None = None) -> Label:
+        label = self.label_repository.get_label_by_id(label_id)
+
+        if not label:
+            raise HTTPException(status_code=404, detail="Label not found")
+
+        if name:
+            label.name = name
+
+        if description:
+            label.description = description
+
+        self.label_repository.update_label()
+        return label
+
+    def delete_label(self, label_id: int) -> Label:
+        label = self.label_repository.get_label_by_id(label_id)
+        if not label:
+            raise HTTPException(status_code=404, detail="Label not found")
+        self.label_repository.delete_label(label)
+        return label
+

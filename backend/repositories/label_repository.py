@@ -34,3 +34,13 @@ class LabelRepository:
 
     def get_labels_for_set(self, set_id: int) -> List[Label]:
         return self.db.query(Label).filter(Label.id_set == set_id).all()
+
+    def get_label_by_id(self, label_id: int):
+        return self.db.query(Label).filter(Label.id == label_id).first()
+
+    def update_label(self):
+        self.db.commit()
+
+    def delete_label(self, label: Label):
+        self.db.delete(label)
+        self.db.commit()

@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from repositories.set_repository import SetRepository
 from ..schemas.set_schema import SetCreate
 from features.exceptions.definitions.definitions import PermissionDenied
+from models.models import Set
 
 
 class SetService:
@@ -11,7 +12,7 @@ class SetService:
         self.set_repository = SetRepository(db)
 
     def create_set_with_permission_check(
-        self, set_data: SetCreate, current_user_id: int
+            self, set_data: SetCreate, current_user_id: int
     ):
         group_id = set_data.id_group
 
@@ -27,14 +28,39 @@ class SetService:
             raise HTTPException(status_code=404, detail="Set not found")
         return set
 
-    def get_user_sets(self, user_id: int):
-        return self.set_repository.get_user_sets(user_id)
+    def get_set_by_group(self, group_id: int):
+        return self.set_repository.get_set_by_group(group_id)
 
-    def update_set(self, set_id: int, new_set_data):
-        update_set = self.set_repository.update_set(set_id, new_set_data)
-        if not update_set:
+    def update_set(self,
+                   set_id: int,
+                   id_group: int | None = None,
+                   name: str | None = None,
+                   description: str | None = None,
+                   type: str | None = None,
+                   package_size: int | None = None) -> Set:
+
+        set = self.get_set_by_id(set_id)
+
+        if not set:
             raise HTTPException(status_code=404, detail="Set not found")
-        return update_set
+
+        if id_group:
+            set.id_group = id_group
+
+        if name:
+            set.name = name
+
+        if description:
+            set.description = description
+
+        if type:
+            set.type = type
+
+        if package_size:
+            set.package_size = package_size
+
+        self.set_repository.update_set()
+        return set
 
     def delete_set(self, set_id: int):
         return self.set_repository.delete_set(set_id)
