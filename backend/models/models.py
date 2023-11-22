@@ -54,10 +54,14 @@ class Group(Base):
     description: Mapped[str | None]
     connection_string: Mapped[str]
     # Define the one-to-many relationship with Set
-    Set: Mapped[List["Set"]] = relationship(back_populates="Group")
+    Set: Mapped[List["Set"]] = relationship(
+        back_populates="Group", cascade="all, delete"
+    )
 
     # Define the one-to-many relationship with Group
-    Membership: Mapped[List["Membership"]] = relationship(back_populates="Group")
+    Membership: Mapped[List["Membership"]] = relationship(
+        back_populates="Group", cascade="all, delete"
+    )
 
 
 class Set(Base):
@@ -68,7 +72,7 @@ class Set(Base):
     name: Mapped[str | None]
     description: Mapped[str | None]
     type: Mapped[str | None]
-    package_size: Mapped[int | None]
+    package_size: Mapped[int]
 
     # Define the many-to-one relationship with Group
     Group: Mapped["Group"] = relationship(back_populates="Set")
@@ -85,29 +89,36 @@ class Sample(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     id_package: Mapped[int] = mapped_column(ForeignKey("Package.id"))
-    id_user: Mapped[int | None] = mapped_column(ForeignKey("User.id"))
-    path: Mapped[str | None]
-    format: Mapped[str | None]
+    path: Mapped[str]
+    format: Mapped[str]
 
     # Define the many-to-one relationship with Package
     Package: Mapped["Package"] = relationship(back_populates="Sample")
 
     # Define the one-to-many relationship with Examination
-    Examination: Mapped[List["Examination"]] = relationship(back_populates="Sample")
+    Examination: Mapped[List["Examination"]] = relationship(
+        back_populates="Sample", cascade="all, delete"
+    )
 
 
 class Package(Base):
     __tablename__ = "Package"
+
     id: Mapped[int] = mapped_column(primary_key=True)
     id_set: Mapped[int] = mapped_column(ForeignKey("Set.id"))
     id_user: Mapped[int | None] = mapped_column(ForeignKey("User.id"))
     is_ready: Mapped[bool | None]
+
     # Define the one-to-many relationship with Sample
-    Sample: Mapped[List["Sample"]] = relationship(back_populates="Package")
+    Sample: Mapped[List["Sample"]] = relationship(
+        back_populates="Package", cascade="all, delete"
+    )
+
     # Define the many-to-one relationship with Set
     Set: Mapped["Set"] = relationship(back_populates="Package")
+
     # Define the many-to-one relationship with User
-    User: Mapped["User"] = relationship(back_populates="Package")
+    User: Mapped["User | None"] = relationship(back_populates="Package")
 
 
 class Examination(Base):
@@ -126,7 +137,9 @@ class Examination(Base):
     Sample: Mapped["Sample"] = relationship(back_populates="Examination")
 
     # Define the one-to-many relationship with BBox
-    BBox: Mapped[List["BBox"]] = relationship(back_populates="Examination")
+    BBox: Mapped[List["BBox"]] = relationship(
+        back_populates="Examination", cascade="all, delete"
+    )
 
 
 class Label(Base):
@@ -141,7 +154,9 @@ class Label(Base):
     Set: Mapped["Set"] = relationship(back_populates="Label")
 
     # Define the one-to-many relationship with BBox
-    BBox: Mapped[List["BBox"]] = relationship(back_populates="Label")
+    BBox: Mapped[List["BBox"]] = relationship(
+        back_populates="Label", cascade="all, delete"
+    )
 
 
 class BBox(Base):

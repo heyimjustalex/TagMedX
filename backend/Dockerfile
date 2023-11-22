@@ -13,7 +13,8 @@ RUN apt-get update \
     pkg-config python3-dev default-libmysqlclient-dev build-essential \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --no-cache-dir -r requirements.txt \
+    && mkdir /images
 
 COPY . /app/
 

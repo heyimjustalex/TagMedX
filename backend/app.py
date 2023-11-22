@@ -8,6 +8,8 @@ from features.authorization.controllers.token_controller import router as auth_r
 from features.groups.controllers.group_controller import router as group_router
 from features.sets.controllers.set_controller import router as set_router
 from features.label.controllers.label_controller import router as label_router
+from features.samples.controllers.sample_controller import router as sample_router
+from features.packages.controllers.package_controller import router as package_router
 
 # Quick connection check, you can remove it if you don't want it
 # Setting up connection is in database.py and session.py
@@ -61,3 +63,5 @@ app.include_router(auth_router)
 app.include_router(group_router)
 app.include_router(set_router)
 app.include_router(label_router)
+app.include_router(package_router)
+app.include_router(sample_router)

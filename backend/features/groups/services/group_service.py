@@ -4,6 +4,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from features.exceptions.definitions.definitions import *
 from repositories.group_repository import GroupRepository
+from repositories.membership_repository import MembershipRepository
 from models.models import Group, Membership
 from repositories.group_repository import Roles
 from typing import List
@@ -12,6 +13,7 @@ from typing import List
 class GroupService:
     def __init__(self, db: Session):
         self.group_repository = GroupRepository(db)
+        self.membership_repository = MembershipRepository(db)
 
     def create_group(self, group_name: str, creator_user_id: int) -> Group:
         characters = string.ascii_letters + string.digits
@@ -27,11 +29,11 @@ class GroupService:
         membership.id_user = creator_user_id
         membership.role = Roles.ADMIN
 
-        self.group_repository.create_membership(membership)
+        self.membership_repository.create_membership(membership)
 
         return group
 
-    def get_groups_by_user(self, user_id: int) -> List[Group]:
+    def get_user_groups(self, user_id: int) -> List[Group]:
         return self.group_repository.get_groups_by_user(user_id)
 
     def get_role_in_group(self, user_id: int, group_id: int) -> str:
@@ -39,7 +41,7 @@ class GroupService:
         return membership.role
 
     def get_group(self, group_id: int) -> Group:
-        group = self.group_repository.get_group(group_id)
+        group = self.group_repository.get_group_by_id(group_id)
         if not group:
             raise GroupNotFoundException(status_code=404, detail="Group not found")
         return group
@@ -73,15 +75,15 @@ class GroupService:
     def remove_user_from_group(self, group_id: int, user_id: int) -> Group:
         group = self.get_group(group_id)
         membership = self.get_membership(group_id, user_id)
-        self.group_repository.delete_membership(membership)
+        self.membership_repository.delete_membership(membership)
         return group
 
     def get_membership(self, id_group: int, id_user: int) -> Membership:
-        membership = self.group_repository.get_membership(id_user, id_group)
+        membership = self.membership_repository.get_membership(id_user, id_group)
         if not membership:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found in specified group.",
+                detail="User not found in group.",
             )
         return membership
 
@@ -99,7 +101,7 @@ class GroupService:
         membership.id_user = user_id
         membership.role = Roles.USER
 
-        self.group_repository.create_membership(membership)
+        self.membership_repository.create_membership(membership)
         return group
 
     def check_if_admin(self, id_user: int, id_group: int) -> str:
