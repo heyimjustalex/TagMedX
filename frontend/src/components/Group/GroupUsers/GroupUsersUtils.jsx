@@ -16,7 +16,7 @@ export function renderCell(item, columnKey, setModal) {
           avatarProps={{
             radius: 'lg',
             fallback: `${cellValue[0]}${item.surname[0]}`,
-            color: NextColorMap[(cellValue.codePointAt(0) + item.surname.codePointAt(0)) % 6]
+            color: NextColorMap[(cellValue.codePointAt(0) + item.surname.codePointAt(0)) % 5 + 1]
           }}
           description={item.e_mail}
           name={`${item.title || ''} ${cellValue} ${item.surname}`}

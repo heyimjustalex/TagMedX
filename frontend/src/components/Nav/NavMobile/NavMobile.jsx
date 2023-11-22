@@ -6,19 +6,18 @@ import { Link } from '@nextui-org/link';
 import RouteLink from 'next/link';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@nextui-org/react';
 import { menuItems } from '../NavConsts';
 import { menuItemsUnlogged } from './NavMobileConsts';
 import { handleLogout } from '../NavUtils';
 import { useUserId } from '../../../hooks/useUserId';
 import { useNotification } from '../../../hooks/useNotification';
 
-export default function NavMobile () {
+export default function NavMobile ({ setIsMenuOpen }) {
 
   const router = useRouter();
   const notification = useNotification();
   const { userId, setUserId } = useUserId();
-  const [isClient, setIsClient] = useState(false)
+  const [isClient, setIsClient] = useState(false);
  
   useEffect(() => {
     setIsClient(true)
@@ -40,35 +39,37 @@ export default function NavMobile () {
             {menuItems.map((e, i) => (
               <NavbarMenuItem key={`${e.url}-${i}`}>
                 <Link
-                  className='w-full'
-                  color={e.color}
-                  href={e.url}
                   size='lg'
+                  href={e.url}
                   as={RouteLink}
+                  color={e.color}
+                  className='w-full'
+                  onPress={() => setIsMenuOpen(false)}
                 >
                   {e.name}
                 </Link>
               </NavbarMenuItem>
             ))}
             <NavbarMenuItem>
-              <Button
-                className='w-full'
+              <Link
+                size='lg'
                 color='danger'
-                variant='ghost'
-                onClick={() => handleLogout(setUserId, router, notification)}
+                className='w-full cursor-pointer'
+                onPress={() => { handleLogout(setUserId, router, notification); setIsMenuOpen(false)}}
               >
                 Logout
-              </Button>
+              </Link>
             </NavbarMenuItem>
           </>
         : menuItemsUnlogged.map((e, i) => (
           <NavbarMenuItem key={`${e.url}-${i}`}>
             <Link
-              className='w-full'
-              color={e.color}
-              href={e.url}
               size='lg'
+              href={e.url}
               as={RouteLink}
+              color={e.color}
+              className='w-full'
+              onPress={() => setIsMenuOpen(false)}
             >
               {e.name}
             </Link>

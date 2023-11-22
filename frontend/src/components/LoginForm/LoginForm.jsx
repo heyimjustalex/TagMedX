@@ -76,7 +76,8 @@ export default function LoginForm() {
           className='flex'
           variant='solid'
           color='primary'
-          onClick={() => handleLogin(setSent, data, setError, setUserId, router, notification)}
+          isDisabled={!data.email || !data.password}
+          onPress={() => handleLogin(setSent, data, setError, setUserId, router, notification)}
           isLoading={sent}
         >
           Login

@@ -22,7 +22,7 @@ export default function GroupSettings({ data, setData }) {
       radius='sm'
       variant='light'
       className='min-w-min w-8 h-7 ml-1'
-      onClick={() => navigator.clipboard.writeText(settings.connectionString)}
+      onPress={() => navigator.clipboard.writeText(settings.connectionString)}
     >
       <IconCopy size={16} className='cursor-pointer' />
     </Button>
@@ -35,7 +35,7 @@ export default function GroupSettings({ data, setData }) {
       variant='light'
       radius='sm'
       className='min-w-min w-8 h-7 mx-1'
-      onClick={() => setSettings({ ...settings, connectionString: generateRandomString(32) })}
+      onPress={() => setSettings({ ...settings, connectionString: generateRandomString(32) })}
     >
       <IconRefresh size={16} className='cursor-pointer' />
     </Button>
@@ -86,7 +86,7 @@ export default function GroupSettings({ data, setData }) {
           <Button
             variant='ghost'
             isDisabled={!modified}
-            onClick={() => setSettings({
+            onPress={() => setSettings({
               name: data.name,
               description: data.description,
               connectionString: data.connection_string
@@ -98,7 +98,7 @@ export default function GroupSettings({ data, setData }) {
             color='primary'
             isDisabled={!modified}
             isLoading={sent}
-            onClick={() => postSettings(settings, data.id, setSent, setData, notification)}
+            onPress={() => postSettings(settings, data.id, setSent, setData, notification)}
           >
             Save
           </Button>

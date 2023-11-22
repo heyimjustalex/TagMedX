@@ -19,7 +19,7 @@ export default function HomePage() {
         className='flex w-30 mt-4'
         color='primary'
         variant='ghost'
-        onClick={checkSession() ? () => router.push('/groups') : () => router.push('/login')}
+        onPress={checkSession() ? () => router.push('/groups') : () => router.push('/login')}
       >
         Let's tag!
       </Button>
