@@ -26,7 +26,7 @@ CREATE TABLE `Set` (
   name VARCHAR(255),
   description VARCHAR(255),
   type VARCHAR(255),
-  package_size INT,
+  package_size INT NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (id_group) REFERENCES `Group`(id)
 );
@@ -54,9 +54,9 @@ CREATE TABLE `Package` (
 
 CREATE TABLE `Sample` (
   id INT NOT NULL AUTO_INCREMENT,
-  id_package INT,
-  path VARCHAR(255),
-  format VARCHAR(255),
+  id_package INT NOT NULL,
+  path VARCHAR(255) NOT NULL,
+  format VARCHAR(255) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (id_package) REFERENCES `Package`(id)
 );

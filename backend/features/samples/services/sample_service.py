@@ -26,7 +26,7 @@ class SampleService:
                 detail=f"The {content_type} file type is not supported.",
             )
 
-        path = f"/images/task{id_package}_{uuid4()}.{IMAGE_TYPES.get(content_type)}"
+        path = f"/images/package{id_package}_{uuid4()}.{IMAGE_TYPES.get(content_type)}"
         with open(path, "wb") as image_file:
             image_file.write(file_content)
 
@@ -37,3 +37,14 @@ class SampleService:
 
         self.repository.create_sample(sample)
         return sample
+
+    def get_sample(self, id_sample: int) -> Sample:
+        sample = self.repository.get_sample_by_id(id_sample)
+        if not sample:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Sample not found"
+            )
+        return sample
+
+    def get_samples_in_package(self, id_package: int) -> list[Sample]:
+        return self.repository.get_samples_by_package(id_package)
