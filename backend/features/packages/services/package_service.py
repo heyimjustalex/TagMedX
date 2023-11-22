@@ -47,7 +47,12 @@ class PackageService:
         return self.repository.get_packages_by_user(id_user)
 
     def get_package_id_with_free_slots_or_create_new_one(self, id_set: int) -> int:
-        package = self.repository.get_package_with_free_slots_by_set(id_set)
-        if not package:
-            return self.create_package(id_set).id
-        return package.id
+        # package = self.repository.get_package_with_free_slots_by_set(id_set)
+        # if not package:
+        #     return self.create_package(id_set).id
+        # return package.id
+        packages = self.get_packages_in_set(id_set)
+        for package in packages:
+            if len(package.Sample) < package.Set.package_size:
+                return package.id
+        return self.create_package(id_set).id

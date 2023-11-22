@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, UploadFile
+from fastapi.responses import FileResponse
 from typing import Annotated
 from connectionDB.session import get_db
 from sqlalchemy.orm import Session
@@ -47,3 +48,22 @@ async def create_samples(
         )
 
     return response
+
+
+@router.get(
+    "/api/samples/{id_sample}",
+    tags=["Samples"],
+    response_class=FileResponse,
+)
+async def get_sample(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    id_sample: int,
+    db: Annotated[Session, Depends(get_db)],
+):
+    sample_service = SampleService(db)
+    sample = sample_service.get_sample(id_sample)
+
+    group_service = GroupService(db)
+    _ = group_service.get_membership(sample.Package.Set.id_group, user_data.id)
+
+    return sample.path
