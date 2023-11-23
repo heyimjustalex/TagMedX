@@ -5,5 +5,5 @@ export function checkSession() {
   const cookieStore = cookies();
   const token = cookieStore.get('token');
   const jwt = token ? jwtDecode(token.value) : null;
-  return jwt && jwt?.exp > Date.now() / 1000;
+  return jwt && jwt?.exp > Date.now() / 1000 ? jwt?.id : false;
 }

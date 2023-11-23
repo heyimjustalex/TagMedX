@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Card, CardBody, Input, Textarea } from '@nextui-or
 import { IconCopy, IconRefresh } from '@tabler/icons-react';
 
 import { generateRandomString } from '../../../utils/text';
-import { postSettings } from './GroupSettingsUtils';
+import { handleSaveSettings } from './GroupSettingsUtils';
 import { useNotification } from '../../../hooks/useNotification';
 
 export default function GroupSettings({ data, setData }) {
@@ -98,7 +98,7 @@ export default function GroupSettings({ data, setData }) {
             color='primary'
             isDisabled={!modified}
             isLoading={sent}
-            onPress={() => postSettings(settings, data.id, setSent, setData, notification)}
+            onPress={() => handleSaveSettings(settings, data.id, setSent, setData, notification)}
           >
             Save
           </Button>
