@@ -7,6 +7,8 @@ export const NextColorMap = {
   3: NextColor.SUCCESS,
   4: NextColor.WARNING,
   5: NextColor.DANGER,
+  classification: NextColor.PRIMARY,
   admin: NextColor.SECONDARY,
-  user: NextColor.SUCCESS
+  user: NextColor.SUCCESS,
+  detection: NextColor.DANGER
 };

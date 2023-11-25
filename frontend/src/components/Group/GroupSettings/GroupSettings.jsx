@@ -26,7 +26,7 @@ export default function GroupSettings({ data, setData }) {
     >
       <IconCopy size={16} className='cursor-pointer' />
     </Button>
-  ,[setSettings])
+  ,[settings.connectionString, setSettings])
 
   const resetBtn = useMemo(() =>
     <Button
@@ -39,7 +39,7 @@ export default function GroupSettings({ data, setData }) {
     >
       <IconRefresh size={16} className='cursor-pointer' />
     </Button>
-  ,[setSettings])
+  ,[settings, setSettings])
 
   const modified = useMemo(() => 
     settings.name !== data.name ||

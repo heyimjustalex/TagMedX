@@ -28,7 +28,7 @@ def create_set(
     )
 
 
-@router.get("/api/sets/{group_id}", tags=["Set"], response_model=List[SetSchema])
+@router.get("/api/sets/group/{group_id}", tags=["Set"], response_model=List[SetSchema])
 def get_group_sets(group_id: int, db: Session = Depends(get_db)):
     set_service = SetService(db)
     sets = set_service.get_set_by_group(group_id)

@@ -35,7 +35,6 @@ export default function GroupsTableAddModal({ isOpen, onOpenChange, setData, not
               </Button>
               <Button
                 color='primary'
-                onPress={onClose}
                 isDisabled={!value}
                 onClick={() => addGroup(value, setSent, onClose, setData, notification)}
                 isLoading={sent}

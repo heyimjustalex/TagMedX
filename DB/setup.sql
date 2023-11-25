@@ -100,12 +100,11 @@ CREATE TABLE `BBox` (
 
 INSERT INTO `User` (e_mail, password_hash, name, surname, title, specialization, practice_start_year)
 VALUES
-    ('user1@example.com', 'hash1', 'John', 'Doe', 'Mr.',  'specialization 1', 2000),
-    ('user2@example.com', 'hash2', 'Jane', 'Smith', 'Ms.', 'specialization 2',2002),
-    ('user3@example.com', 'hash3', 'Alice', 'Johnson', 'Dr.',  'specialization 3', 2012),
-    ('user4@example.com', 'hash4', 'Bob', 'Wilson', 'Mr.', 'specialization 4', 2023),
-    ('user5@example.com', 'hash5', 'Eve', 'Davis', 'Ms.', 'specialization 5', 2020);
-
+    ('user1@example.com', 'hash1', 'John', 'Doe', 'Mr.',  'Oncology', 2000),
+    ('user2@example.com', 'hash2', 'Jane', 'Smith', 'Ms.', 'Pediatrics', 2002),
+    ('user3@example.com', 'hash3', 'Alice', 'Johnson', 'Dr.',  'Orthopedics', 2012),
+    ('user4@example.com', 'hash4', 'Bob', 'Wilson', 'Mr.', 'Psychiatry', 2023),
+    ('user5@example.com', 'hash5', 'Eve', 'Davis', 'Ms.', 'Cardiology', 2020);
 
 INSERT INTO `Group` (name, description,connection_string)
 VALUES
@@ -118,11 +117,11 @@ VALUES
 
 INSERT INTO `Set` (id_group, name, description, type, package_size)
 VALUES
-    (1, 'set 1', 'set Description 1', 'Type A', 100),
-    (2, 'set 2', 'set Description 2', 'Type B', 10),
-    (3, 'set 3', 'set Description 3', 'Type A', 100),
-    (4, 'set 4', 'set Description 4', 'Type C', 10),
-    (5, 'set 5', 'set Description 5', 'Type B', 100);
+    (1, 'set 1', 'set Description 1', 'Detection', 100),
+    (2, 'set 2', 'set Description 2', 'Detection', 10),
+    (3, 'set 3', 'set Description 3', 'Classification', 100),
+    (4, 'set 4', 'set Description 4', 'Classification', 10),
+    (5, 'set 5', 'set Description 5', 'Classification', 100);
 
 INSERT INTO `Package` (id_set, id_user, is_ready)
 VALUES
