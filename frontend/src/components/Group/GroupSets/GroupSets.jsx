@@ -6,24 +6,23 @@ import {
   TableCell,
   TableColumn,
   TableHeader,
-  TableRow,
-  useDisclosure
+  TableRow
 } from '@nextui-org/react';
 import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 
 import { renderCell } from './GroupSetsUtils';
-import GroupSetsAddModal from './GroupSetsAddModal';
+import GroupSetsModal from './GroupSetsModal';
 import GroupSetsTopContent from './GroupSetsTopContent';
-import { columns, typeOptions } from './GroupSetsConsts';
+import { columns, defaultModal, typeOptions } from './GroupSetsConsts';
 import GroupSetsRemoveModal from './GroupSetsRemoveModal';
 import { useNotification } from '../../../hooks/useNotification';
 
 export default function GroupSets({ data, setData }) {
-  const addModal = useDisclosure();
   const notification = useNotification();
   const [filterValue, setFilterValue] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [modal, setModal] = useState(defaultModal);
   const [removeModal, setRemoveModal] = useState({ open: false, name: '', id: '' });
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
   const hasSearchFilter = Boolean(filterValue);
@@ -71,7 +70,7 @@ export default function GroupSets({ data, setData }) {
       onSearchChange={onSearchChange}
       typeFilter={typeFilter}
       setTypeFilter={setTypeFilter}
-      onAddOpen={addModal.onOpen}
+      onAddOpen={() => setModal({ ...defaultModal, open: true, edit: false })}
     />
   ,[
     filterValue,
@@ -79,7 +78,7 @@ export default function GroupSets({ data, setData }) {
     data.sets.length,
     onSearchChange,
     hasSearchFilter,
-    addModal.onOpen
+    setModal
   ]);
 
   return (
@@ -111,16 +110,16 @@ export default function GroupSets({ data, setData }) {
           emptyContent='No sets found'
         >
           {(item) => (
-            <TableRow key={item.id} className='cursor-pointer' as={Link} href={`groups/${item.id}`}>
-              {(columnKey) => <TableCell>{renderCell(item, columnKey, setRemoveModal)}</TableCell>}
+            <TableRow key={item.id} className='cursor-pointer' as={Link} href={`/groups/${data.id}?tab=packages&set=${item.id}`}>
+              {(columnKey) => <TableCell>{renderCell(item, columnKey, setModal, setRemoveModal)}</TableCell>}
             </TableRow>
           )}
         </TableBody>
       </Table>
-      <GroupSetsAddModal
+      <GroupSetsModal
+        modal={modal}
+        setModal={setModal}
         groupId={data.id}
-        isOpen={addModal.isOpen}
-        onOpenChange={addModal.onOpenChange}
         setData={setData}
         notification={notification}
       />
