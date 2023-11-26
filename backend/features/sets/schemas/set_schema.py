@@ -20,6 +20,7 @@ class SetResponse(BaseModel):
 
 
 class SetSchema(BaseModel):
+    id: int
     name: str
     description: str
     type: str

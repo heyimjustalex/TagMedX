@@ -57,7 +57,7 @@ export function renderCell(item, columnKey, setModal) {
 
 export async function removeUser(user, groupId, setModal, setSent, setData, notification) {
   setSent(true);
-  const res = await del(`groups/${groupId}/remove-user/${user?.user_id}`);
+  const res = await del(`groups/${groupId}/user/${user?.user_id}`);
   if(res.ok) {
     setData(prev => ({ ...prev, users: prev.users.filter(e => e.user_id !== user.user_id)}));
     setSent(false);

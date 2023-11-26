@@ -127,7 +127,7 @@ def update_group(
 
 
 @router.delete(
-    "/api/groups/{group_id}", tags=["Groups"], response_model=AdminGroupResponse
+    "/api/groups/{group_id}", tags=["Groups"], response_model=None
 )
 def delete_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
@@ -137,19 +137,13 @@ def delete_group(
     group_service = GroupService(db)
     role = group_service.check_if_admin(user_data.id, group_id)
     deleted_group = group_service.delete_group(group_id)
-    return AdminGroupResponse(
-        name=deleted_group.name,
-        description=deleted_group.description,
-        id=deleted_group.id,
-        connection_string=deleted_group.connection_string,
-        role=role,
-    )
+    return None
 
 
 @router.delete(
-    "/api/groups/{group_id}/remove-user/{user_id}",
+    "/api/groups/{group_id}/user/{user_id}",
     tags=["Groups"],
-    response_model=AdminGroupResponse,
+    response_model=None,
 )
 def remove_user_from_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
@@ -160,13 +154,7 @@ def remove_user_from_group(
     group_service = GroupService(db)
     role = group_service.check_if_admin(user_data.id, group_id)
     removed_group = group_service.remove_user_from_group(group_id, user_id)
-    return AdminGroupResponse(
-        id=removed_group.id,
-        name=removed_group.name,
-        description=removed_group.description,
-        role=role,
-        connection_string=removed_group.connection_string,
-    )
+    return None
 
 
 @router.get(

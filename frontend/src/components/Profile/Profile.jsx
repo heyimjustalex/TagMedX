@@ -7,7 +7,7 @@ import { NextColorMap } from '../../consts/NextColorMap';
 import { checkEmail } from '../SignupForm/SignupFormUtils';
 import { useNotification } from '../../hooks/useNotification';
 import { specializations } from '../../consts/Specializations';
-import { checkInitYear, compareChanges } from './ProfileUtils';
+import { checkInitYear, compareChanges, handleSaveUser } from './ProfileUtils';
 
 export default function Profile ({ data }) {
 
@@ -117,7 +117,7 @@ export default function Profile ({ data }) {
           variant='solid'
           color='primary'
           isDisabled={compareChanges(user, newUser) || (error.name || error.surname || error.email || error.year)}
-          onPress={() => {} }
+          onPress={() => handleSaveUser(newUser, setSent, setUser, notification)}
           isLoading={sent}
         >
           Save

@@ -13,7 +13,7 @@ async function get(url) {
     }
   })
 
-  const body = await res.json();
+  const body = res.ok ? await res.json() : Promise.resolve(null);
 
   return {
     ok: res.ok,
@@ -34,7 +34,7 @@ async function post(url, data, cookie) {
     body: JSON.stringify(data)
   })
 
-  const body = await res.json();
+  const body = res.ok ? await res.json() : Promise.resolve(null);
 
   return {
     ok: res.ok,
@@ -55,7 +55,7 @@ async function put(url, data, cookie) {
     body: JSON.stringify(data)
   })
 
-  const body = await res.json();
+  const body = res.ok ? await res.json() : Promise.resolve(null);
 
   return {
     ok: res.ok,
@@ -76,7 +76,7 @@ async function patch(url, data, cookie) {
     body: JSON.stringify(data)
   })
 
-  const body = await res.json();
+  const body = res.ok ? await res.json() : Promise.resolve(null);
 
   return {
     ok: res.ok,
