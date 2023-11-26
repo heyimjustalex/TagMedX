@@ -12,17 +12,19 @@ import {
 import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 
-import { useNotification } from '../../../hooks/useNotification';
-import { columns, typeOptions } from './GroupSetsConsts';
-import GroupsSetsTopContent from './GroupSetsTopContent';
 import { renderCell } from './GroupSetsUtils';
-import GroupsSetsAddModal from './GroupSetsAddModal';
+import GroupSetsAddModal from './GroupSetsAddModal';
+import GroupSetsTopContent from './GroupSetsTopContent';
+import { columns, typeOptions } from './GroupSetsConsts';
+import GroupSetsRemoveModal from './GroupSetsRemoveModal';
+import { useNotification } from '../../../hooks/useNotification';
 
 export default function GroupSets({ data, setData }) {
   const addModal = useDisclosure();
   const notification = useNotification();
   const [filterValue, setFilterValue] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
+  const [removeModal, setRemoveModal] = useState({ open: false, name: '', id: '' });
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
   const hasSearchFilter = Boolean(filterValue);
 
@@ -63,7 +65,7 @@ export default function GroupSets({ data, setData }) {
   },[])
 
   const topContent = useMemo(() =>
-    <GroupsSetsTopContent
+    <GroupSetsTopContent
       filterValue={filterValue}
       onClear={onClear}
       onSearchChange={onSearchChange}
@@ -110,15 +112,21 @@ export default function GroupSets({ data, setData }) {
         >
           {(item) => (
             <TableRow key={item.id} className='cursor-pointer' as={Link} href={`groups/${item.id}`}>
-              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+              {(columnKey) => <TableCell>{renderCell(item, columnKey, setRemoveModal)}</TableCell>}
             </TableRow>
           )}
         </TableBody>
       </Table>
-      <GroupsSetsAddModal
+      <GroupSetsAddModal
         groupId={data.id}
         isOpen={addModal.isOpen}
         onOpenChange={addModal.onOpenChange}
+        setData={setData}
+        notification={notification}
+      />
+      <GroupSetsRemoveModal
+        modal={removeModal}
+        setModal={setRemoveModal}
         setData={setData}
         notification={notification}
       />

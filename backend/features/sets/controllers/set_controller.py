@@ -9,7 +9,7 @@ from ..services.set_service import SetService
 router = APIRouter()
 
 
-@router.post("/api/sets/create", tags=["Set"], response_model=SetResponse)
+@router.post("/api/sets", tags=["Set"], response_model=SetResponse)
 def create_set(
         set_data: SetCreate,
         db: Session = Depends(get_db),
@@ -49,7 +49,7 @@ def get_set(set_id: int, db: Session = Depends(get_db)):
     )
 
 
-@router.put("/update_set/{set_id}", tags=["Set"], response_model=SetResponse)
+@router.put("/api/sets/{set_id}", tags=["Set"], response_model=SetResponse)
 async def update_set(
         set_id: int,
         set_update: SetUpdateSchema,
@@ -74,7 +74,7 @@ async def update_set(
     )
 
 
-@router.delete("/delete_set/{set_id}", tags=["Set"], response_model=SetResponse)
+@router.delete("/api/sets/{set_id}", tags=["Set"], response_model=SetResponse)
 async def delete_set(
         set_id: int,
         db: Session = Depends(get_db),
