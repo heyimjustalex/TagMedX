@@ -41,7 +41,7 @@ export default function Group({ group }) {
         <Tab key="packages" title="Packages" href={`/groups/${data.id}?tab=packages`} as={RouteLink}>
           <Card>
             <CardBody className='p-4'>
-              <GroupPackages data={data} />
+              <GroupPackages data={data} setData={setData} />
             </CardBody>
           </Card>
         </Tab>

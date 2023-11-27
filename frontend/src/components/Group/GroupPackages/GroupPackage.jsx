@@ -24,7 +24,7 @@ export default function GroupPackage({ data, users, setPackages }) {
           selectedKeys={selectedKey}
           onChange={e => {
             setPackages(prev => prev.map(
-              pack => pack.id === data.id ? { ...data, id_user: parseInt(e.target.value) } : pack
+              pack => pack.id === data.id ? { ...data, id_user: parseInt(e.target.value) || null } : pack
             ))
           }}
         >
