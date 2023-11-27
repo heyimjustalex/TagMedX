@@ -107,7 +107,7 @@ export default function GroupSets({ data, setData }) {
         </TableHeader>
         <TableBody
           items={sortedItems}
-          emptyContent='No sets found'
+          emptyContent='No sets found.'
         >
           {(item) => (
             <TableRow key={item.id} className='cursor-pointer' as={Link} href={`/groups/${data.id}?tab=packages&set=${item.id}`}>

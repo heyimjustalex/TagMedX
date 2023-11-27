@@ -27,17 +27,25 @@ export async function savePackages(packages, setPackages, oldPackages, setData, 
       notification.make(
         NextColor.SUCCESS,
         `${changed.length > 1 ? 'Packages' : 'Package'} saved`,
-        `You have successfully saved ${changed.length > 1 ? changed.length + ' packages owners' : '#' + changed[0] + ' package owner'}.`
+        `You have successfully assigned ${
+          changed.length > 1
+          ? 'users to ' + changed.length + ' packages'
+          : 'user to the #' + changed[0] + ' package'
+        }.`
       );
     } else {
       notification.make(
         NextColor.WARNING,
         'Partially saved',
-        `You have successfully saved ${changed.length} out of ${res.length} requested packages owners.`
+        `You have successfully assigned users to ${changed.length} out of ${res.length} requested packages owners.`
       );
     }
   }
   else {
-    notification.make(NextColor.DANGER, 'Error', `Could not save ${res.length > 1 ? 'package owner.' : 'packages owners.'}.`);
+    notification.make(
+      NextColor.DANGER,
+      'Error',
+      `Could not assign ${res.length > 1 ? 'users to the requested packages' : 'user to the requested package'}.`
+    );
   }
 }

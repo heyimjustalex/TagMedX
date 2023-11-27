@@ -116,7 +116,7 @@ export default function GroupsTable() {
         </TableHeader>
         <TableBody
           items={sortedItems}
-          emptyContent={data.ready ? 'No groups found' : true}
+          emptyContent={data.ready ? 'No groups found.' : true}
           isLoading={!data.ready}
           loadingContent={<Spinner className='mt-10' label='Loading groups...' />}
         >

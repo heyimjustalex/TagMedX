@@ -59,9 +59,15 @@ export default function GroupPackages({ data, setData }) {
           Save
         </Button>
       </div>
-      <div className='flex flex-row flex-wrap gap-4 w-full mt-4'>
-        {packages?.map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} />)}
-      </div>
+      {
+        packages?.length > 0
+        ? <div className='flex flex-row flex-wrap gap-4 w-full mt-4'>
+          {packages?.map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} />)}
+        </div>
+        : <div className='flex text-foreground-400 items-center justify-center h-40'>
+          {data.role === 'Admin' && data?.sets?.length === 0 ? 'No packages found, create set first.' : 'No packages found.'}
+        </div>
+      }
     </>
   )
 }

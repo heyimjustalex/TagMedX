@@ -32,7 +32,7 @@ async function getPackages(id) {
 
 export async function generateMetadata({ params, searchParams }) {
   const res = await get(`groups/${params.id}/name`);
-  if(res.ok) return { title: `TagMedX - ${res.body} - ${capitalize(searchParams.tab)}` };
+  if(res.ok) return { title: `TagMedX - ${res.body}${searchParams.tab ? ' - ' + capitalize(searchParams.tab) : ''}` };
   else return { title: `TagMedX - Group no. ${params.id}` };
 }
 
