@@ -22,22 +22,35 @@ async function getSets(id) {
   return res;
 }
 
+async function getPackages(id) {
+  if(id) {
+    const res = await get(`packages/set/${id}`);
+    if(!res.ok) console.error(`Get group sets: ${res.code} ${res.status}`);
+    return res;
+  } else return Promise.resolve({ code: 204, body: [] });
+}
+
 export async function generateMetadata({ params, searchParams }) {
   const res = await get(`groups/${params.id}/name`);
   if(res.ok) return { title: `TagMedX - ${res.body} - ${capitalize(searchParams.tab)}` };
   else return { title: `TagMedX - Group no. ${params.id}` };
 }
 
-export default async function GroupPage({ params }) {
+export default async function GroupPage({ params, searchParams }) {
 
-  const [data, users, sets] = await Promise.all([getData(params.id), getUsers(params.id), getSets(params.id)]);
+  const [data, users, sets, packages] = await Promise.all([
+    getData(params.id),
+    getUsers(params.id),
+    getSets(params.id),
+    getPackages(searchParams.set)
+  ]);
 
   return (
     <>
       { 
         [data.code, users.code, sets.code].includes(401) ? redirect('/login?expired=1') :
         <section className='content-page flex flex-col'>
-          <Group group={{ ...data.body, users: users.body.members, sets: sets.body }} />
+          <Group group={{ ...data.body, users: users.body.members, sets: sets.body, packages: packages.body.packages }} />
         </section>
       }
     </>

@@ -8,6 +8,7 @@ import { Card, CardBody, Tab, Tabs } from '@nextui-org/react';
 import GroupSettings from './GroupSettings/GroupSettings';
 import GroupUsers from './GroupUsers/GroupUsers';
 import GroupSets from './GroupSets/GroupSets';
+import GroupPackages from './GroupPackages/GroupPackages';
 
 export default function Group({ group }) {
   const searchParams = useSearchParams();
@@ -23,7 +24,7 @@ export default function Group({ group }) {
       <Tabs aria-label="Options" selectedKey={tab}>
         <Tab key="overview" title="Overview" href={`/groups/${data.id}?tab=overview`} as={RouteLink}>
           <Card>
-            <CardBody>
+            <CardBody className='p-4'>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
               incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
               exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -32,24 +33,22 @@ export default function Group({ group }) {
         </Tab>
         <Tab key="sets" title="Sets" href={`/groups/${data.id}?tab=sets`} as={RouteLink}>
           <Card>
-            <CardBody>
+            <CardBody className='p-4'>
               <GroupSets data={data} setData={setData} />
             </CardBody>
           </Card>
         </Tab>
         <Tab key="packages" title="Packages" href={`/groups/${data.id}?tab=packages`} as={RouteLink}>
           <Card>
-            <CardBody>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            <CardBody className='p-4'>
+              <GroupPackages data={data} />
             </CardBody>
           </Card>
         </Tab>
         {data?.role === 'Admin' ? 
           <Tab key="users" title="Users" href={`/groups/${data.id}?tab=users`} as={RouteLink}>
             <Card>
-              <CardBody>
+              <CardBody className='p-4'>
                 <GroupUsers data={data} setData={setData} />
               </CardBody>
             </Card>
@@ -57,7 +56,11 @@ export default function Group({ group }) {
         : null }
         {data?.role === 'Admin' ? 
           <Tab key="settings" title="Settings" href={`/groups/${data.id}?tab=settings`} as={RouteLink}>
-            <GroupSettings data={data} setData={setData} />
+            <Card>
+              <CardBody className='p-4 gap-4'>
+                <GroupSettings data={data} setData={setData} />
+              </CardBody>
+            </Card>
           </Tab>
         : null }
       </Tabs>
