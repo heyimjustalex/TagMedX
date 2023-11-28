@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from ..schemas.package_schema import PackageResponse, PackageListResponse
+from ..schemas.package_schema import PackageResponse
 from ...authorization.services.token_service import UserData, TokenService
 from typing import Annotated
 from connectionDB.session import get_db
@@ -34,7 +34,9 @@ async def get_package(
 
 
 @router.get(
-    "/api/packages/set/{id_set}", tags=["Packages"], response_model=PackageListResponse
+    "/api/packages/set/{id_set}",
+    tags=["Packages"],
+    response_model=list[PackageResponse],
 )
 async def get_packages_in_set(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
@@ -50,9 +52,9 @@ async def get_packages_in_set(
     package_service = PackageService(db)
     packages = package_service.get_packages_in_set(set.id)
 
-    response = PackageListResponse(packages=[])
+    response: list[PackageResponse] = []
     for package in packages:
-        response.packages.append(
+        response.append(
             PackageResponse(
                 id=package.id,
                 id_set=package.id_set,
@@ -64,7 +66,7 @@ async def get_packages_in_set(
     return response
 
 
-@router.get("/api/packages", tags=["Packages"], response_model=PackageListResponse)
+@router.get("/api/packages", tags=["Packages"], response_model=list[PackageResponse])
 async def get_user_packages(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     db: Annotated[Session, Depends(get_db)],
@@ -72,9 +74,9 @@ async def get_user_packages(
     package_service = PackageService(db)
     packages = package_service.get_user_packages(user_data.id)
 
-    response = PackageListResponse(packages=[])
+    response: list[PackageResponse] = []
     for package in packages:
-        response.packages.append(
+        response.append(
             PackageResponse(
                 id=package.id,
                 id_set=package.id_set,

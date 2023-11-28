@@ -6,7 +6,3 @@ class PackageResponse(BaseModel):
     id_set: int
     id_user: int | None = None
     is_ready: bool | None = None
-
-
-class PackageListResponse(BaseModel):
-    packages: list[PackageResponse]

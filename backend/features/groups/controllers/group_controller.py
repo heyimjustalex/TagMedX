@@ -12,7 +12,6 @@ from ..schemas.group_schema import (
     GroupWithRoleResponse,
     GroupJoin,
     AdminGroupResponse,
-    GroupMemberListResponse,
     GroupMemberResponse,
 )
 
@@ -153,7 +152,7 @@ def remove_user_from_group(
 @router.get(
     "/api/groups/{group_id}/users",
     tags=["Groups"],
-    response_model=GroupMemberListResponse,
+    response_model=list[GroupMemberResponse],
 )
 def get_users_in_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
@@ -166,10 +165,10 @@ def get_users_in_group(
     user_service = UserService(db)
     users = user_service.get_users_in_group(group_id)
 
-    response = GroupMemberListResponse(members=[])
+    response: list[GroupMemberResponse] = []
     for user in users:
         role = group_service.get_role_in_group(user.id, group_id)
-        response.members.append(
+        response.append(
             GroupMemberResponse(
                 user_id=user.id,
                 e_mail=user.e_mail,

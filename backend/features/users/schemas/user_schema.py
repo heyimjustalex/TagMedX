@@ -13,10 +13,6 @@ class UserResponse(BaseModel):
     practice_start_year: int | None = None
 
 
-class UserListResponse(BaseModel):
-    users: list[UserResponse]
-
-
 class RegisterResponse(BaseModel):
     message: str
 
