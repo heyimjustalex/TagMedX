@@ -1,51 +1,39 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from repositories.set_repository import SetRepository
-from ..schemas.set_schema import SetCreate
-from features.exceptions.definitions.definitions import PermissionDenied
 from models.models import Set
 
 
 class SetService:
     def __init__(self, db: Session):
-        self.db = db
-        self.set_repository = SetRepository(db)
+        self.repository = SetRepository(db)
 
-    def create_set_with_permission_check(
-            self, set_data: SetCreate, current_user_id: int
-    ):
-        group_id = set_data.id_group
+    def create_set(
+        self,
+        id_group: int,
+        package_size: int,
+        name: str | None = None,
+        desc: str | None = None,
+        type: str | None = None,
+    ) -> Set:
+        set = Set()
+        set.id_group = id_group
+        set.package_size = package_size
+        set.name = name
+        set.description = desc
+        set.type = type
 
-        if not self.set_repository.is_user_admin_in_group(current_user_id, group_id):
-            raise PermissionDenied(status_code=403, detail="Permission denied")
-
-        set = self.set_repository.create_set(set_data)
+        self.repository.create_set(set)
         return set
 
-    def get_set_by_id(self, set_id):
-        set = self.set_repository.get_set_by_id(set_id)
-        if not set:
-            raise HTTPException(status_code=404, detail="Set not found")
-        return set
-
-    def get_set_by_group(self, group_id: int):
-        return self.set_repository.get_set_by_group(group_id)
-
-    def update_set(self,
-                   set_id: int,
-                   id_group: int | None = None,
-                   name: str | None = None,
-                   description: str | None = None,
-                   type: str | None = None,
-                   package_size: int | None = None) -> Set:
-
-        set = self.get_set_by_id(set_id)
-
-        if not set:
-            raise HTTPException(status_code=404, detail="Set not found")
-
-        if id_group:
-            set.id_group = id_group
+    def update_set(
+        self,
+        id_set: int,
+        name: str | None = None,
+        description: str | None = None,
+        type: str | None = None,
+    ) -> Set:
+        set = self.get_set(id_set)
 
         if name:
             set.name = name
@@ -56,11 +44,21 @@ class SetService:
         if type:
             set.type = type
 
-        if package_size:
-            set.package_size = package_size
-
-        self.set_repository.update_set()
+        self.repository.update()
         return set
 
-    def delete_set(self, set_id: int):
-        return self.set_repository.delete_set(set_id)
+    def delete_set(self, id_set: int):
+        set = self.get_set(id_set)
+        self.repository.delete_set(set)
+
+    def get_set(self, id_set: int) -> Set:
+        set = self.repository.get_set_by_id(id_set)
+        if not set:
+            raise HTTPException(status_code=404, detail="Set not found")
+        return set
+
+    def get_sets_in_group(self, id_group: int) -> list[Set]:
+        return self.repository.get_sets_by_group(id_group)
+
+    def get_sets_by_type(self, type: str) -> list[Set]:
+        return self.repository.get_sets_by_type(type)

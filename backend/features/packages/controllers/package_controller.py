@@ -42,7 +42,7 @@ async def get_packages_in_set(
     db: Annotated[Session, Depends(get_db)],
 ):
     set_service = SetService(db)
-    set = set_service.get_set_by_id(id_set)
+    set = set_service.get_set(id_set)
 
     group_service = GroupService(db)
     _ = group_service.get_membership(set.id_group, user_data.id)

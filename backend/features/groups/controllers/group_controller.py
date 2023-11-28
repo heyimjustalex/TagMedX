@@ -84,11 +84,8 @@ def get_group(
         name=group.name, description=group.description, id=group.id, role=role
     )
 
-@router.get(
-    "/api/groups/{group_id}/name",
-    tags=["Groups"],
-    response_model=str
-)
+
+@router.get("/api/groups/{group_id}/name", tags=["Groups"], response_model=str)
 def get_group_name(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
@@ -126,9 +123,7 @@ def update_group(
     )
 
 
-@router.delete(
-    "/api/groups/{group_id}", tags=["Groups"], response_model=None
-)
+@router.delete("/api/groups/{group_id}", tags=["Groups"], response_model=None)
 def delete_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,

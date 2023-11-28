@@ -26,7 +26,7 @@ async def create_samples(
     db: Annotated[Session, Depends(get_db)],
 ):
     set_service = SetService(db)
-    set = set_service.get_set_by_id(id_set)
+    set = set_service.get_set(id_set)
 
     group_service = GroupService(db)
     _ = group_service.check_if_admin(user_data.id, set.id_group)
