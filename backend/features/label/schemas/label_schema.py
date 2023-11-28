@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 
 class LabelSchema(BaseModel):
+    id: int
     id_set: int
     name: str
     description: str

@@ -24,7 +24,7 @@ def create_label(label_data: LabelSchema, db: Session = Depends(get_db),
     )
 
 
-@router.get("/labels/{set_id}", tags=["Label"], response_model=List[LabelSchema])
+@router.get("/labels/set/{set_id}", tags=["Label"], response_model=List[LabelSchema])
 def get_labels_for_set(
         set_id: int,
         db: Session = Depends(get_db)
