@@ -5,6 +5,7 @@ class LabelCreate(BaseModel):
     id_set: int
     name: str | None = None
     description: str | None = None
+    color: str | None = None
 
 
 class LabelResponse(BaseModel):
@@ -12,8 +13,10 @@ class LabelResponse(BaseModel):
     id_set: int
     name: str | None = None
     description: str | None = None
+    color: str | None = None
 
 
 class LabelUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
+    color: str | None = None

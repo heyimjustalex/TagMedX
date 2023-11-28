@@ -153,6 +153,7 @@ class Label(Base):
     id_set: Mapped[int] = mapped_column(ForeignKey("Set.id"))
     name: Mapped[str | None]
     description: Mapped[str | None]
+    color: Mapped[str | None]
 
     # Define the many-to-one relationship with Set
     Set: Mapped["Set"] = relationship(back_populates="Label")

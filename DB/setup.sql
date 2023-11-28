@@ -79,6 +79,7 @@ CREATE TABLE `Label` (
   id_set INT NOT NULL,
   name VARCHAR(255),
   description VARCHAR(255),
+  color VARCHAR(255),
   PRIMARY KEY (id),
   FOREIGN KEY (id_set) REFERENCES `Set`(id)
 );
@@ -143,11 +144,11 @@ VALUES
 
 INSERT INTO `Sample` (id_package, path, format)
 VALUES
-    (NULL, '/path/to/sample1', 'Format A'),
-    (NULL, '/path/to/sample2', 'Format B'),
-    (NULL, '/path/to/sample3', 'Format A'),
-    (NULL, '/path/to/sample4', 'Format C'),
-    (NULL, '/path/to/sample5', 'Format B');
+    (3, '/path/to/sample1', 'Format A'),
+    (1, '/path/to/sample2', 'Format B'),
+    (4, '/path/to/sample3', 'Format A'),
+    (4, '/path/to/sample4', 'Format C'),
+    (5, '/path/to/sample5', 'Format B');
 
 
 INSERT INTO `Examination` (id_user, id_sample, to_further_verification, bad_quality)
@@ -158,13 +159,13 @@ VALUES
     (4, 4, 1, 0),
     (2, 5, 0, 0);
 
-INSERT INTO `Label` (id_set, name, description)
+INSERT INTO `Label` (id_set, name, description, color)
 VALUES
-    (1, 'Label 1', 'Label Description 1'),
-    (2, 'Label 2', 'Label Description 2'),
-    (3, 'Label 3', 'Label Description 3'),
-    (4, 'Label 4', 'Label Description 4'),
-    (2, 'Label 5', 'Label Description 5');
+    (1, 'Label 1', 'Label Description 1', 'red'),
+    (2, 'Label 2', 'Label Description 2', NULL),
+    (3, 'Label 3', 'Label Description 3', 'green'),
+    (4, 'Label 4', 'Label Description 4', 'blue'),
+    (2, 'Label 5', 'Label Description 5', NULL);
 
 
 INSERT INTO `BBox` (id_examination, id_label, comment, x1, y1, x2, y2)

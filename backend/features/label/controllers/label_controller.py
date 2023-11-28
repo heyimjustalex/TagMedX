@@ -29,7 +29,10 @@ def create_label(
 
     label_service = LabelService(db)
     label = label_service.create_label(
-        label_create.id_set, label_create.name, label_create.description
+        label_create.id_set,
+        label_create.name,
+        label_create.description,
+        label_create.color,
     )
 
     return LabelResponse(
@@ -127,7 +130,7 @@ def update_label(
     _ = group_service.check_if_admin(user_data.id, label.Set.id_group)
 
     label = label_service.update_label(
-        label.id, label_update.name, label_update.description
+        label.id, label_update.name, label_update.description, label_update.color
     )
 
     return LabelResponse(

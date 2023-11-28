@@ -9,18 +9,27 @@ class LabelService:
         self.repository = LabelRepository(db)
 
     def create_label(
-        self, id_set: int, name: str | None = None, desc: str | None = None
+        self,
+        id_set: int,
+        name: str | None = None,
+        desc: str | None = None,
+        color: str | None = None,
     ) -> Label:
         label = Label()
         label.id_set = id_set
         label.name = name
         label.description = desc
+        label.color = color
 
         self.repository.create_label(label)
         return label
 
     def update_label(
-        self, id_label: int, name: str | None = None, description: str | None = None
+        self,
+        id_label: int,
+        name: str | None = None,
+        description: str | None = None,
+        color: str | None = None,
     ) -> Label:
         label = self.get_label(id_label)
 
@@ -29,6 +38,9 @@ class LabelService:
 
         if description:
             label.description = description
+
+        if color:
+            label.color = color
 
         self.repository.update()
         return label
