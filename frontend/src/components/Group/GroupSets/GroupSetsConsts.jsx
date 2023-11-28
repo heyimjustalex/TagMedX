@@ -6,8 +6,8 @@ export const columns = [
 ];
 
 export const typeOptions = [
-  {name: 'Classification 	', uid: 'classification'},
-  {name: 'Detection', uid: 'detection'}
+  'Classification',
+  'Detection'
 ];
 
 export const defaultModal = { open: false, edit: false, name: '', type: new Set(), description: '', packageSize: ''};

@@ -127,18 +127,18 @@ INSERT INTO `Package` (id_set, id_user, is_ready)
 VALUES
     (1, NULL, 0),
     (1, NULL, 0),
-    (2, 1, 1),
-    (2, 2, 1),
-    (3, 3, 1);
+    (2, NULL, 1),
+    (2, NULL, 1),
+    (3, NULL, 1);
 
 
 INSERT INTO `Membership` (id_user, id_group, role)
 VALUES
     (1, 1, 'User'),
-    (2, 1,'Admin'),
-    (2, 2,'User'),
-    (3, 2,'Admin'),
-    (4, 3,'Admin');
+    (2, 1, 'Admin'),
+    (2, 2, 'User'),
+    (3, 2, 'Admin'),
+    (4, 3, 'Admin');
 
 
 INSERT INTO `Sample` (id_package, path, format)

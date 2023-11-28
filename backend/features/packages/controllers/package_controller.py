@@ -34,7 +34,7 @@ async def get_package(
 
 
 @router.get(
-    "/api/set/{id_set}/packages", tags=["Packages"], response_model=PackageListResponse
+    "/api/packages/set/{id_set}", tags=["Packages"], response_model=PackageListResponse
 )
 async def get_packages_in_set(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],

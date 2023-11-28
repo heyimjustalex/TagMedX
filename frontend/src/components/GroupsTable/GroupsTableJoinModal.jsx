@@ -9,7 +9,8 @@ export default function GroupsTableJoinModal({ isOpen, onOpenChange, setData, no
   const [sent, setSent] = useState(false);
 
   return (
-    <Modal 
+    <Modal
+      hideCloseButton
       isOpen={isOpen}
       onOpenChange={() => { onOpenChange(); setValue('')}}
       placement='top-center'
@@ -31,7 +32,7 @@ export default function GroupsTableJoinModal({ isOpen, onOpenChange, setData, no
               <Button
                 onPress={onClose}
               >
-                Close
+                Cancel
               </Button>
               <Button
                 color='primary'

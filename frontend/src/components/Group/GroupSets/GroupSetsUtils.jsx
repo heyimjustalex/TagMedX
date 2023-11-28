@@ -1,11 +1,11 @@
 import { Chip, Tooltip } from '@nextui-org/react';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconFilePlus, IconTrash } from '@tabler/icons-react';
 
 import { del, post, put } from '../../../utils/fetch';
 import { NextColorMap } from '../../../consts/NextColorMap';
 import { NextColor } from '../../../consts/NextColor';
 
-export function renderCell(item, columnKey, setModal, setRemoveModal) {
+export function renderCell(item, columnKey, setModal, setRemoveModal, setSamplesModal) {
   const cellValue = item[columnKey];
   switch (columnKey) {
     case 'type':
@@ -17,6 +17,12 @@ export function renderCell(item, columnKey, setModal, setRemoveModal) {
     case 'actions':
       return (
         <div className="relative flex justify-end items-center gap-2">
+        <Tooltip content="Add samples" placement='top-end'>
+            <span className="text-lg text-default-600 cursor-pointer active:opacity-50">
+              <IconFilePlus onClick={() => setSamplesModal({ open: true, id: item.id, name: item.name })}
+              />
+            </span>
+          </Tooltip>
           <Tooltip content="Edit set" placement='top-end'>
             <span className="text-lg text-default-600 cursor-pointer active:opacity-50">
               <IconEdit onClick={
@@ -121,5 +127,35 @@ export async function removeSet(id, setModal, setSent, setData, notification) {
     setSent(false);
     setModal(prev => ({ ...prev, open: false }));
     notification.make(NextColor.DANGER, 'Error', 'Could not remove set.');
+  }
+}
+
+export async function postSamples(files, modal, setModal, setSent, setData, notification) {
+
+  const body = new FormData();
+  await files.forEach(e => body.append('files', e));
+
+  setSent(true);
+  
+  const res = await post(`samples/upload/${modal.id}`, body, true);
+
+  if(res.ok) {
+    setData(prev => ({
+      ...prev,
+      samples: prev?.samples
+        ? [...prev.samples, ...res.body.samples]
+        : [...res.body.samples]
+    }));
+    setSent(false);
+    setModal(prev => ({ ...prev, open: false }));
+    notification.make(
+      NextColor.SUCCESS,
+      'Samples added',
+      `You have successfully added ${files.length > 1 ? files.length + ' samples' : 'sample'} files to ${res.body.name}.`);
+  }
+  else {
+    setSent(false);
+    setModal(prev => ({ ...prev, open: false }));
+    notification.make(NextColor.DANGER, 'Error', `Could not add samples to ${modal.name}.`);
   }
 }

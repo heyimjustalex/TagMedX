@@ -19,8 +19,11 @@ export default function GroupUsers({ data, setData }) {
     let filteredUsers = [...data.users];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((group) =>
-        group.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter((user) =>
+        user.name
+          .toLowerCase()
+          .concat(' ',user.surname.toLowerCase())
+          .includes(filterValue.toLowerCase())
       );
     }
 

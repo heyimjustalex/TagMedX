@@ -27,8 +27,8 @@ export default function GroupsTableTopContent({ filterValue, onClear, onSearchCh
         />
         <div className='flex w-full sm:w-min gap-3'>
           <Dropdown>
-            <DropdownTrigger className='flex w-full sm:w-min justify-end sm:justify-end'>
-              <Button endContent={<IconChevronDown className='text-small' />} variant='flat'>
+            <DropdownTrigger className='flex w-full sm:w-min justify-between'>
+              <Button endContent={<IconChevronDown />} variant='flat'>
                 Role
               </Button>
             </DropdownTrigger>
@@ -47,10 +47,10 @@ export default function GroupsTableTopContent({ filterValue, onClear, onSearchCh
               ))}
             </DropdownMenu>
           </Dropdown>
-          <Button className='min-w-fit' color='primary' variant='flat' endContent={<IconPlus className='hidden sm:flex' />} onPress={onAddOpen}>
+          <Button className='min-w-fit' color='primary' variant='flat' endContent={<IconPlus />} onPress={onAddOpen}>
             Add New
           </Button>
-          <Button className='min-w-fit' color='primary' endContent={<IconUsersGroup className='hidden sm:flex' />} onPress={onJoinOpen}>
+          <Button className='min-w-fit' color='primary' endContent={<IconUsersGroup />} onPress={onJoinOpen}>
             Join Group
           </Button>
         </div>

@@ -7,7 +7,18 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        '2-el': 'calc((100% - 1rem) / 2)',
+        '3-el': 'calc((100% - 2rem) / 3)',
+        '4-el': 'calc((100% - 3rem) / 4)',
+        '5-el': 'calc((100% - 4rem) / 5)'
+      },
+      maxHeight: {
+        'screen-base': 'calc(100vh - 220px)',
+        'screen-table': 'calc(100vh - 300px)',
+      }
+    },
   },
   darkMode: 'class',
   plugins: [nextui()],

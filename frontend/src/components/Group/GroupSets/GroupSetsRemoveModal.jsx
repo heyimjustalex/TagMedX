@@ -9,6 +9,7 @@ export default function GroupSetsRemoveModal({ modal, setModal, setData, notific
 
   return (
     <Modal 
+      hideCloseButton
       isOpen={modal.open}
       placement='top-center'
     >
@@ -22,7 +23,7 @@ export default function GroupSetsRemoveModal({ modal, setModal, setData, notific
             isDisabled={sent}
             onPress={() => setModal(prev => ({ ...prev, open: false }))}
           >
-            Close
+            Cancel
           </Button>
           <Button
             color='danger'
