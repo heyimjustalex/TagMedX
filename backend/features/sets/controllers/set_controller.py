@@ -131,4 +131,4 @@ async def delete_set(
 
     set_service.delete_set(set.id)
 
-    return SetDeleteResponse(message="Set removed successfully.")
+    return SetDeleteResponse(message="Set removed successfully")

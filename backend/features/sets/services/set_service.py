@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from repositories.set_repository import SetRepository
 from models.models import Set
@@ -54,7 +54,9 @@ class SetService:
     def get_set(self, id_set: int) -> Set:
         set = self.repository.get_set_by_id(id_set)
         if not set:
-            raise HTTPException(status_code=404, detail="Set not found")
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Set not found"
+            )
         return set
 
     def get_sets_in_group(self, id_group: int) -> list[Set]:
