@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.models import Label
+from models.models import Label, Set
 
 
 class LabelRepository:
@@ -22,3 +22,8 @@ class LabelRepository:
 
     def get_labels_by_set(self, id_set: int) -> list[Label]:
         return self.db.query(Label).filter(Label.id_set == id_set).all()
+
+    def get_labels_by_group(self, id_group: int) -> list[Label]:
+        return (
+            self.db.query(Label).filter(Label.Set.has(Set.id_group == id_group)).all()
+        )

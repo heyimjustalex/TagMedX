@@ -37,3 +37,10 @@ class PackageRepository:
 
     def get_packages_by_user(self, id_user: int) -> list[Package]:
         return self.db.query(Package).filter(Package.id_user == id_user).all()
+
+    def get_packages_by_group(self, id_group: int) -> list[Package]:
+        return (
+            self.db.query(Package)
+            .filter(Package.Set.has(Set.id_group == id_group))
+            .all()
+        )

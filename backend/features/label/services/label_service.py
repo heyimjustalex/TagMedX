@@ -47,3 +47,6 @@ class LabelService:
 
     def get_labels_for_set(self, id_set: int) -> list[Label]:
         return self.repository.get_labels_by_set(id_set)
+
+    def get_labels_in_group(self, id_group: int) -> list[Label]:
+        return self.repository.get_labels_by_group(id_group)

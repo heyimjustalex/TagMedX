@@ -85,6 +85,34 @@ def get_labels_for_set(
     return response
 
 
+@router.get(
+    "/api/labels/group/{id_group}", tags=["Labels"], response_model=list[LabelResponse]
+)
+def get_labels_in_group(
+    id_group: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    group_service = GroupService(db)
+    _ = group_service.get_membership(id_group, user_data.id)
+
+    label_service = LabelService(db)
+    labels = label_service.get_labels_in_group(id_group)
+
+    response: list[LabelResponse] = []
+    for label in labels:
+        response.append(
+            LabelResponse(
+                id=label.id,
+                id_set=label.id_set,
+                name=label.name,
+                description=label.description,
+            )
+        )
+
+    return response
+
+
 @router.put("/api/labels/{id_label}", tags=["Labels"], response_model=LabelResponse)
 def update_label(
     id_label: int,

@@ -66,6 +66,36 @@ async def get_packages_in_set(
     return response
 
 
+@router.get(
+    "/api/packages/group/{id_group}",
+    tags=["Packages"],
+    response_model=list[PackageResponse],
+)
+async def get_packages_in_group(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    id_group: int,
+    db: Annotated[Session, Depends(get_db)],
+):
+    group_service = GroupService(db)
+    _ = group_service.get_membership(id_group, user_data.id)
+
+    package_service = PackageService(db)
+    packages = package_service.get_packages_in_group(id_group)
+
+    response: list[PackageResponse] = []
+    for package in packages:
+        response.append(
+            PackageResponse(
+                id=package.id,
+                id_set=package.id_set,
+                id_user=package.id_user,
+                is_ready=package.is_ready,
+            )
+        )
+
+    return response
+
+
 @router.get("/api/packages", tags=["Packages"], response_model=list[PackageResponse])
 async def get_user_packages(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
