@@ -10,7 +10,6 @@ from ..schemas.label_schema import (
     LabelCreate,
     LabelResponse,
     LabelUpdate,
-    LabelDeleteResposne,
 )
 
 router = APIRouter()
@@ -108,9 +107,7 @@ def update_label(
     )
 
 
-@router.delete(
-    "/api/labels/{id_label}", tags=["Labels"], response_model=LabelDeleteResposne
-)
+@router.delete("/api/labels/{id_label}", tags=["Labels"])
 def delete_label(
     id_label: int,
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
@@ -124,4 +121,4 @@ def delete_label(
 
     label_service.delete_label(id_label)
 
-    return LabelDeleteResposne(message="Label removed successfully")
+    return {"message": "Label removed successfully"}

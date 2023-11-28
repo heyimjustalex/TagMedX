@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from connectionDB.session import get_db
-from ..schemas.set_schema import SetCreate, SetResponse, SetUpdate, SetDeleteResponse
+from ..schemas.set_schema import SetCreate, SetResponse, SetUpdate
 from features.authorization.services.token_service import TokenService, UserData
 from ..services.set_service import SetService
 from ...groups.services.group_service import GroupService
@@ -117,7 +117,7 @@ async def update_set(
     )
 
 
-@router.delete("/api/sets/{id_set}", tags=["Sets"], response_model=SetDeleteResponse)
+@router.delete("/api/sets/{id_set}", tags=["Sets"])
 async def delete_set(
     id_set: int,
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
@@ -131,4 +131,4 @@ async def delete_set(
 
     set_service.delete_set(set.id)
 
-    return SetDeleteResponse(message="Set removed successfully")
+    return {"message:" "Set removed successfully"}

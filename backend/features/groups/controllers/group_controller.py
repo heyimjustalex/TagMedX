@@ -122,22 +122,21 @@ def update_group(
     )
 
 
-@router.delete("/api/groups/{group_id}", tags=["Groups"], response_model=None)
+@router.delete("/api/groups/{group_id}", tags=["Groups"])
 def delete_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
     db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
-    role = group_service.check_if_admin(user_data.id, group_id)
-    deleted_group = group_service.delete_group(group_id)
-    return None
+    _ = group_service.check_if_admin(user_data.id, group_id)
+    group_service.delete_group(group_id)
+    return {"message": "Group removed successfully"}
 
 
 @router.delete(
     "/api/groups/{group_id}/user/{user_id}",
     tags=["Groups"],
-    response_model=None,
 )
 def remove_user_from_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
@@ -146,9 +145,9 @@ def remove_user_from_group(
     db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
-    role = group_service.check_if_admin(user_data.id, group_id)
-    removed_group = group_service.remove_user_from_group(group_id, user_id)
-    return None
+    _ = group_service.check_if_admin(user_data.id, group_id)
+    group_service.remove_user_from_group(group_id, user_id)
+    return {"message": "User successfully removed from the group"}
 
 
 @router.get(

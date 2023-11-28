@@ -17,7 +17,3 @@ class LabelResponse(BaseModel):
 class LabelUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
-
-
-class LabelDeleteResposne(BaseModel):
-    message: str

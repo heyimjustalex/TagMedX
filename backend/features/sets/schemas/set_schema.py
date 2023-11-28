@@ -22,7 +22,3 @@ class SetUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
     type: str | None = None
-
-
-class SetDeleteResponse(BaseModel):
-    message: str
