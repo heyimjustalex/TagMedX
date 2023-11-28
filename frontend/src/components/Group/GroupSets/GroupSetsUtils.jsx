@@ -1,11 +1,11 @@
 import { Chip, Tooltip } from '@nextui-org/react';
-import { IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconFilePlus, IconTrash } from '@tabler/icons-react';
 
 import { del, post, put } from '../../../utils/fetch';
 import { NextColorMap } from '../../../consts/NextColorMap';
 import { NextColor } from '../../../consts/NextColor';
 
-export function renderCell(item, columnKey, setModal, setRemoveModal) {
+export function renderCell(item, columnKey, setModal, setRemoveModal, setSamplesModal) {
   const cellValue = item[columnKey];
   switch (columnKey) {
     case 'type':
@@ -17,6 +17,12 @@ export function renderCell(item, columnKey, setModal, setRemoveModal) {
     case 'actions':
       return (
         <div className="relative flex justify-end items-center gap-2">
+        <Tooltip content="Add samples" placement='top-end'>
+            <span className="text-lg text-default-600 cursor-pointer active:opacity-50">
+              <IconFilePlus onClick={() => setSamplesModal({ open: true, id: item.id, name: item.name })}
+              />
+            </span>
+          </Tooltip>
           <Tooltip content="Edit set" placement='top-end'>
             <span className="text-lg text-default-600 cursor-pointer active:opacity-50">
               <IconEdit onClick={

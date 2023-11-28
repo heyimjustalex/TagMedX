@@ -30,7 +30,7 @@ export default function GroupPackages({ data, setData }) {
           selectionMode='single'
           aria-label='set-selector'
           selectedKeys={selectedKey}
-          className='h-10 w-full sm:max-w-full'
+          className='h-10 w-full'
           placeholder='Select set to display packages'
           classNames={{ inputWrapper: 'h-10', trigger: 'h-10 min-h-10' }}
           onChange={e => router.push(`/groups/${data.id}?tab=${tab}&set=${e.target.value}`)}

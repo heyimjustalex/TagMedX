@@ -22,7 +22,8 @@ export default function GroupSetsModal({ modal, setModal, groupId, setData, noti
   const error = useMemo(() => checkPackageSize(modal.packageSize), [modal.packageSize]);
 
   return (
-    <Modal 
+    <Modal
+      hideCloseButton
       isOpen={modal.open}
       placement='top-center'
     >
@@ -47,8 +48,8 @@ export default function GroupSetsModal({ modal, setModal, groupId, setData, noti
             onSelectionChange={e => setModal(prev => ({ ...prev, type: e }))}
           >
             {typeOptions.map((type) => (
-              <SelectItem key={type.uid} value={type.name}>
-                {type.name}
+              <SelectItem key={type} value={type}>
+                {type}
               </SelectItem>
             ))}
           </Select>

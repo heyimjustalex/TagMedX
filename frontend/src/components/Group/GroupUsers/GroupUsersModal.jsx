@@ -8,7 +8,8 @@ export default function GroupUsersModal({ modal, setModal, groupId, groupName, s
   const [sent, setSent] = useState(false);
 
   return (
-    <Modal 
+    <Modal
+      hideCloseButton
       isOpen={modal.open}
       placement='top-center'
     >
@@ -24,7 +25,7 @@ export default function GroupUsersModal({ modal, setModal, groupId, groupName, s
                 isDisabled={sent}
                 onPress={() => setModal(prev => { return { ...prev, open: false }})}
               >
-                Close
+                Cancel
               </Button>
               <Button
                 color='danger'

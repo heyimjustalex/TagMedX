@@ -13,6 +13,10 @@ module.exports = {
         '3-el': 'calc((100% - 2rem) / 3)',
         '4-el': 'calc((100% - 3rem) / 4)',
         '5-el': 'calc((100% - 4rem) / 5)'
+      },
+      maxHeight: {
+        'screen-base': 'calc(100vh - 220px)',
+        'screen-table': 'calc(100vh - 300px)',
       }
     },
   },

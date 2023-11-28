@@ -40,8 +40,8 @@ export default function GroupSetsTopContent({ filterValue, onClear, onSearchChan
             onSelectionChange={setTypeFilter}
           >
             {typeOptions.map((type) => (
-              <DropdownItem key={type.uid} className='capitalize'>
-                {type.name}
+              <DropdownItem key={type} className='capitalize'>
+                {type}
               </DropdownItem>
             ))}
           </DropdownMenu>

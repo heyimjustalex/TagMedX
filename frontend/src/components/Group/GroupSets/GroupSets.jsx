@@ -14,16 +14,18 @@ import Link from 'next/link';
 import { renderCell } from './GroupSetsUtils';
 import GroupSetsModal from './GroupSetsModal';
 import GroupSetsTopContent from './GroupSetsTopContent';
-import { columns, defaultModal, typeOptions } from './GroupSetsConsts';
 import GroupSetsRemoveModal from './GroupSetsRemoveModal';
+import GroupSetsSamplesModal from './GroupSetsSamplesModal';
 import { useNotification } from '../../../hooks/useNotification';
+import { columns, defaultModal, typeOptions } from './GroupSetsConsts';
 
 export default function GroupSets({ data, setData }) {
   const notification = useNotification();
+  const [modal, setModal] = useState(defaultModal);
   const [filterValue, setFilterValue] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
-  const [modal, setModal] = useState(defaultModal);
   const [removeModal, setRemoveModal] = useState({ open: false, name: '', id: '' });
+  const [samplesModal, setSamplesModal] = useState({ open: false, name: '', id: '' });
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
   const hasSearchFilter = Boolean(filterValue);
 
@@ -37,7 +39,7 @@ export default function GroupSets({ data, setData }) {
     }
     if (typeFilter !== 'all' && Array.from(typeFilter).length !== typeOptions.length) {
       filteredSets = filteredSets.filter((set) => 
-        Array.from(typeFilter).includes(set.type.toLowerCase())
+        Array.from(typeFilter).includes(set.type)
       );
     }
 
@@ -111,7 +113,7 @@ export default function GroupSets({ data, setData }) {
         >
           {(item) => (
             <TableRow key={item.id} className='cursor-pointer' as={Link} href={`/groups/${data.id}?tab=packages&set=${item.id}`}>
-              {(columnKey) => <TableCell>{renderCell(item, columnKey, setModal, setRemoveModal)}</TableCell>}
+              {(columnKey) => <TableCell>{renderCell(item, columnKey, setModal, setRemoveModal, setSamplesModal)}</TableCell>}
             </TableRow>
           )}
         </TableBody>
@@ -127,6 +129,11 @@ export default function GroupSets({ data, setData }) {
         modal={removeModal}
         setModal={setRemoveModal}
         setData={setData}
+        notification={notification}
+      />
+      <GroupSetsSamplesModal
+        modal={samplesModal}
+        setModal={setSamplesModal}
         notification={notification}
       />
     </>
