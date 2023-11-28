@@ -5,29 +5,35 @@ import { capitalize } from '../../../utils/text';
 import Group from '../../../components/Group/Group';
 
 async function getData(id) {
-  const res = await get(`groups/${id}`);
-  if(!res.ok) console.error(`Get group: ${res.code} ${res.status}`);
-  return res;
+  if(!isNaN(id)) {
+    const res = await get(`groups/${id}`);
+    if(!res.ok) console.error(`Get group: ${res.code} ${res.status}`);
+    return res;
+  } else return Promise.resolve({ code: 204, body: [] });
 }
 
 async function getUsers(id) {
-  const res = await get(`groups/${id}/users`);
-  if(!res.ok) console.error(`Get group users: ${res.code} ${res.status}`);
-  return res;
+  if(!isNaN(id)) {
+    const res = await get(`groups/${id}/users`);
+    if(!res.ok) console.error(`Get group users: ${res.code} ${res.status}`);
+    return res;
+  } else return Promise.resolve({ code: 204, body: { members: [] } });
 }
 
 async function getSets(id) {
-  const res = await get(`sets/group/${id}`);
-  if(!res.ok) console.error(`Get group sets: ${res.code} ${res.status}`);
-  return res;
-}
-
-async function getPackages(id) {
-  if(id) {
-    const res = await get(`packages/set/${id}`);
+  if(!isNaN(id)) {
+    const res = await get(`sets/group/${id}`);
     if(!res.ok) console.error(`Get group sets: ${res.code} ${res.status}`);
     return res;
   } else return Promise.resolve({ code: 204, body: [] });
+}
+
+async function getPackages(id, setId) {
+  if(!isNaN(id) && setId) {
+    const res = await get(`packages/set/${setId}`);
+    if(!res.ok) console.error(`Get group sets: ${res.code} ${res.status}`);
+    return res;
+  } else return Promise.resolve({ code: 204, body: { packages: [] } });
 }
 
 export async function generateMetadata({ params, searchParams }) {
@@ -42,7 +48,7 @@ export default async function GroupPage({ params, searchParams }) {
     getData(params.id),
     getUsers(params.id),
     getSets(params.id),
-    getPackages(searchParams.set)
+    getPackages(params.id, searchParams.set)
   ]);
 
   return (

@@ -18,8 +18,9 @@ import {
 } from '@nextui-org/react';
 
 import './GroupSets.css';
+import { postSamples } from './GroupSetsUtils';
 
-export default function GroupSetsSamplesModal({ modal, setModal, notification }) {
+export default function GroupSetsSamplesModal({ modal, setModal, setData, notification }) {
 
   const [sent, setSent] = useState(false);
   const [files, setFiles] = useState([]);
@@ -29,17 +30,12 @@ export default function GroupSetsSamplesModal({ modal, setModal, notification })
   const handleChange = event => {
     if (event.target.files) {
       setFiles(prev => [...prev, ...event.target.files])
-      // const i = event.target.files[0];
-      // const body = new FormData();
-      // body.append('image', i);
     }
   };
 
   useEffect(() => {
     if(modal.open) setFiles([])
   }, [modal.open])
-
-  console.log(files)
 
   return (
     <>
@@ -80,15 +76,15 @@ export default function GroupSetsSamplesModal({ modal, setModal, notification })
               </TableHeader>
                   <TableBody className='p-0'>
                     {files.map((e, i) =>
-                      <TableRow key={i}>
+                      <TableRow key={i} className={sent ? 'cursor-progress' : ''}>
                         <TableCell>
                           {e.name}
                         </TableCell>
                         <TableCell className='flex justify-end'>
                           <IconX
-                            className='cursor-pointer'
                             size={20}
-                            onClick={() => setFiles(prev => prev.filter((_, j) => i !== j))}
+                            className={sent ? 'cursor-not-allowed text-default-400' : 'cursor-pointer'}
+                            onClick={() => sent ? {} : setFiles(prev => prev.filter((_, j) => i !== j))}
                           />
                         </TableCell>
                       </TableRow>
@@ -104,6 +100,7 @@ export default function GroupSetsSamplesModal({ modal, setModal, notification })
             <div className='flex gap-2'>
               <Button
                 onPress={() => setModal(prev => ({ ...prev, open: false }))}
+                isDisabled={sent}
               >
                 Cancel
               </Button>
@@ -111,14 +108,14 @@ export default function GroupSetsSamplesModal({ modal, setModal, notification })
                 color='primary'
                 variant='flat'
                 onClick={() => input.current.click()}
-                isLoading={sent}
+                isDisabled={sent}
               >
                 Add files
               </Button>
               <Button
                 color='primary'
                 isDisabled={files.length === 0}
-                onClick={() => {}}
+                onClick={() => postSamples(files, modal, setModal, setSent, setData, notification)}
                 isLoading={sent}
               >
                 Upload

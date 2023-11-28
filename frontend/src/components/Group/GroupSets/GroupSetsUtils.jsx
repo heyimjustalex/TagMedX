@@ -129,3 +129,33 @@ export async function removeSet(id, setModal, setSent, setData, notification) {
     notification.make(NextColor.DANGER, 'Error', 'Could not remove set.');
   }
 }
+
+export async function postSamples(files, modal, setModal, setSent, setData, notification) {
+
+  const body = new FormData();
+  await files.forEach(e => body.append('files', e));
+
+  setSent(true);
+  
+  const res = await post(`samples/upload/${modal.id}`, body, true);
+
+  if(res.ok) {
+    setData(prev => ({
+      ...prev,
+      samples: prev?.samples
+        ? [...prev.samples, ...res.body.samples]
+        : [...res.body.samples]
+    }));
+    setSent(false);
+    setModal(prev => ({ ...prev, open: false }));
+    notification.make(
+      NextColor.SUCCESS,
+      'Samples added',
+      `You have successfully added ${files.length > 1 ? files.length + ' samples' : 'sample'} files to ${res.body.name}.`);
+  }
+  else {
+    setSent(false);
+    setModal(prev => ({ ...prev, open: false }));
+    notification.make(NextColor.DANGER, 'Error', `Could not add samples to ${modal.name}.`);
+  }
+}

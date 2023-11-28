@@ -15,12 +15,13 @@ async function get(url) {
   }
 }
 
-async function post(url, data) {
+async function post(url, data, multipart = false) {
+
   const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
     method: 'POST',
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    headers: multipart ? { 'Accept': 'application/json' } : { 'Content-Type': 'application/json' },
+    body: multipart ? data : JSON.stringify(data)
   })
 
   const body = await res.json();

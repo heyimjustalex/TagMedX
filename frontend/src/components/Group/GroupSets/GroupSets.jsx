@@ -134,6 +134,7 @@ export default function GroupSets({ data, setData }) {
       <GroupSetsSamplesModal
         modal={samplesModal}
         setModal={setSamplesModal}
+        setData={setData}
         notification={notification}
       />
     </>
