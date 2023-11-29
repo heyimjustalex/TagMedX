@@ -22,6 +22,14 @@ export default function GroupPackages({ data, setData }) {
     return packages?.some((e, i) => e.id_user !== data.packages[i].id_user) || false
   }, [packages, data.packages])
 
+  const [length, packagesToDisplay] = useMemo(() => {
+    const setPackages = packages.filter(e => e.id_set === setIdNum);
+    return [
+      setPackages.length,
+      setPackages.map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} />)
+    ]
+  },[packages, setIdNum])
+
   return (
     <>
       <div className='flex flex-row justify-between gap-3 items-end'>
@@ -61,13 +69,9 @@ export default function GroupPackages({ data, setData }) {
         </Button>
       </div>
       {
-        packages?.length > 0
+        length > 0
         ? <div className='flex flex-row flex-wrap gap-4 w-full mt-4'>
-          {
-            packages
-            .filter(e => e.id_set === setIdNum)
-            .map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} /> )
-          }
+          { packagesToDisplay }
         </div>
         : <div className='flex text-foreground-400 items-center justify-center h-40'>
           {data.role === 'Admin' && data?.sets?.length === 0 ? 'No packages found, create set first.' : 'No packages found.'}
