@@ -16,7 +16,7 @@ export default function GroupLabelsTopContent({ data, setId }) {
         aria-label='set-selector'
         selectedKeys={selectedKey}
         className='h-10 w-full'
-        placeholder='Select set to display packages'
+        placeholder='Select set to display labels'
         classNames={{ inputWrapper: 'h-10', trigger: 'h-10 min-h-10' }}
         onChange={e => router.push(`/groups/${data.id}?tab=labels&set=${e.target.value}`)}
       >

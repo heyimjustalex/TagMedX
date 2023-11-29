@@ -38,15 +38,12 @@ export default function GroupLabels({ data, setData }) {
       data={data}
       setId={setId}
     />
-  ,[
-    data,
-    setId
-  ]);
+  ,[data, setId]);
 
   return (
     <>
       <Table
-        aria-label='Table with groups'
+        aria-label='labels-table'
         isHeaderSticky
         bottomContentPlacement='outside'
         classNames={{ wrapper: 'max-h-full' }}
