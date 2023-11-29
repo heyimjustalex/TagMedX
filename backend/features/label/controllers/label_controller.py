@@ -36,7 +36,11 @@ def create_label(
     )
 
     return LabelResponse(
-        id=label.id, id_set=label.id_set, name=label.name, description=label.description
+        id=label.id,
+        id_set=label.id_set,
+        name=label.name,
+        description=label.description,
+        color=label.color,
     )
 
   
@@ -53,7 +57,11 @@ def get_label(
     _ = group_service.get_membership(label.Set.id_group, user_data.id)
 
     return LabelResponse(
-        id=label.id, id_set=label.id_set, name=label.name, description=label.description
+        id=label.id,
+        id_set=label.id_set,
+        name=label.name,
+        description=label.description,
+        color=label.color,
     )
 
 
@@ -82,6 +90,7 @@ def get_labels_for_set(
                 id_set=label.id_set,
                 name=label.name,
                 description=label.description,
+                color=label.color,
             )
         )
 
@@ -110,6 +119,7 @@ def get_labels_in_group(
                 id_set=label.id_set,
                 name=label.name,
                 description=label.description,
+                color=label.color,
             )
         )
 
@@ -134,7 +144,11 @@ def update_label(
     )
 
     return LabelResponse(
-        id=label.id, id_set=label.id_set, name=label.name, description=label.description
+        id=label.id,
+        id_set=label.id_set,
+        name=label.name,
+        description=label.description,
+        color=label.color,
     )
 
 
