@@ -78,10 +78,14 @@ class Set(Base):
     Group: Mapped["Group"] = relationship(back_populates="Set")
 
     # Define the one-to-many relationship with Package
-    Package: Mapped[List["Package"]] = relationship(back_populates="Set")
+    Package: Mapped[List["Package"]] = relationship(
+        back_populates="Set", cascade="all, delete"
+    )
 
     # Define the one-to-many relationship with Label
-    Label: Mapped[List["Label"]] = relationship(back_populates="Set")
+    Label: Mapped[List["Label"]] = relationship(
+        back_populates="Set", cascade="all, delete"
+    )
 
 
 class Sample(Base):
@@ -149,6 +153,7 @@ class Label(Base):
     id_set: Mapped[int] = mapped_column(ForeignKey("Set.id"))
     name: Mapped[str | None]
     description: Mapped[str | None]
+    color: Mapped[str | None]
 
     # Define the many-to-one relationship with Set
     Set: Mapped["Set"] = relationship(back_populates="Label")

@@ -67,16 +67,13 @@ class GroupService:
         self.group_repository.update()
         return group
 
-    def delete_group(self, group_id: int) -> Group:
+    def delete_group(self, group_id: int):
         group = self.get_group(group_id)
         self.group_repository.delete_group(group)
-        return group
 
-    def remove_user_from_group(self, group_id: int, user_id: int) -> Group:
-        group = self.get_group(group_id)
+    def remove_user_from_group(self, group_id: int, user_id: int):
         membership = self.get_membership(group_id, user_id)
         self.membership_repository.delete_membership(membership)
-        return group
 
     def get_membership(self, id_group: int, id_user: int) -> Membership:
         membership = self.membership_repository.get_membership(id_user, id_group)

@@ -12,7 +12,6 @@ from ..schemas.group_schema import (
     GroupWithRoleResponse,
     GroupJoin,
     AdminGroupResponse,
-    GroupMemberListResponse,
     GroupMemberResponse,
 )
 
@@ -22,8 +21,8 @@ router = APIRouter()
 @router.post("/api/groups/create", tags=["Groups"], response_model=AdminGroupResponse)
 def create_group(
     group_create: GroupCreate,
-    db: Session = Depends(get_db),
-    user_data: UserData = Depends(TokenService.get_user_data),
+    db: Annotated[Session, Depends(get_db)],
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
 ):
     creator_user_id = user_data.id
     group_service = GroupService(db)
@@ -40,8 +39,8 @@ def create_group(
 
 @router.get("/api/groups", tags=["Groups"], response_model=List[GroupWithRoleResponse])
 def get_groups(
-    db: Session = Depends(get_db),
-    user_data: UserData = Depends(TokenService.get_user_data),
+    db: Annotated[Session, Depends(get_db)],
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
 ):
     group_service = GroupService(db)
     user_id = user_data.id
@@ -66,7 +65,7 @@ def get_groups(
 def get_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
-    db: Session = Depends(get_db),
+    db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
     group = group_service.get_group(group_id)
@@ -84,15 +83,11 @@ def get_group(
         name=group.name, description=group.description, id=group.id, role=role
     )
 
-@router.get(
-    "/api/groups/{group_id}/name",
-    tags=["Groups"],
-    response_model=str
-)
+
+@router.get("/api/groups/{group_id}/name", tags=["Groups"], response_model=str)
 def get_group_name(
-    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
-    db: Session = Depends(get_db),
+    db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
     group = group_service.get_group(group_id)
@@ -107,7 +102,7 @@ def update_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
     group_update: GroupUpdate,
-    db: Session = Depends(get_db),
+    db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
     role = group_service.check_if_admin(user_data.id, group_id)
@@ -126,46 +121,43 @@ def update_group(
     )
 
 
-@router.delete(
-    "/api/groups/{group_id}", tags=["Groups"], response_model=None
-)
+@router.delete("/api/groups/{group_id}", tags=["Groups"])
 def delete_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
-    db: Session = Depends(get_db),
+    db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
-    role = group_service.check_if_admin(user_data.id, group_id)
-    deleted_group = group_service.delete_group(group_id)
-    return None
+    _ = group_service.check_if_admin(user_data.id, group_id)
+    group_service.delete_group(group_id)
+    return {"message": "Group removed successfully"}
 
 
 @router.delete(
     "/api/groups/{group_id}/user/{user_id}",
     tags=["Groups"],
-    response_model=None,
 )
 def remove_user_from_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
     user_id: int,
-    db: Session = Depends(get_db),
+    db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
-    role = group_service.check_if_admin(user_data.id, group_id)
-    removed_group = group_service.remove_user_from_group(group_id, user_id)
-    return None
+    _ = group_service.check_if_admin(user_data.id, group_id)
+    group_service.remove_user_from_group(group_id, user_id)
+    return {"message": "User successfully removed from the group"}
 
 
 @router.get(
     "/api/groups/{group_id}/users",
     tags=["Groups"],
-    response_model=GroupMemberListResponse,
+    response_model=list[GroupMemberResponse],
 )
 def get_users_in_group(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     group_id: int,
-    db: Session = Depends(get_db),
+    db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
     _ = group_service.get_membership(group_id, user_data.id)
@@ -173,10 +165,10 @@ def get_users_in_group(
     user_service = UserService(db)
     users = user_service.get_users_in_group(group_id)
 
-    response = GroupMemberListResponse(members=[])
+    response: list[GroupMemberResponse] = []
     for user in users:
         role = group_service.get_role_in_group(user.id, group_id)
-        response.members.append(
+        response.append(
             GroupMemberResponse(
                 user_id=user.id,
                 e_mail=user.e_mail,
@@ -195,8 +187,8 @@ def get_users_in_group(
 @router.post("/api/groups/join", tags=["Groups"], response_model=GroupWithRoleResponse)
 def join_group(
     group_join: GroupJoin,
-    db: Session = Depends(get_db),
-    user_data: UserData = Depends(TokenService.get_user_data),
+    db: Annotated[Session, Depends(get_db)],
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
 ):
     group_service = GroupService(db)
     user_id = user_data.id

@@ -1,40 +1,37 @@
-from typing import List
-from features.exceptions.definitions.definitions import PermissionDenied
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
-from ..schemas.label_schema import LabelSchema
 from repositories.label_repository import LabelRepository
 from models.models import Label
 
 
 class LabelService:
     def __init__(self, db: Session):
-        self.label_repository = LabelRepository(db)
+        self.repository = LabelRepository(db)
 
-    def create_label(self, user_id: int, label_data: LabelSchema):
-        label = self.label_repository.create_label(user_id, label_data)
-        if label is None:
-            raise PermissionDenied(
-                status_code=403, detail="No authorization to create a label"
-            )
+    def create_label(
+        self,
+        id_set: int,
+        name: str | None = None,
+        desc: str | None = None,
+        color: str | None = None,
+    ) -> Label:
+        label = Label()
+        label.id_set = id_set
+        label.name = name
+        label.description = desc
+        label.color = color
+
+        self.repository.create_label(label)
         return label
 
-    def get_labels_for_set(self, set_id: int) -> List[Label]:
-        labels = self.label_repository.get_labels_for_set(set_id)
-        if not labels:
-            raise HTTPException(
-                status_code=404, detail="No labels for the specified task"
-            )
-        return labels
-
-    def update_label(self,
-                     label_id: int,
-                     name: str | None = None,
-                     description: str | None = None) -> Label:
-        label = self.label_repository.get_label_by_id(label_id)
-
-        if not label:
-            raise HTTPException(status_code=404, detail="Label not found")
+    def update_label(
+        self,
+        id_label: int,
+        name: str | None = None,
+        description: str | None = None,
+        color: str | None = None,
+    ) -> Label:
+        label = self.get_label(id_label)
 
         if name:
             label.name = name
@@ -42,13 +39,26 @@ class LabelService:
         if description:
             label.description = description
 
-        self.label_repository.update_label()
+        if color:
+            label.color = color
+
+        self.repository.update()
         return label
 
-    def delete_label(self, label_id: int) -> Label:
-        label = self.label_repository.get_label_by_id(label_id)
+    def delete_label(self, id_label: int):
+        label = self.get_label(id_label)
+        self.repository.delete_label(label)
+
+    def get_label(self, id_label: int) -> Label:
+        label = self.repository.get_label_by_id(id_label)
         if not label:
-            raise HTTPException(status_code=404, detail="Label not found")
-        self.label_repository.delete_label(label)
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Label not found"
+            )
         return label
 
+    def get_labels_for_set(self, id_set: int) -> list[Label]:
+        return self.repository.get_labels_by_set(id_set)
+
+    def get_labels_in_group(self, id_group: int) -> list[Label]:
+        return self.repository.get_labels_by_group(id_group)

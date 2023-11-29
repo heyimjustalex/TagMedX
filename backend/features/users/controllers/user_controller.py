@@ -7,7 +7,6 @@ from typing import Annotated
 from ...authorization.services.token_service import UserData, TokenService
 from ..schemas.user_schema import (
     UserResponse,
-    UserListResponse,
     UserCreate,
     UserUpdate,
     RegisterResponse,
@@ -16,14 +15,14 @@ from ..schemas.user_schema import (
 router = APIRouter()
 
 
-@router.get("/api/users/", tags=["Users"], response_model=UserListResponse)
+@router.get("/api/users/", tags=["Users"], response_model=list[UserResponse])
 async def read_users(db: Annotated[Session, Depends(get_db)]):
     user_service = UserService(db)
     users = user_service.get_users()
 
-    response = UserListResponse(users=[])
+    response: list[UserResponse] = []
     for user in users:
-        response.users.append(
+        response.append(
             UserResponse(
                 user_id=user.id,
                 e_mail=user.e_mail,

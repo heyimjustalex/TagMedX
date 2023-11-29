@@ -1,91 +1,134 @@
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Annotated
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from connectionDB.session import get_db
-from ..schemas.set_schema import SetCreate, SetResponse, SetSchema, SetUpdateSchema
+from ..schemas.set_schema import SetCreate, SetResponse, SetUpdate
 from features.authorization.services.token_service import TokenService, UserData
 from ..services.set_service import SetService
+from ...groups.services.group_service import GroupService
 
 router = APIRouter()
 
 
-@router.post("/api/sets", tags=["Set"], response_model=SetResponse)
+@router.post("/api/sets", tags=["Sets"], response_model=SetResponse)
 def create_set(
-        set_data: SetCreate,
-        db: Session = Depends(get_db),
-        user_data: UserData = Depends(TokenService.get_user_data),
+    set_create: SetCreate,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
+    group_service = GroupService(db)
+    _ = group_service.check_if_admin(user_data.id, set_create.id_group)
+
     set_service = SetService(db)
-    current_user_id = user_data.id
-    set = set_service.create_set_with_permission_check(set_data, current_user_id)
+    set = set_service.create_set(
+        set_create.id_group,
+        set_create.package_size,
+        set_create.name,
+        set_create.description,
+        set_create.type,
+    )
+
     return SetResponse(
+        id=set.id,
         id_group=set.id_group,
+        package_size=set.package_size,
         name=set.name,
         description=set.description,
         type=set.type,
-        package_size=set.package_size,
+    )
+
+
+@router.get(
+    "/api/sets/group/{id_group}", tags=["Sets"], response_model=list[SetResponse]
+)
+def get_sets_in_group(
+    id_group: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    group_service = GroupService(db)
+    _ = group_service.get_membership(id_group, user_data.id)
+
+    set_service = SetService(db)
+    sets = set_service.get_sets_in_group(id_group)
+
+    response: list[SetResponse] = []
+    for set in sets:
+        response.append(
+            SetResponse(
+                id=set.id,
+                id_group=set.id_group,
+                package_size=set.package_size,
+                name=set.name,
+                description=set.description,
+                type=set.type,
+            )
+        )
+
+    return response
+
+
+@router.get("/api/sets/{id_set}", tags=["Sets"], response_model=SetResponse)
+def get_set(
+    id_set: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    set_service = SetService(db)
+    set = set_service.get_set(id_set)
+
+    group_service = GroupService(db)
+    _ = group_service.get_membership(set.id_group, user_data.id)
+
+    return SetResponse(
         id=set.id,
+        id_group=set.id_group,
+        package_size=set.package_size,
+        name=set.name,
+        description=set.description,
+        type=set.type,
     )
 
 
-@router.get("/api/sets/group/{group_id}", tags=["Set"], response_model=List[SetSchema])
-def get_group_sets(group_id: int, db: Session = Depends(get_db)):
-    set_service = SetService(db)
-    sets = set_service.get_set_by_group(group_id)
-    return sets
-
-
-@router.get("/api/sets/{set_id}", tags=["Set"], response_model=SetResponse)
-def get_set(set_id: int, db: Session = Depends(get_db)):
-    set_service = SetService(db)
-    get_set = set_service.get_set_by_id(set_id)
-    return SetResponse(
-        id_group=get_set.id_group,
-        name=get_set.name,
-        description=get_set.description,
-        type=get_set.type,
-        package_size=get_set.package_size,
-        id=get_set.id,
-    )
-
-
-@router.put("/api/sets/{set_id}", tags=["Set"], response_model=SetResponse)
+@router.put("/api/sets/{id_set}", tags=["Sets"], response_model=SetResponse)
 async def update_set(
-        set_id: int,
-        set_update: SetUpdateSchema,
-        db: Session = Depends(get_db),
+    id_set: int,
+    set_update: SetUpdate,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     set_service = SetService(db)
-    updated_set = set_service.update_set(
-        set_id,
-        set_update.id_group,
-        set_update.name,
-        set_update.description,
-        set_update.type,
-        set_update.package_size,
+    set = set_service.get_set(id_set)
+
+    group_service = GroupService(db)
+    _ = group_service.check_if_admin(user_data.id, set.id_group)
+
+    set = set_service.update_set(
+        set.id, set_update.name, set_update.description, set_update.type
     )
+
     return SetResponse(
-        id_group=updated_set.id_group,
-        name=updated_set.name,
-        description=updated_set.description,
-        type=updated_set.type,
-        package_size=updated_set.package_size,
-        id=updated_set.id,
+        id=set.id,
+        id_group=set.id_group,
+        package_size=set.package_size,
+        name=set.name,
+        description=set.description,
+        type=set.type,
     )
 
 
-@router.delete("/api/sets/{set_id}", tags=["Set"], response_model=SetResponse)
+@router.delete("/api/sets/{id_set}", tags=["Sets"])
 async def delete_set(
-        set_id: int,
-        db: Session = Depends(get_db),
+    id_set: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     set_service = SetService(db)
-    deleted_set = set_service.delete_set(set_id)
-    return SetResponse(
-        id_group=deleted_set.id_group,
-        name=deleted_set.name,
-        description=deleted_set.description,
-        type=deleted_set.type,
-        package_size=deleted_set.package_size,
-        id=deleted_set.id,
-    )
+    set = set_service.get_set(id_set)
+
+    group_service = GroupService(db)
+    _ = group_service.check_if_admin(user_data.id, set.id_group)
+
+    set_service.delete_set(set.id)
+
+    return {"message:" "Set removed successfully"}

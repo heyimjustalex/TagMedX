@@ -36,9 +36,5 @@ class GroupMemberResponse(UserResponse):
     role: str
 
 
-class GroupMemberListResponse(BaseModel):
-    members: list[GroupMemberResponse]
-
-
 class GroupJoin(BaseModel):
     connection_string: str

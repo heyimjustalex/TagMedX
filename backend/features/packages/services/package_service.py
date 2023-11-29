@@ -46,6 +46,9 @@ class PackageService:
     def get_user_packages(self, id_user: int) -> list[Package]:
         return self.repository.get_packages_by_user(id_user)
 
+    def get_packages_in_group(self, id_group: int) -> list[Package]:
+        return self.repository.get_packages_by_group(id_group)
+
     def get_package_id_with_free_slots_or_create_new_one(self, id_set: int) -> int:
         # package = self.repository.get_package_with_free_slots_by_set(id_set)
         # if not package:

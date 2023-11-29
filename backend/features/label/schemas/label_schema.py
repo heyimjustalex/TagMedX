@@ -1,20 +1,22 @@
 from pydantic import BaseModel
 
 
-class LabelSchema(BaseModel):
-    id: int
+class LabelCreate(BaseModel):
     id_set: int
-    name: str
-    description: str
+    name: str | None = None
+    description: str | None = None
+    color: str | None = None
 
 
 class LabelResponse(BaseModel):
     id: int
     id_set: int
-    name: str
-    description: str
+    name: str | None = None
+    description: str | None = None
+    color: str | None = None
 
 
 class LabelUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
+    color: str | None = None
