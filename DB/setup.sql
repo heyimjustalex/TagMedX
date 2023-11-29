@@ -161,10 +161,10 @@ VALUES
 
 INSERT INTO `Label` (id_set, name, description, color)
 VALUES
-    (1, 'Label 1', 'Label Description 1', 'red'),
+    (1, 'Label 1', 'Label Description 1', NULL),
     (2, 'Label 2', 'Label Description 2', NULL),
-    (3, 'Label 3', 'Label Description 3', 'green'),
-    (4, 'Label 4', 'Label Description 4', 'blue'),
+    (3, 'Label 3', 'Label Description 3', NULL),
+    (4, 'Label 4', 'Label Description 4', NULL),
     (2, 'Label 5', 'Label Description 5', NULL);
 
 

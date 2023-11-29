@@ -30,7 +30,7 @@ export default function GroupPackage({ data, users, setPackages }) {
         >
           {users.map((user) => (
             <SelectItem key={user.user_id} value={user.user_id}>
-              {`${user.title} ${user.name} ${user.surname}`}
+              {`${user.title || ''} ${user.name} ${user.surname}`}
             </SelectItem>
           ))}
         </Select>

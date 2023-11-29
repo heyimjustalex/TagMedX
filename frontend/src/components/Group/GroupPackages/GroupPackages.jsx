@@ -13,13 +13,22 @@ export default function GroupPackages({ data, setData }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const notification = useNotification();
-  const [tab, setId] = [searchParams.get('tab'), searchParams.get('set')];
+  const setId = searchParams.get('set');
+  const setIdNum = parseInt(setId)
   const selectedKey = setId ? new Set().add(setId) : new Set();
   const [packages, setPackages] = useState(data.packages);
 
   const isModified = useMemo(() => {
     return packages?.some((e, i) => e.id_user !== data.packages[i].id_user) || false
   }, [packages, data.packages])
+
+  const [length, packagesToDisplay] = useMemo(() => {
+    const setPackages = packages.filter(e => e.id_set === setIdNum);
+    return [
+      setPackages.length,
+      setPackages.map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} />)
+    ]
+  },[packages, setIdNum])
 
   return (
     <>
@@ -33,7 +42,7 @@ export default function GroupPackages({ data, setData }) {
           className='h-10 w-full'
           placeholder='Select set to display packages'
           classNames={{ inputWrapper: 'h-10', trigger: 'h-10 min-h-10' }}
-          onChange={e => router.push(`/groups/${data.id}?tab=${tab}&set=${e.target.value}`)}
+          onChange={e => router.push(`/groups/${data.id}?tab=packages&set=${e.target.value}`)}
         >
           {data.sets.map((set) => (
             <SelectItem key={set.id} value={set.user_id}>
@@ -60,9 +69,9 @@ export default function GroupPackages({ data, setData }) {
         </Button>
       </div>
       {
-        packages?.length > 0
+        length > 0
         ? <div className='flex flex-row flex-wrap gap-4 w-full mt-4'>
-          {packages?.map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} />)}
+          { packagesToDisplay }
         </div>
         : <div className='flex text-foreground-400 items-center justify-center h-40'>
           {data.role === 'Admin' && data?.sets?.length === 0 ? 'No packages found, create set first.' : 'No packages found.'}
