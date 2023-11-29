@@ -8,40 +8,45 @@ async function getData(id) {
   if(!isNaN(id)) {
     const res = await get(`groups/${id}`);
     if(!res.ok) console.error(`Get group: ${res.code} ${res.status}`);
-    return res;
-  } else return Promise.resolve({ code: 204, body: [] });
+    else return res;
+  }
+  return Promise.resolve({ code: 204, body: [] });
 }
 
 async function getUsers(id) {
   if(!isNaN(id)) {
     const res = await get(`groups/${id}/users`);
     if(!res.ok) console.error(`Get group users: ${res.code} ${res.status}`);
-    return res;
-  } else return Promise.resolve({ code: 204, body: { members: [] } });
+    else return res;
+  }
+  return Promise.resolve({ code: 204, body: { members: [] } });
 }
 
 async function getSets(id) {
   if(!isNaN(id)) {
     const res = await get(`sets/group/${id}`);
     if(!res.ok) console.error(`Get group sets: ${res.code} ${res.status}`);
-    return res;
-  } else return Promise.resolve({ code: 204, body: [] });
+    else return res;
+  }
+  return Promise.resolve({ code: 204, body: [] });
 }
 
-async function getPackages(id, setId) {
-  if(!isNaN(id) && setId) {
-    const res = await get(`packages/set/${setId}`);
+async function getPackages(id) {
+  if(!isNaN(id)) {
+    const res = await get(`packages/group/${id}`);
     if(!res.ok) console.error(`Get group sets: ${res.code} ${res.status}`);
-    return res;
-  } else return Promise.resolve({ code: 204, body: { packages: [] } });
+    else return res;
+  }
+  return Promise.resolve({ code: 204, body: { packages: [] } });
 }
 
-async function getLabels(id, setId) {
-  if(!isNaN(id) && setId) {
-    const res = await get(`labels/set/${setId}`);
+async function getLabels(id) {
+  if(!isNaN(id)) {
+    const res = await get(`labels/group/${id}`);
     if(!res.ok) console.error(`Get group labels: ${res.code} ${res.status}`);
-    return res;
-  } else return Promise.resolve({ code: 204, body: [] });
+    else return res;
+  }
+  return Promise.resolve({ code: 204, body: [] });
 }
 
 export async function generateMetadata({ params, searchParams }) {
@@ -65,14 +70,14 @@ export default async function GroupPage({ params, searchParams }) {
   return (
     <>
       { 
-        [data.code, users.code, sets.code].includes(401) ? redirect('/login?expired=1') :
+        [data.code, users.code, sets.code, packages.code, labels.code].includes(401) ? redirect('/login?expired=1') :
         <section className='content-page flex flex-col'>
           <Group group={{
             ...data.body,
-            users: users.body.members || [],
-            sets: sets.body || [],
-            packages: packages.body.packages || [],
-            labels: labels.body || []
+            users: users.body,
+            sets: sets.body,
+            packages: packages.body,
+            labels: labels.body
           }} />
         </section>
       }

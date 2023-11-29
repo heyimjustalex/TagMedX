@@ -20,8 +20,8 @@ export default function GroupLabels({ data, setData }) {
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
 
   const filteredItems = useMemo(() => {
-    const labels = Array.isArray(data?.labels) ? data.labels : [];
-    return labels.filter(e => e.id_set === setId)
+    // const labels = Array.isArray(data?.labels) ? data.labels : [];
+    return data?.labels.filter(e => e.id_set === setId)
   }, [data.labels]);
 
   const sortedItems = useMemo(() => {

@@ -86,11 +86,9 @@ export async function editSet(modal, setSent, setModal, setData, groupId, notifi
   setSent(true);
   const res = await put(`sets/${modal.id}`,
     {
-      id_group: groupId,
       name: modal.name,
-      type: modal.type.values().next().value,
       description: modal.description,
-      package_size: modal.packageSize
+      type: modal.type.values().next().value
     }
   );
 
