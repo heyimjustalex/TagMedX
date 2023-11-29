@@ -9,12 +9,13 @@ import GroupSettings from './GroupSettings/GroupSettings';
 import GroupUsers from './GroupUsers/GroupUsers';
 import GroupSets from './GroupSets/GroupSets';
 import GroupPackages from './GroupPackages/GroupPackages';
+import GroupLabels from './GroupLabels/GroupLabels';
 
 export default function Group({ group }) {
   const searchParams = useSearchParams();
   const tab = searchParams.get('tab') || 'overview';
   const [data, setData] = useState(group);
-
+  console.log(data)
   return (
     <>
       <div className='flex'>
@@ -46,6 +47,15 @@ export default function Group({ group }) {
           </Card>
         </Tab>
         {data?.role === 'Admin' ? 
+          <Tab key="labels" title="Labels" href={`/groups/${data.id}?tab=labels`} as={RouteLink}>
+            <Card>
+              <CardBody className='p-4'>
+                <GroupLabels data={data} setData={setData} />
+              </CardBody>
+            </Card>
+          </Tab>
+        : null}
+        {data?.role === 'Admin' ? 
           <Tab key="users" title="Users" href={`/groups/${data.id}?tab=users`} as={RouteLink}>
             <Card>
               <CardBody className='p-4'>
@@ -53,7 +63,7 @@ export default function Group({ group }) {
               </CardBody>
             </Card>
           </Tab>
-        : null }
+        : null}
         {data?.role === 'Admin' ? 
           <Tab key="settings" title="Settings" href={`/groups/${data.id}?tab=settings`} as={RouteLink}>
             <Card>
@@ -62,7 +72,7 @@ export default function Group({ group }) {
               </CardBody>
             </Card>
           </Tab>
-        : null }
+        : null}
       </Tabs>
     </>
   );
