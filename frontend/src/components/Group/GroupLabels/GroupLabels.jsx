@@ -9,20 +9,26 @@ import {
   TableRow
 } from '@nextui-org/react';
 
-import { columns } from './GroupLabelsConsts';
-import { renderCell } from './GroupsLabelsUtils';
+import { columns, defaultLabelModal } from './GroupLabelsConsts';
+import { renderCell } from './GroupLabelsUtils';
 import GroupLabelsTopContent from './GroupLabelsTopContent';
+import GroupLabelsModal from './GroupLabelsModal';
+import GroupLabelsRemoveModal from './GroupLabelsRemoveModal';
+import { useNotification } from '../../../hooks/useNotification';
 
 export default function GroupLabels({ data, setData }) {
 
   const searchParams = useSearchParams();
   const setId = searchParams.get('set');
+  const setIdNum = parseInt(setId);
+  const notification = useNotification();
+  const [modal, setModal] = useState(defaultLabelModal);
+  const [removeModal, setRemoveModal] = useState(defaultLabelModal);
   const [sortDescriptor, setSortDescriptor] = useState({ column: 'id', direction: 'descending' });
 
   const filteredItems = useMemo(() => {
-    // const labels = Array.isArray(data?.labels) ? data.labels : [];
-    return data?.labels.filter(e => e.id_set === setId)
-  }, [data.labels]);
+    return data.labels.filter(e => e.id_set === setIdNum);
+  }, [data.labels, setId]);
 
   const sortedItems = useMemo(() => {
     return [...filteredItems].sort((a, b) => {
@@ -37,8 +43,9 @@ export default function GroupLabels({ data, setData }) {
     <GroupLabelsTopContent
       data={data}
       setId={setId}
+      setModal={setModal}
     />
-  ,[data, setId]);
+  ,[data, setId, setModal]);
 
   return (
     <>
@@ -70,11 +77,25 @@ export default function GroupLabels({ data, setData }) {
         >
           {(item) => (
             <TableRow key={item.id}>
-              {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+              {(columnKey) => <TableCell>{renderCell(item, columnKey, setModal, setRemoveModal)}</TableCell>}
             </TableRow>
           )}
         </TableBody>
       </Table>
+      <GroupLabelsModal
+        modal={modal}
+        setModal={setModal}
+        setId={setId}
+        setData={setData}
+        notification={notification}
+      />
+      <GroupLabelsRemoveModal
+        modal={removeModal}
+        setModal={setRemoveModal}
+        setId={setId}
+        setData={setData}
+        notification={notification}
+      />
     </>
   )
 }

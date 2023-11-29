@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import {
   Button,
   Input,
@@ -12,14 +12,12 @@ import {
   Textarea
 } from '@nextui-org/react';
 
-import { addSet, editSet } from './GroupSetsUtils';
-import { typeOptions } from './GroupSetsConsts';
-import { checkPackageSize } from './GroupSetsUtils';
+import { NextColor } from '../../../consts/NextColor';
+import { addLabel, editLabel } from './GroupLabelsUtils';
 
-export default function GroupSetsModal({ modal, setModal, groupId, setData, notification }) {
+export default function GroupLabelsModal({ modal, setModal, setId, setData, notification }) {
 
   const [sent, setSent] = useState(false);
-  const error = useMemo(() => checkPackageSize(modal.packageSize), [modal.packageSize]);
 
   return (
     <Modal
@@ -29,7 +27,7 @@ export default function GroupSetsModal({ modal, setModal, groupId, setData, noti
     >
       <ModalContent>
         <ModalHeader className='flex flex-col gap-1'>
-          { modal.edit ? 'Edit Set' : 'Create Set' }
+          { modal.edit ? 'Edit Label' : 'Add Label' }
         </ModalHeader>
         <ModalBody>
           <Input
@@ -37,32 +35,30 @@ export default function GroupSetsModal({ modal, setModal, groupId, setData, noti
             label='Name'
             value={modal.name}
             isRequired={!modal.edit}
+            isInvalid={modal.edit && !modal.name}
             onValueChange={e => setModal(prev => ({ ...prev, name: e }))}
           />
           <Select 
-            label="Type"
-            isDisabled={modal.edit}
+            label="Color"
+            color={modal.color?.values()?.next()?.value}
             isRequired={!modal.edit}
-            selectedKeys={modal.type}
+            isInvalid={modal.edit && modal?.color?.size === 0}
+            selectedKeys={modal.color}
             selectionMode='single'
-            onSelectionChange={e => setModal(prev => ({ ...prev, type: e }))}
+            items={Object.values(NextColor)}
+            onSelectionChange={e => setModal(prev => ({ ...prev, color: e }))}
+            renderValue={(items) => {
+              return items.map((item) =>
+                <p key={item.key} className='capitalize'>{item.props.value}</p>
+              );
+            }}
           >
-            {typeOptions.map((type) => (
-              <SelectItem key={type} value={type}>
-                {type}
+            {Object.values(NextColor).map((color) => (
+              <SelectItem key={color} value={color} className={`capitalize text-${color}`}>
+                {color}
               </SelectItem>
             ))}
           </Select>
-          <Input
-            size='sm'
-            type='text'
-            label='Package size'
-            isDisabled={modal.edit}
-            isRequired={!modal.edit}
-            value={modal.packageSize}
-            isInvalid={error}
-            onChange={(e) => setModal(prev => ({ ...prev, packageSize: parseInt(e.target.value) || '' }))}
-          />
           <Textarea
             minRows={2}
             label='Description'
@@ -74,15 +70,16 @@ export default function GroupSetsModal({ modal, setModal, groupId, setData, noti
         <ModalFooter>
           <Button
             onPress={() => setModal({ open: false, edit: false })}
+            isDisabled={sent}
           >
             Cancel
           </Button>
           <Button
             color='primary'
-            isDisabled={!modal.name || modal.type?.size === 0 || error || !modal.packageSize || !modal.description}
+            isDisabled={!modal.name || modal?.color?.size === 0}
             onClick={modal.edit
-              ? () => editSet(modal, setSent, setModal, setData, groupId, notification)
-              : () => addSet(modal, setSent, setModal, setData, groupId, notification)
+              ? () => editLabel(modal, setSent, setModal, setData, notification)
+              : () => addLabel(modal, setSent, setModal, setData, setId, notification)
             }
             isLoading={sent}
           >

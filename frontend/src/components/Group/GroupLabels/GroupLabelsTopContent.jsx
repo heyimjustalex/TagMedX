@@ -2,7 +2,9 @@ import { Button, Select, SelectItem } from '@nextui-org/react';
 import { IconTag } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
 
-export default function GroupLabelsTopContent({ data, setId }) {
+import { defaultLabelModal } from './GroupLabelsConsts';
+
+export default function GroupLabelsTopContent({ data, setId, setModal }) {
 
   const router = useRouter();
   const selectedKey = setId ? new Set().add(setId) : new Set();
@@ -30,6 +32,7 @@ export default function GroupLabelsTopContent({ data, setId }) {
         color='primary'
         className='min-w-fit'
         endContent={<IconTag />}
+        onPress={() => setModal({ ...defaultLabelModal, open: true, edit: false })}
       >
         Add Label
       </Button>
