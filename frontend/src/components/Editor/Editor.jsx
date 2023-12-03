@@ -25,8 +25,8 @@ export default function Editor() {
     if (pan) {
       const { x, y } = e.nativeEvent;
       setNewTranslation({
-        x: x - startPoint.x,
-        y: y - startPoint.y,
+        x: Math.floor((x - startPoint.x) / scale),
+        y: Math.floor((y - startPoint.y) / scale),
       });
     }
   }, [pan, startPoint, setNewTranslation]);
@@ -54,14 +54,15 @@ export default function Editor() {
       }}
     >
       <EditorTools
-        scale={scale}
-        setScale={setScale}
         tool={tool}
+        scale={scale}
         setTool={setTool}
+        setScale={setScale}
+        setTranslation={setTranslation}
       />
       <EditorSelectionArea
-        scale={scale}
         tool={tool}
+        scale={scale}
         translation={{ x: translation.x + newTranslation.x, y: translation.y + newTranslation.y }}
       />
     </div>

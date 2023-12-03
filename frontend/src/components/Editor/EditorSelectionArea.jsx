@@ -27,8 +27,8 @@ export default function EditorSelectionArea({ scale, tool, translation }) {
       setSelection({ 
         x: Math.min(endPoint.layerX, startPoint.layerX),
         y: Math.min(endPoint.layerY, startPoint.layerY),
-        width: Math.abs(endPoint.layerX - startPoint.layerX),
-        height: Math.abs(endPoint.layerY - startPoint.layerY)
+        width: Math.floor(Math.abs(endPoint.layerX - startPoint.layerX) / scale),
+        height: Math.floor(Math.abs(endPoint.layerY - startPoint.layerY) / scale)
       });
     }
   }, [isSelecting, startPoint, setSelection]);
@@ -63,6 +63,7 @@ export default function EditorSelectionArea({ scale, tool, translation }) {
         scale: scale,
         left: '50%',
         top: '50%',
+        transformOrigin: '0 0 0px',
         transform: `translate(calc(-50% + ${translation.x}px), calc(-50% + ${translation.y}px))`
       }}
       onMouseDown={tool === Tool.SELECT ? handleMouseDown : () => {}}
