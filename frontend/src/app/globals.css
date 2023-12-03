@@ -71,12 +71,16 @@
   padding: 1.25rem;
 }
 
+.editor-page {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 4.05rem);
+}
+
 .content-page {
   display: flex;
   width: 100%;
   height: calc(100vh - 4.05rem);
-  /* justify-content: left;
-  align-items: center; */
   padding: 1.25rem;
 }
 
