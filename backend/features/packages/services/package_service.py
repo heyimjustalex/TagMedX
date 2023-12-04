@@ -1,4 +1,4 @@
-from uuid import uuid4
+import os
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from repositories.package_repository import PackageRepository
@@ -14,6 +14,14 @@ class PackageService:
         package.id_set = id_set
         self.repository.create_package(package)
         return package
+
+    def check_if_assigned_to_user(self, id_user: int, id_package: int):
+        package = self.get_package(id_package)
+        if package.id_user != id_user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="This package is not assigned to this user",
+            )
 
     def assign_to_user(self, id_package: int, id_user: int) -> Package:
         package = self.get_package(id_package)
@@ -31,6 +39,12 @@ class PackageService:
         package.is_ready = True
         self.repository.update()
         return package
+
+    def delete_package(self, id_package: int):
+        package = self.get_package(id_package)
+        for sample in package.Sample:
+            os.remove(sample.path)
+        self.repository.delete_package(package)
 
     def get_package(self, id_package: int) -> Package:
         package = self.repository.get_package_by_id(id_package)
