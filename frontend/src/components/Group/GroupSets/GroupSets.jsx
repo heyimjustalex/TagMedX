@@ -17,7 +17,7 @@ import GroupSetsTopContent from './GroupSetsTopContent';
 import GroupSetsRemoveModal from './GroupSetsRemoveModal';
 import GroupSetsSamplesModal from './GroupSetsSamplesModal';
 import { useNotification } from '../../../hooks/useNotification';
-import { columns, defaultModal, typeOptions } from './GroupSetsConsts';
+import { adminColumns, columns, defaultModal, typeOptions } from './GroupSetsConsts';
 
 export default function GroupSets({ data, setData }) {
   const notification = useNotification();
@@ -73,6 +73,7 @@ export default function GroupSets({ data, setData }) {
       typeFilter={typeFilter}
       setTypeFilter={setTypeFilter}
       onAddOpen={() => setModal({ ...defaultModal, open: true, edit: false })}
+      isAdmin={data?.role === 'Admin'}
     />
   ,[
     filterValue,
@@ -80,7 +81,8 @@ export default function GroupSets({ data, setData }) {
     data.sets.length,
     onSearchChange,
     hasSearchFilter,
-    setModal
+    setModal,
+    data.role
   ]);
 
   return (
@@ -97,7 +99,7 @@ export default function GroupSets({ data, setData }) {
         topContentPlacement='outside'
         onSortChange={setSortDescriptor}
       >
-        <TableHeader columns={columns}>
+        <TableHeader columns={data?.role === 'Admin' ? adminColumns : columns}>
           {(column) => (
             <TableColumn
               key={column.uid}

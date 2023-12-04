@@ -9,7 +9,11 @@ export function renderCell(item, columnKey, setModal, setRemoveModal) {
   switch (columnKey) {
     case 'color':
       return (
-        <Chip className='capitalize' color={cellValue || 'default'} size='sm' variant='flat'>
+        <Chip className='capitalize' size='sm' variant='flat' classNames={{
+          base: cellValue ? `bg-${cellValue}-100` : 'bg-zinc-200',
+          content: cellValue ? `text-${cellValue}-500` : 'text-zinc-600'
+        }}
+        >
           {cellValue || 'default'}
         </Chip>
       );
@@ -47,7 +51,7 @@ export async function addLabel(modal, setSent, setModal, setData, setId, notific
       id_set: setId,
       name: modal.name,
       description: modal.description,
-      color: modal.color.values().next().value
+      color: modal.color.values().next().value || null
     }
   );
 
@@ -70,14 +74,14 @@ export async function editLabel(modal, setSent, setModal, setData, notification)
     {
       name: modal.name,
       description: modal.description,
-      color: modal.color.values().next().value
+      color: modal.color.values().next().value || null
     }
   );
 
   if(res.ok) {
     setData(prev => ({
       ...prev,
-      labels: prev.sets.map(e => {
+      labels: prev.labels.map(e => {
         if(e.id === modal.id) return res.body;
         else return e;
       })

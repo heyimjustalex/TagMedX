@@ -12,7 +12,7 @@ import {
   Textarea
 } from '@nextui-org/react';
 
-import { NextColor } from '../../../consts/NextColor';
+import { NextCommonColor } from '../../../consts/NextCommonColor';
 import { addLabel, editLabel } from './GroupLabelsUtils';
 
 export default function GroupLabelsModal({ modal, setModal, setId, setData, notification }) {
@@ -40,21 +40,19 @@ export default function GroupLabelsModal({ modal, setModal, setId, setData, noti
           />
           <Select 
             label="Color"
-            color={modal.color?.values()?.next()?.value}
             isRequired={!modal.edit}
-            isInvalid={modal.edit && modal?.color?.size === 0}
             selectedKeys={modal.color}
             selectionMode='single'
-            items={Object.values(NextColor)}
+            items={Object.values(NextCommonColor)}
             onSelectionChange={e => setModal(prev => ({ ...prev, color: e }))}
             renderValue={(items) => {
               return items.map((item) =>
-                <p key={item.key} className='capitalize'>{item.props.value}</p>
+                <p key={item.key} className={item.props.className}>{item.props.value}</p>
               );
             }}
           >
-            {Object.values(NextColor).map((color) => (
-              <SelectItem key={color} value={color} className={`capitalize text-${color}`}>
+            {Object.values(NextCommonColor).map((color) => (
+              <SelectItem key={color} value={color} className={`capitalize text-${color}-500`}>
                 {color}
               </SelectItem>
             ))}
@@ -76,7 +74,7 @@ export default function GroupLabelsModal({ modal, setModal, setId, setData, noti
           </Button>
           <Button
             color='primary'
-            isDisabled={!modal.name || modal?.color?.size === 0}
+            isDisabled={!modal.name}
             onClick={modal.edit
               ? () => editLabel(modal, setSent, setModal, setData, notification)
               : () => addLabel(modal, setSent, setModal, setData, setId, notification)

@@ -13,7 +13,8 @@ export async function handleSignUp(setValidation, setSent, data, router, notific
         router.push('/');
         notification.make(NextColor.SUCCESS, 'Register', 'You have been successfully registered.');
       } else {
-        throw Error(`${res.status} ${res.statusText}`)
+        console.error(`${res.status} ${res.statusText}`);
+        notification.make(NextColor.DANGER, 'Register', 'Something went wrong.');
       }
     })
     .catch(err => {

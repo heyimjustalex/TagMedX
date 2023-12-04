@@ -10,7 +10,7 @@ import { IconChevronDown, IconPlus, IconSearch } from '@tabler/icons-react';
 
 import { typeOptions } from './GroupSetsConsts';
 
-export default function GroupSetsTopContent({ filterValue, onClear, onSearchChange, typeFilter, setTypeFilter, onAddOpen }) {
+export default function GroupSetsTopContent({ filterValue, onClear, onSearchChange, typeFilter, setTypeFilter, onAddOpen, isAdmin }) {
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex flex-row justify-between gap-3 items-end'>
@@ -46,9 +46,11 @@ export default function GroupSetsTopContent({ filterValue, onClear, onSearchChan
             ))}
           </DropdownMenu>
         </Dropdown>
-        <Button color='primary' className='min-w-fit' endContent={<IconPlus />} onPress={onAddOpen}>
-          Add New
-        </Button>
+        { isAdmin ?
+          <Button color='primary' className='min-w-fit' endContent={<IconPlus />} onPress={onAddOpen}>
+            Add New
+          </Button>
+        : null }
       </div>
     </div>
   )

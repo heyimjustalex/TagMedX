@@ -23,12 +23,21 @@ export default function GroupPackages({ data, setData }) {
   }, [packages, data.packages])
 
   const [length, packagesToDisplay] = useMemo(() => {
-    const setPackages = packages.filter(e => e.id_set === setIdNum);
+    const packagesFromSet = packages.filter(e => e.id_set === setIdNum);
     return [
-      setPackages.length,
-      setPackages.map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} />)
+      packagesFromSet.length,
+      packagesFromSet.map(e => 
+        <GroupPackage
+          key={`${e.id}-${e.id_user}`}
+          data={e}
+          users={data.users}
+          groupId={data.id}
+          setPackages={setPackages}
+          isAdmin={data.role === 'Admin'}
+        />
+      )
     ]
-  },[packages, setIdNum])
+  },[packages, setIdNum, setPackages])
 
   return (
     <>
@@ -50,23 +59,27 @@ export default function GroupPackages({ data, setData }) {
             </SelectItem>
           ))}
         </Select>
-        <Button
-          className='min-w-fit'
-          endContent={<IconEditOff />}
-          onPress={() => setPackages(data.packages)}
-          isDisabled={!isModified}
-        >
-          Discard
-        </Button>
-        <Button
-          color='primary'
-          className='min-w-fit'
-          endContent={<IconDeviceFloppy />}
-          onPress={() => savePackages(packages, setPackages, data.packages, setData, notification)}
-          isDisabled={!isModified}
-        >
-          Save
-        </Button>
+        { data.role === 'Admin' ?
+          <>
+            <Button
+              className='min-w-fit'
+              endContent={<IconEditOff />}
+              onPress={() => setPackages(data.packages)}
+              isDisabled={!isModified}
+            >
+              Discard
+            </Button>
+            <Button
+              color='primary'
+              className='min-w-fit'
+              endContent={<IconDeviceFloppy />}
+              onPress={() => savePackages(packages, setPackages, data.packages, setData, notification)}
+              isDisabled={!isModified}
+            >
+              Save
+            </Button>
+          </>
+        : null }
       </div>
       {
         length > 0

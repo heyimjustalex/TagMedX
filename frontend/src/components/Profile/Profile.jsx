@@ -35,7 +35,7 @@ export default function Profile ({ data }) {
         />
         <div className='text-center'>
           <h1 className='text-xl'>{`${newUser.title || ''} ${newUser.name || ''} ${newUser.surname || ''}`}</h1>
-          <p className='text-sm text-gray-400'>{newUser.e_mail}</p>
+          <p className='text-sm text-zinc-400'>{newUser.e_mail}</p>
         </div>
       </CardHeader>
       <Divider/>

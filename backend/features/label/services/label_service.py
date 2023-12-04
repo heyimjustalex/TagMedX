@@ -39,8 +39,7 @@ class LabelService:
         if description:
             label.description = description
 
-        if color:
-            label.color = color
+        label.color = color
 
         self.repository.update()
         return label

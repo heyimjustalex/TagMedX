@@ -21,7 +21,7 @@ export default function Group({ group }) {
       <div className='flex'>
         <h1 className='text-4xl font-medium'>{data.name}</h1>
       </div>
-      <div className='flex text-xs py-1 px-1 mb-5 text-gray-500'>{data.description}</div>
+      <div className='flex text-xs py-1 px-1 mb-5 text-zinc-500'>{data.description}</div>
       <Tabs aria-label="Options" selectedKey={tab}>
         <Tab key="overview" title="Overview" href={`/groups/${data.id}?tab=overview`} as={RouteLink}>
           <Card>
