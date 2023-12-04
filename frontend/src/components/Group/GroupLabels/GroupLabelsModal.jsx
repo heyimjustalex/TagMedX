@@ -47,7 +47,7 @@ export default function GroupLabelsModal({ modal, setModal, setId, setData, noti
             onSelectionChange={e => setModal(prev => ({ ...prev, color: e }))}
             renderValue={(items) => {
               return items.map((item) =>
-                <p key={item.key} className='capitalize'>{item.props.value}</p>
+                <p key={item.key} className={item.props.className}>{item.props.value}</p>
               );
             }}
           >

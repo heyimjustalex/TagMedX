@@ -1,9 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
 import { Tool } from './EditorConsts';
 
-export default function EditorSelectionArea({ scale, tool, translation }) {
+export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, translation }) {
   const containerRef = useRef(null);
-  const [bboxes, setBboxes] = useState([]);
   const [isSelecting, setIsSelecting] = useState(false);
   const [selection, setSelection] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0, layerX: 0, layerY: 0 });

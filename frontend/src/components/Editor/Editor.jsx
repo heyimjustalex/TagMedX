@@ -2,15 +2,17 @@
 
 import { useCallback, useState } from 'react';
 
-import EditorSelectionArea from './EditorSelectionArea';
-import EditorTools from './EditorTools';
 import { Tool } from './EditorConsts';
+import EditorTools from './EditorTools';
+import EditorDescriptor from './EditorDescriptor';
+import EditorSelectionArea from './EditorSelectionArea';
 
-export default function Editor() {
+export default function Editor({ labels }) {
 
-  const [scale, setScale] = useState(1);
-  const [tool, setTool] = useState(Tool.SELECT);
   const [pan, setPan] = useState(false);
+  const [scale, setScale] = useState(1);
+  const [bboxes, setBboxes] = useState([]);
+  const [tool, setTool] = useState(Tool.SELECT);
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
   const [translation, setTranslation] = useState({ x: 0, y: 0 });
   const [newTranslation, setNewTranslation] = useState({ x: 0, y: 0 });
@@ -60,9 +62,16 @@ export default function Editor() {
         setScale={setScale}
         setTranslation={setTranslation}
       />
+      <EditorDescriptor
+        labels={labels}
+        setBboxes={setBboxes}
+        bbox={bboxes.find(e => e.active)}
+      />
       <EditorSelectionArea
         tool={tool}
         scale={scale}
+        bboxes={bboxes}
+        setBboxes={setBboxes}
         translation={{ x: translation.x + newTranslation.x, y: translation.y + newTranslation.y }}
       />
     </div>

@@ -1,5 +1,5 @@
 import { Button, Card, Slider } from '@nextui-org/react';
-import { IconArrowsMove, IconNewSection, IconFocus2 } from '@tabler/icons-react';
+import { IconArrowsMove, IconFocus2, IconNewSection } from '@tabler/icons-react';
 
 import './Editor.css';
 import { Tool } from './EditorConsts';
