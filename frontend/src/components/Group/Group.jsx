@@ -15,7 +15,7 @@ export default function Group({ group }) {
   const searchParams = useSearchParams();
   const tab = searchParams.get('tab') || 'overview';
   const [data, setData] = useState(group);
-console.log(group)
+
   return (
     <>
       <div className='flex'>

@@ -91,14 +91,12 @@ export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, tr
               left: bbox.x,
               width: bbox.width,
               height: bbox.height,
-              border: bbox.active ? '1px solid #0f0' : '1px solid #f00',
-              // backgroundColor: bbox.active ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)',
               cursor: tool === Tool.PAN ? 'inherit' : 'pointer'
             }}
             className={
               bbox.active
-                ? 'bg-green-300/20'
-                : 'bg-red-300/20'
+                ? `bg-${bbox?.label?.color || 'zinc'}-100/10 border-2 border-${bbox?.label?.color || 'zinc'}-500`
+                : `bg-${bbox?.label?.color || 'zinc'}-200/10 border border-${bbox?.label?.color || 'zinc'}-400`
             }
             onMouseDown={tool === Tool.SELECT ? (e) => handleBboxMouseDown(e, i) : () => {}}
             onMouseUp={tool === Tool.SELECT ? handleBboxMouseUp : () => {}}
