@@ -65,3 +65,60 @@ async def get_sample(
     _ = group_service.get_membership(sample.Package.Set.id_group, user_data.id)
 
     return sample.path
+
+
+@router.get("/api/samples", tags=["Samples"], response_model=list[SampleResponse])
+async def get_user_samples(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    sample_service = SampleService(db)
+    samples = sample_service.get_user_samples(user_data.id)
+
+    response: list[SampleResponse] = []
+    for sample in samples:
+        response.append(SampleResponse(id=sample.id, id_package=sample.id_package))
+
+    return response
+
+
+@router.get(
+    "/api/samples/package/{id_package}",
+    tags=["Samples"],
+    response_model=list[SampleResponse],
+)
+async def get_samples_in_package(
+    id_package: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    package_service = PackageService(db)
+    package = package_service.get_package(id_package)
+
+    group_service = GroupService(db)
+    _ = group_service.get_membership(package.Set.id_group, user_data.id)
+
+    sample_service = SampleService(db)
+    samples = sample_service.get_samples_in_package(package.id)
+
+    response: list[SampleResponse] = []
+    for sample in samples:
+        response.append(SampleResponse(id=sample.id, id_package=sample.id_package))
+
+    return response
+
+
+@router.delete("/api/samples/{id_sample}", tags=["Samples"])
+async def delete_sample(
+    id_sample: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    sample_service = SampleService(db)
+    sample = sample_service.get_sample(id_sample)
+
+    group_service = GroupService(db)
+    _ = group_service.check_if_admin(user_data.id, sample.Package.Set.id_group)
+
+    sample_service.delete_sample(sample.id)
+    return {"message": "Sample removed successfully"}

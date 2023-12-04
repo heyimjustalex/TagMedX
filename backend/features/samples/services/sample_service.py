@@ -1,3 +1,4 @@
+import os
 from uuid import uuid4
 from sqlalchemy.orm import Session
 from repositories.sample_repository import SampleRepository
@@ -38,6 +39,11 @@ class SampleService:
         self.repository.create_sample(sample)
         return sample
 
+    def delete_sample(self, id_sample: int):
+        sample = self.get_sample(id_sample)
+        os.remove(sample.path)
+        self.repository.delete_sample(sample)
+
     def get_sample(self, id_sample: int) -> Sample:
         sample = self.repository.get_sample_by_id(id_sample)
         if not sample:
@@ -48,3 +54,6 @@ class SampleService:
 
     def get_samples_in_package(self, id_package: int) -> list[Sample]:
         return self.repository.get_samples_by_package(id_package)
+
+    def get_user_samples(self, id_user: int) -> list[Sample]:
+        return self.repository.get_samples_by_user(id_user)
