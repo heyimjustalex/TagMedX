@@ -23,12 +23,12 @@ export default function GroupPackages({ data, setData }) {
   }, [packages, data.packages])
 
   const [length, packagesToDisplay] = useMemo(() => {
-    const setPackages = packages.filter(e => e.id_set === setIdNum);
+    const packagesFromSet = packages.filter(e => e.id_set === setIdNum);
     return [
-      setPackages.length,
-      setPackages.map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} />)
+      packagesFromSet.length,
+      packagesFromSet.map(e => <GroupPackage key={`${e.id}-${e.id_user}`} data={e} users={data.users} setPackages={setPackages} />)
     ]
-  },[packages, setIdNum])
+  },[packages, setIdNum, setPackages])
 
   return (
     <>

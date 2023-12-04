@@ -10,7 +10,7 @@ export default function EditorDescriptor({ bbox, setBboxes, labels }) {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    setLabel(bbox?.label || new Set());
+    setLabel({ id: bbox?.label?.id || new Set(), color: bbox?.label?.color });
     setDescription(bbox?.description || '');
   }, [bbox]);
 
@@ -21,8 +21,11 @@ export default function EditorDescriptor({ bbox, setBboxes, labels }) {
         items={labels}
         isDisabled={!bbox}
         selectionMode='single'
-        selectedKeys={label}
-        onSelectionChange={e => setLabel(e)}
+        selectedKeys={label.id}
+        onSelectionChange={e => setLabel({
+          id: e,
+          color: e ? labels.find(label => label.id === parseInt(e.values().next().value))?.color : null
+        })}
         renderValue={(items) => {
           return items.map((item) => <p key={item.key} className={item.props.className}>{item.textValue}</p>);
         }}
@@ -68,7 +71,14 @@ export default function EditorDescriptor({ bbox, setBboxes, labels }) {
               color='primary'
               variant='light'
               isDisabled={!bbox}
-              onPress={() => setBboxes(prev => prev.map(bbox => bbox.active ? { ...bbox, label, description, active: false } : bbox ))}
+              onPress={() => setBboxes(
+                prev => prev.map(bbox => bbox.active ? {
+                  ...bbox,
+                  label,
+                  description,
+                  active: false }
+                : bbox ))
+              }
             >
               <IconDeviceFloppy />
             </Button>
