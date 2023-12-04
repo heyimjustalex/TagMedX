@@ -17,7 +17,7 @@ import GroupSetsTopContent from './GroupSetsTopContent';
 import GroupSetsRemoveModal from './GroupSetsRemoveModal';
 import GroupSetsSamplesModal from './GroupSetsSamplesModal';
 import { useNotification } from '../../../hooks/useNotification';
-import { columns, adminColumns, defaultModal, typeOptions } from './GroupSetsConsts';
+import { adminColumns, columns, defaultModal, typeOptions } from './GroupSetsConsts';
 
 export default function GroupSets({ data, setData }) {
   const notification = useNotification();
@@ -64,7 +64,7 @@ export default function GroupSets({ data, setData }) {
   const onClear = useCallback(()=>{
     setFilterValue('')
   },[])
-  console.log(data)
+
   const topContent = useMemo(() =>
     <GroupSetsTopContent
       filterValue={filterValue}
