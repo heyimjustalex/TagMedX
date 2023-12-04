@@ -165,3 +165,19 @@ async def mark_as_ready(
         id_user=package.id_user,
         is_ready=package.is_ready,
     )
+
+
+@router.delete("/api/packages/{id_package}", tags=["Packages"])
+async def delete_package(
+    id_package: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
+):
+    package_service = PackageService(db)
+    package = package_service.get_package(id_package)
+
+    group_service = GroupService(db)
+    _ = group_service.check_if_admin(user_data.id, package.Set.id_group)
+
+    package_service.delete_package(package.id)
+    return {"message": "Package removed successfully"}
