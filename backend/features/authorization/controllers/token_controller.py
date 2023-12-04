@@ -8,7 +8,7 @@ from ..services.token_service import TokenService
 from ..schemas.token_schema import TokenCreate
 from ...users.schemas.user_schema import UserResponse
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 router = APIRouter()
 

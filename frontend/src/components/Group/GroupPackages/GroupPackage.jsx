@@ -1,6 +1,8 @@
-import { Card, CardBody, CardHeader, Chip, Select, SelectItem } from '@nextui-org/react';
+import RouteLink from 'next/link';
+import { IconEye, IconEyeExclamation, IconHealthRecognition } from '@tabler/icons-react';
+import { Card, CardBody, CardFooter, CardHeader, Chip, Link, Select, SelectItem } from '@nextui-org/react';
 
-export default function GroupPackage({ data, users, setPackages }) {
+export default function GroupPackage({ data, users, groupId, setPackages, isAdmin }) {
 
   const selectedKey = data?.id_user ? new Set().add(`${data.id_user}`) : new Set();
 
@@ -16,25 +18,65 @@ export default function GroupPackage({ data, users, setPackages }) {
             {data.is_ready ? 'Ready' : 'Pending'}
           </Chip>
         </div>
-        <Select 
-          size='sm'
-          className='mt-3'
-          label="Assigned user"
-          selectionMode='single'
-          selectedKeys={selectedKey}
-          onChange={e => {
-            setPackages(prev => prev.map(
-              pack => pack.id === data.id ? { ...data, id_user: parseInt(e.target.value) || null } : pack
-            ))
-          }}
-        >
-          {users.map((user) => (
-            <SelectItem key={user.user_id} value={user.user_id}>
-              {`${user.title || ''} ${user.name} ${user.surname}`}
-            </SelectItem>
-          ))}
-        </Select>
+        { isAdmin ?
+          <Select 
+            size='sm'
+            className='mt-3'
+            label="Assigned user"
+            selectionMode='single'
+            selectedKeys={selectedKey}
+            onChange={e => {
+              setPackages(prev => prev.map(
+                pack => pack.id === data.id ? { ...data, id_user: parseInt(e.target.value) || null } : pack
+              ))
+            }}
+          >
+            {users.map((user) => (
+              <SelectItem key={user.user_id} value={user.user_id}>
+                {`${user.title || ''} ${user.name} ${user.surname}`}
+              </SelectItem>
+            ))}
+          </Select>
+        : null }
       </CardBody>
+      <CardFooter className='p-0 pt-3'>
+        { isAdmin ?
+            <div className='flex justify-between w-full'>
+              <Link
+                isBlock
+                size='sm'
+                showAnchorIcon
+                as={RouteLink}
+                anchorIcon={<IconEyeExclamation />}
+                href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor`}
+              >
+                Uncertain
+              </Link>
+              <Link
+                isBlock
+                size='sm'
+                showAnchorIcon
+                as={RouteLink}
+                anchorIcon={<IconEye />}
+                href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor`}
+              >
+                Browse All
+              </Link>
+            </div>
+          : <div className='flex justify-center w-full'>
+            <Link
+              isBlock
+              size='sm'
+              showAnchorIcon
+              as={RouteLink}
+              anchorIcon={<IconHealthRecognition />}
+              href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor`}
+            >
+              Start Examination
+            </Link>
+          </div>
+        }
+      </CardFooter>
     </Card>
   )
 }
