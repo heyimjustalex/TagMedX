@@ -171,10 +171,10 @@ class BBox(Base):
     id_examination: Mapped[int] = mapped_column(ForeignKey("Examination.id"))
     id_label: Mapped[int] = mapped_column(ForeignKey("Label.id"))
     comment: Mapped[str | None]
-    x1: Mapped[float | None]
-    y1: Mapped[float | None]
-    x2: Mapped[float | None]
-    y2: Mapped[float | None]
+    x: Mapped[int | None]
+    y: Mapped[int | None]
+    width: Mapped[int | None]
+    height: Mapped[int | None]
 
     # Define the many-to-one relationship with Examination
     Examination: Mapped["Examination"] = relationship(back_populates="BBox")
