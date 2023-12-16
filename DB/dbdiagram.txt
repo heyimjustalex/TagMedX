@@ -73,10 +73,10 @@ Table BBox{
   id_examination integer
   label_id integer
   comment varchar
-  x1 float
-  y1 float
-  x2 float
-  y2 float  
+  x int
+  y int
+  width int
+  height int
 }
 
 

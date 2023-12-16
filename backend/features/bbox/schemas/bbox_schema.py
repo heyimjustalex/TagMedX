@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from ...label.schemas.label_schema import LabelResponse
 
 
+
 class BBoxCreate(BaseModel):
     id_examination: int
     id_label: int

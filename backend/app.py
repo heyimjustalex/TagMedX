@@ -10,6 +10,7 @@ from features.sets.controllers.set_controller import router as set_router
 from features.label.controllers.label_controller import router as label_router
 from features.samples.controllers.sample_controller import router as sample_router
 from features.packages.controllers.package_controller import router as package_router
+from features.bbox.controllers.bbox_controller import router as bbox_router
 
 # Quick connection check, you can remove it if you don't want it
 # Setting up connection is in database.py and session.py
@@ -65,3 +66,4 @@ app.include_router(set_router)
 app.include_router(label_router)
 app.include_router(package_router)
 app.include_router(sample_router)
+app.include_router(bbox_router)
