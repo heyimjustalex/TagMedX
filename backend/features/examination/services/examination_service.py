@@ -27,12 +27,10 @@ class ExaminationService:
 
     def update_examination(
         self,
-        id_examination: int,
+        examination: Examination,
         to_further_verification: bool | None = None,
         bad_quality: bool | None = None,
     ) -> Examination:
-        examination = self.get_examination(id_examination)
-
         if to_further_verification:
             examination.to_further_verification = to_further_verification
 
@@ -42,8 +40,7 @@ class ExaminationService:
         self.repository.update()
         return examination
 
-    def delete_examination(self, id_examination: int):
-        examination = self.get_examination(id_examination)
+    def delete_examination(self, examination: Examination):
         self.repository.delete_examination(examination)
 
     def get_examination(self, id_examination: int) -> Examination:

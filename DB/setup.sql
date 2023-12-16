@@ -89,10 +89,10 @@ CREATE TABLE `BBox` (
   id_examination INT NOT NULL,
   id_label INT NOT NULL,
   comment VARCHAR(255),
-  x1 FLOAT,
-  y1 FLOAT,
-  x2 FLOAT,
-  y2 FLOAT,
+  x INT,
+  y INT,
+  width INT,
+  height INT,
   PRIMARY KEY (id),
   FOREIGN KEY (id_examination) REFERENCES `Examination`(id),
   FOREIGN KEY (id_label) REFERENCES `Label`(id)
@@ -168,10 +168,10 @@ VALUES
     (2, 'Label 5', 'Label Description 5', NULL);
 
 
-INSERT INTO `BBox` (id_examination, id_label, comment, x1, y1, x2, y2)
+INSERT INTO `BBox` (id_examination, id_label, comment, x, y, width, height)
 VALUES
-    (1, 1, 'Comment 1', 10.0, 20.0, 30.0, 40.0),
-    (2, 2, 'Comment 2', 15.0, 25.0, 35.0, 45.0),
-    (3, 3, 'Comment 3', 20.0, 30.0, 40.0, 50.0),
-    (4, 4, 'Comment 4', 25.0, 35.0, 45.0, 55.0),
-    (2, 5, 'Comment 5', 30.0, 40.0, 50.0, 60.0);
+    (1, 1, 'Comment 1', 10, 20, 30, 40),
+    (2, 2, 'Comment 2', 15, 25, 35, 45),
+    (3, 3, 'Comment 3', 20, 30, 40, 50),
+    (4, 4, 'Comment 4', 25, 35, 45, 55),
+    (2, 5, 'Comment 5', 30, 40, 50, 60);
