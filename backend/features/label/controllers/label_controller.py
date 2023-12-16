@@ -43,7 +43,7 @@ def create_label(
         color=label.color,
     )
 
-  
+
 @router.get("/api/labels/{id_label}", tags=["Labels"], response_model=LabelResponse)
 def get_label(
     id_label: int,
