@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.models import Group, Membership, Set
+from models.models import Group, Membership
 from typing import List
 
 
@@ -26,7 +26,7 @@ class GroupRepository:
     def get_group_by_id(self, group_id: int) -> Group | None:
         return self.db.query(Group).filter(Group.id == group_id).first()
 
-    def get_groups_by_user(self, id_user) -> List[Group]:
+    def get_groups_by_user(self, id_user: int) -> List[Group]:
         return (
             self.db.query(Group)
             .filter(Group.Membership.any(Membership.id_user == id_user))

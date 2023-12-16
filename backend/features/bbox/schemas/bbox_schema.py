@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+from ...label.schemas.label_schema import LabelResponse
+
 
 
 class BBoxCreate(BaseModel):
@@ -20,6 +22,10 @@ class BBoxResponse(BaseModel):
     y: int | None = None
     width: int | None = None
     height: int | None = None
+
+
+class ExtendedBBoxResponse(BBoxResponse):
+    label: LabelResponse
 
 
 class BBoxUpdate(BaseModel):

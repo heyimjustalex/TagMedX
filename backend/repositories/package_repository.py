@@ -18,7 +18,7 @@ class PackageRepository:
         self.db.delete(package)
         self.db.commit()
 
-    def get_package_by_id(self, id_package) -> Package | None:
+    def get_package_by_id(self, id_package: int) -> Package | None:
         return self.db.query(Package).filter(Package.id == id_package).first()
 
     def get_packages_by_set(self, id_set: int) -> list[Package]:

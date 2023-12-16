@@ -1,5 +1,9 @@
 from fastapi import APIRouter, Depends
-from ..schemas.package_schema import PackageResponse
+from ..schemas.package_schema import PackageResponse, ExtendedPackageResponse
+from ...samples.schemas.sample_schema import ExtendedSampleResponse
+from ...examination.schemas.examination_schema import ExtendedExaminationResponse
+from ...bbox.schemas.bbox_schema import ExtendedBBoxResponse
+from ...label.schemas.label_schema import LabelResponse
 from ...authorization.services.token_service import UserData, TokenService
 from typing import Annotated
 from connectionDB.session import get_db
@@ -31,6 +35,72 @@ async def get_package(
         id_user=package.id_user,
         is_ready=package.is_ready,
     )
+
+
+@router.get(
+    "/api/packages/{id_package}/extend",
+    tags=["Packages"],
+    response_model=ExtendedPackageResponse,
+)
+async def get_extended_package(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    id_package: int,
+    db: Annotated[Session, Depends(get_db)],
+):
+    package_service = PackageService(db)
+    package = package_service.get_package(id_package)
+
+    group_service = GroupService(db)
+    _ = group_service.get_membership(package.Set.id_group, user_data.id)
+
+    response = ExtendedPackageResponse(
+        id=package.id,
+        id_set=package.id_set,
+        id_user=package.id_user,
+        is_ready=package.is_ready,
+        samples=[],
+    )
+
+    for sample in package.Sample:
+        sample_response = ExtendedSampleResponse(
+            id=sample.id, id_package=sample.id_package, examinations=[]
+        )
+
+        for examination in sample.Examination:
+            examination_response = ExtendedExaminationResponse(
+                id=examination.id,
+                id_user=examination.id_user,
+                id_sample=examination.id_sample,
+                to_further_verification=examination.to_further_verification,
+                bad_quality=examination.bad_quality,
+                bboxes=[],
+            )
+
+            for bbox in examination.BBox:
+                bbox_response = ExtendedBBoxResponse(
+                    id=bbox.id,
+                    id_examination=bbox.id_examination,
+                    id_label=bbox.id_label,
+                    comment=bbox.comment,
+                    x=bbox.x,
+                    y=bbox.y,
+                    width=bbox.width,
+                    height=bbox.height,
+                    label=LabelResponse(
+                        id=bbox.Label.id,
+                        id_set=bbox.Label.id_set,
+                        name=bbox.Label.name,
+                        description=bbox.Label.description,
+                        color=bbox.Label.color,
+                    ),
+                )
+                examination_response.bboxes.append(bbox_response)
+
+            sample_response.examinations.append(examination_response)
+
+        response.samples.append(sample_response)
+
+    return response
 
 
 @router.get(
