@@ -8,6 +8,10 @@ export async function getSample(setImage, setStatus, sampleId, notification) {
     credentials: 'include',
     headers: { 'Content-Type': '*/*' }
   })
+  .then(res => {
+    if(!res.ok) throw new Error(`${res.status} ${res.statusText}`)
+    return res
+  })
   .then(res => res.blob())
   .then(blob => {
     const url = URL.createObjectURL(blob);

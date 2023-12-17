@@ -55,7 +55,7 @@ Table Examination{
    id integer  [primary key]
    id_user integer
    id_sample integer
-   to_further_verification bool
+   tentative bool
    bad_quality bool
 
 }

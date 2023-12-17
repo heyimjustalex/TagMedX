@@ -9,7 +9,7 @@ import { Spinner } from '@nextui-org/react';
 export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sampleId, translation, status, setStatus }) {
   const containerRef = useRef(null);
   const [image, setImage] = useState({ src: '', width: 0, height: 0 });
-  const notification = useNotification;
+  const notification = useNotification();
   const [isSelecting, setIsSelecting] = useState(false);
   const [selection, setSelection] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0, layerX: 0, layerY: 0 });

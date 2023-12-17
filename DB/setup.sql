@@ -67,7 +67,7 @@ CREATE TABLE `Examination` (
   id INT NOT NULL AUTO_INCREMENT,
   id_user INT NOT NULL,
   id_sample INT NOT NULL,
-  to_further_verification BOOLEAN,
+  tentative BOOLEAN,
   bad_quality BOOLEAN,
   PRIMARY KEY (id),
   FOREIGN KEY (id_user) REFERENCES `User`(id),
@@ -148,7 +148,7 @@ VALUES
 --     (5, '/path/to/sample5', 'Format B');
 
 
--- INSERT INTO `Examination` (id_user, id_sample, to_further_verification, bad_quality)
+-- INSERT INTO `Examination` (id_user, id_sample, tentative, bad_quality)
 -- VALUES
 --     (1, 1, 0, 0),
 --     (2, 2, 1, 0),

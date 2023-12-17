@@ -71,7 +71,7 @@ async def get_extended_package(
                 id=examination.id,
                 id_user=examination.id_user,
                 id_sample=examination.id_sample,
-                to_further_verification=examination.to_further_verification,
+                tentative=examination.tentative,
                 bad_quality=examination.bad_quality,
                 bboxes=[],
             )

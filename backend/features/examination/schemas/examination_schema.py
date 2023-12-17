@@ -6,7 +6,7 @@ class ExaminationResponse(BaseModel):
     id: int
     id_user: int
     id_sample: int
-    to_further_verification: bool | None = None
+    tentative: bool | None = None
     bad_quality: bool | None = None
 
 
