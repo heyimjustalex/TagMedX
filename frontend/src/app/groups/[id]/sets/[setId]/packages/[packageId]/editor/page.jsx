@@ -1,17 +1,20 @@
-import { getLabels } from './utils';
+import { getLabels, getPackage } from './utils';
 import Editor from '../../../../../../../../components/Editor/Editor';
 import { redirect } from 'next/navigation';
 
 export default async function EditorPage({ params }) {
 
-  const labels = await getLabels(params.setId);
+  const [pack, labels] = await Promise.all([
+    getPackage(params.packageId),
+    getLabels(params.setId)
+  ]);
 
   return (
     <>
       { 
-        [labels.code].includes(401) ? redirect('/login?expired=1') :
+        [pack.code, labels.code].includes(401) ? redirect('/login?expired=1') :
         <section className='editor-page'>
-          <Editor labels={labels.body} />
+          <Editor pack={pack.body} labels={labels.body} />
         </section>
       }
     </>

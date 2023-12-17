@@ -141,15 +141,15 @@ export async function postSamples(files, modal, setModal, setSent, setData, noti
     setData(prev => ({
       ...prev,
       samples: prev?.samples
-        ? [...prev.samples, ...res.body.samples]
-        : [...res.body.samples]
+        ? [...prev.samples, ...res.body]
+        : [...res.body]
     }));
     setSent(false);
     setModal(prev => ({ ...prev, open: false }));
     notification.make(
       NextColor.SUCCESS,
       'Samples added',
-      `You have successfully added ${files.length > 1 ? files.length + ' samples' : 'sample'} files to ${res.body.name}.`);
+      `You have successfully added ${files.length > 1 ? files.length + ' samples' : 'sample'} files to ${modal.name}.`);
   }
   else {
     setSent(false);

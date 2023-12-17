@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Checkbox, CheckboxGroup, Divider, Select, SelectItem, Textarea } from '@nextui-org/react';
-import { IconDeviceFloppy, IconTrash, IconX, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import { Button, Card, Checkbox, Divider, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react';
 
 import './Editor.css';
 
@@ -27,7 +27,7 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, tentative, s
         Tentative
       </Checkbox>
       <Divider />
-      <div className='flex w-full text-xs text-zinc-500'>Bbox</div>
+      <div className='flex w-full text-xs text-zinc-500'>BBox</div>
       <Select
         label="Label"
         items={labels}

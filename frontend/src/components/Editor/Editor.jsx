@@ -8,7 +8,7 @@ import EditorDescriptor from './EditorDescriptor';
 import EditorNavigation from './EditorNavigation';
 import EditorSelectionArea from './EditorSelectionArea';
 
-export default function Editor({ labels }) {
+export default function Editor({ pack, labels }) {
 
   const [pan, setPan] = useState(false);
   const [scale, setScale] = useState(1);
@@ -18,7 +18,9 @@ export default function Editor({ labels }) {
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
   const [translation, setTranslation] = useState({ x: 0, y: 0 });
   const [newTranslation, setNewTranslation] = useState({ x: 0, y: 0 });
-
+  const [status, setStatus] = useState({ ready: false, error: false });
+  const [pointer, setPointer] = useState(pack?.samples?.findIndex(e => e?.examinations?.length < 1) || 0);
+console.log(pack)
   const handleMouseDown = useCallback((e) => {
     setPan(true);
     const { x, y } = e.nativeEvent;
@@ -71,12 +73,19 @@ export default function Editor({ labels }) {
         setTentative={setTentative}
         bbox={bboxes.find(e => e.active)}
       />
-      <EditorNavigation />
+      <EditorNavigation 
+        pointer={pointer}
+        length={pack?.samples.length}
+        setPointer={setPointer}
+      />
       <EditorSelectionArea
         tool={tool}
         scale={scale}
         bboxes={bboxes}
+        status={status}
         setBboxes={setBboxes}
+        setStatus={setStatus}
+        sampleId={pack?.samples[pointer]?.id}
         translation={{ x: translation.x + newTranslation.x, y: translation.y + newTranslation.y }}
       />
     </div>
