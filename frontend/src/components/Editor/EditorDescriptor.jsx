@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { Button, Card, Select, SelectItem, Textarea, Divider, CheckboxGroup, Checkbox } from '@nextui-org/react';
 import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react';
 
 import './Editor.css';
 
-export default function EditorDescriptor({ bbox, setBboxes, labels }) {
+export default function EditorDescriptor({ bbox, setBboxes, labels, tags, setTags }) {
 
   const [label, setLabel] = useState(new Set());
   const [description, setDescription] = useState('');
@@ -16,6 +16,19 @@ export default function EditorDescriptor({ bbox, setBboxes, labels }) {
 
   return (
     <Card className='editor-descriptor'>
+      <div className='flex w-full text-xs text-zinc-500'>Examination</div>
+      <CheckboxGroup
+        size='xs'
+        value={tags}
+        color='warning'
+        onValueChange={setTags}
+        orientation='horizontal'
+      >
+        <Checkbox value='tentative' size='sm'>Tentative</Checkbox>
+        <Checkbox value='bad-quality' size='sm'>Bad quality</Checkbox>
+      </CheckboxGroup>
+      <Divider />
+      <div className='flex w-full text-xs text-zinc-500'>Bbox</div>
       <Select
         label="Label"
         items={labels}

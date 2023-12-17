@@ -9,6 +9,7 @@ import EditorSelectionArea from './EditorSelectionArea';
 
 export default function Editor({ labels }) {
 
+  const [tags, setTags] = useState([]);
   const [pan, setPan] = useState(false);
   const [scale, setScale] = useState(1);
   const [bboxes, setBboxes] = useState([]);
@@ -63,7 +64,9 @@ export default function Editor({ labels }) {
         setTranslation={setTranslation}
       />
       <EditorDescriptor
+        tags={tags}
         labels={labels}
+        setTags={setTags}
         setBboxes={setBboxes}
         bbox={bboxes.find(e => e.active)}
       />
