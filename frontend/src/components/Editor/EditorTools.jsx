@@ -1,5 +1,5 @@
-import { Button, Card, Slider } from '@nextui-org/react';
-import { IconArrowsMove, IconFocus2, IconNewSection } from '@tabler/icons-react';
+import { Button, Card, Divider, Slider } from '@nextui-org/react';
+import { IconArrowsMove, IconDeviceFloppy, IconFocus2, IconLogout2, IconNewSection, IconX } from '@tabler/icons-react';
 
 import './Editor.css';
 import { Tool } from './EditorConsts';
@@ -45,6 +45,33 @@ export default function EditorTools({ tool, scale, setScale, setTranslation, set
         variant='light' 
       >
         <IconFocus2 />
+      </Button>
+      <Divider />
+      <Button
+        isIconOnly
+        title='Save'
+        color='primary'
+        onPress={() => {}}
+        variant='light' 
+      >
+        <IconDeviceFloppy />
+      </Button>
+      <Button
+        isIconOnly
+        title='Discard'
+        color='primary'
+        onPress={() => {}}
+        variant='light' 
+      >
+        <IconX />
+      </Button>
+      <Button
+        isIconOnly
+        title='Exit'
+        onPress={() => {}}
+        variant='light' 
+      >
+        <IconLogout2 />
       </Button>
     </Card>
   )

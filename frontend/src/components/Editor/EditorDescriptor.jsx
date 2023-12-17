@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Select, SelectItem, Textarea, Divider, CheckboxGroup, Checkbox } from '@nextui-org/react';
-import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react';
+import { Button, Card, Checkbox, CheckboxGroup, Divider, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { IconDeviceFloppy, IconTrash, IconX, IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 import './Editor.css';
 
-export default function EditorDescriptor({ bbox, setBboxes, labels, tags, setTags }) {
+export default function EditorDescriptor({ bbox, setBboxes, labels, tentative, setTentative }) {
 
   const [label, setLabel] = useState(new Set());
   const [description, setDescription] = useState('');
@@ -17,16 +17,15 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, tags, setTag
   return (
     <Card className='editor-descriptor'>
       <div className='flex w-full text-xs text-zinc-500'>Examination</div>
-      <CheckboxGroup
-        size='xs'
-        value={tags}
+      <Checkbox
+        value='tentative'
+        size='sm'
         color='warning'
-        onValueChange={setTags}
-        orientation='horizontal'
+        isSelected={tentative}
+        onValueChange={setTentative}
       >
-        <Checkbox value='tentative' size='sm'>Tentative</Checkbox>
-        <Checkbox value='bad-quality' size='sm'>Bad quality</Checkbox>
-      </CheckboxGroup>
+        Tentative
+      </Checkbox>
       <Divider />
       <div className='flex w-full text-xs text-zinc-500'>Bbox</div>
       <Select
@@ -62,40 +61,39 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, tags, setTag
           title='Delete'
           variant='light'
           className='flex'
+          color='danger'
           isDisabled={!bbox}
           onPress={() => setBboxes(prev => prev.filter(bbox => !bbox.active))}
         >
           <IconTrash />
         </Button>
-        <div className='flex'>
-          <Button
-              isIconOnly
-              title='Discard'
-              color='primary'
-              variant='light'
-              isDisabled={!bbox}
-              onPress={() => setBboxes(prev => prev.map(bbox => bbox.active ? { ...bbox, active: false } : bbox ))}
-            >
-              <IconX />
-            </Button>
-            <Button
-              isIconOnly
-              title='Save'
-              color='primary'
-              variant='light'
-              isDisabled={!bbox}
-              onPress={() => setBboxes(
-                prev => prev.map(bbox => bbox.active ? {
-                  ...bbox,
-                  label,
-                  description,
-                  active: false }
-                : bbox ))
-              }
-            >
-              <IconDeviceFloppy />
-            </Button>
-        </div>
+        <Button
+          isIconOnly
+          title='Save'
+          color='primary'
+          variant='light'
+          isDisabled={!bbox}
+          onPress={() => setBboxes(
+            prev => prev.map(bbox => bbox.active ? {
+              ...bbox,
+              label,
+              description,
+              active: false }
+            : bbox ))
+          }
+        >
+          <IconDeviceFloppy />
+        </Button>
+        <Button
+          isIconOnly
+          title='Discard'
+          color='primary'
+          variant='light'
+          isDisabled={!bbox}
+          onPress={() => setBboxes(prev => prev.map(bbox => bbox.active ? { ...bbox, active: false } : bbox ))}
+        >
+          <IconX />
+        </Button>
       </div>
     </Card>
   )
