@@ -46,6 +46,7 @@ async def get_extended_package(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     id_package: int,
     db: Annotated[Session, Depends(get_db)],
+    tentative: bool = False,
 ):
     package_service = PackageService(db)
     package = package_service.get_package(id_package)
@@ -66,7 +67,13 @@ async def get_extended_package(
             id=sample.id, id_package=sample.id_package
         )
 
+        if tentative == True and (
+            not sample.Examination or sample.Examination.tentative != True
+        ):
+            continue
+
         if not sample.Examination:
+            response.samples.append(sample_response)
             continue
 
         user = ""
