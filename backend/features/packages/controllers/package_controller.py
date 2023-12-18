@@ -51,7 +51,7 @@ async def get_extended_package(
     package = package_service.get_package(id_package)
 
     group_service = GroupService(db)
-    _ = group_service.get_membership(package.Set.id_group, user_data.id)
+    user_role = group_service.get_role_in_group(user_data.id, package.Set.id_group)
 
     response = ExtendedPackageResponse(
         id=package.id,
@@ -83,6 +83,7 @@ async def get_extended_package(
         examination_response = ExtendedExaminationResponse(
             id=sample.Examination.id,
             user=user,
+            role=user_role,
             id_user=sample.Examination.id_user,
             id_sample=sample.Examination.id_sample,
             tentative=sample.Examination.tentative,
