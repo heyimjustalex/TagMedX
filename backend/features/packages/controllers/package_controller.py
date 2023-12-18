@@ -65,13 +65,14 @@ async def get_extended_package(
         sample_response = ExtendedSampleResponse(
             id=sample.id, id_package=sample.id_package, examinations=[]
         )
-
+        
         for examination in sample.Examination:
             examination_response = ExtendedExaminationResponse(
                 id=examination.id,
+                user=examination.User.title + ' ' + examination.User.name + ' ' + examination.User.surname,
                 id_user=examination.id_user,
                 id_sample=examination.id_sample,
-                to_further_verification=examination.to_further_verification,
+                tentative=examination.tentative,
                 bad_quality=examination.bad_quality,
                 bboxes=[],
             )

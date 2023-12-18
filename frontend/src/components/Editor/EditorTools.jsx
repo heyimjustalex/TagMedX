@@ -1,10 +1,13 @@
-import { Button, Card, Slider } from '@nextui-org/react';
-import { IconArrowsMove, IconFocus2, IconNewSection } from '@tabler/icons-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Button, Card, Divider, Slider } from '@nextui-org/react';
+import { IconArrowsMove, IconDeviceFloppy, IconFocus2, IconLogout2, IconNewSection, IconX } from '@tabler/icons-react';
 
 import './Editor.css';
 import { Tool } from './EditorConsts';
 
 export default function EditorTools({ tool, scale, setScale, setTranslation, setTool }) {
+  const path = usePathname().split('/');
   return (
     <Card className='editor-tools'>
       <Button
@@ -45,6 +48,34 @@ export default function EditorTools({ tool, scale, setScale, setTranslation, set
         variant='light' 
       >
         <IconFocus2 />
+      </Button>
+      <Divider />
+      <Button
+        isIconOnly
+        title='Save'
+        color='primary'
+        variant='light'
+        onPress={() => {}}
+      >
+        <IconDeviceFloppy />
+      </Button>
+      <Button
+        isIconOnly
+        title='Discard'
+        color='primary'
+        variant='light'
+        onPress={() => {}}
+      >
+        <IconX />
+      </Button>
+      <Button
+        as={Link}
+        isIconOnly
+        title='Exit'
+        variant='light'
+        href={`/groups/${path[2]}?tab=packages&set=${path[4]}`}
+      >
+        <IconLogout2 />
       </Button>
     </Card>
   )

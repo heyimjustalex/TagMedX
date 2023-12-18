@@ -131,7 +131,7 @@ class Examination(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     id_user: Mapped[int] = mapped_column(ForeignKey("User.id"))
     id_sample: Mapped[int] = mapped_column(ForeignKey("Sample.id"))
-    to_further_verification: Mapped[bool | None]
+    tentative: Mapped[bool | None]
     bad_quality: Mapped[bool | None]
 
     # Define the many-to-one relationship with User

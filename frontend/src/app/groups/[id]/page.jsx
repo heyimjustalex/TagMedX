@@ -3,14 +3,14 @@ import { redirect } from 'next/navigation';
 import Group from '../../../components/Group/Group';
 import { getData, getLabels, getPackages, getSets, getUsers } from './utils';
 
-export default async function GroupPage({ params, searchParams }) {
+export default async function GroupPage({ params }) {
 
   const [data, users, sets, packages, labels] = await Promise.all([
     getData(params.id),
     getUsers(params.id),
     getSets(params.id),
-    getPackages(params.id, searchParams.set),
-    getLabels(params.id, searchParams.set)
+    getPackages(params.id),
+    getLabels(params.id)
   ]);
 
   return (

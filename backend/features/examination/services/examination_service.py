@@ -12,14 +12,14 @@ class ExaminationService:
         self,
         id_user: int,
         id_sample: int,
-        to_further_verification: bool | None = None,
+        tentative: bool | None = None,
         bad_quality: bool | None = None,
     ) -> Examination:
         examination = Examination()
 
         examination.id_user == id_user
         examination.id_sample == id_sample
-        examination.to_further_verification == to_further_verification
+        examination.tentative == tentative
         examination.bad_quality == bad_quality
 
         self.repository.create_examination(examination)
@@ -28,11 +28,11 @@ class ExaminationService:
     def update_examination(
         self,
         examination: Examination,
-        to_further_verification: bool | None = None,
+        tentative: bool | None = None,
         bad_quality: bool | None = None,
     ) -> Examination:
-        if to_further_verification:
-            examination.to_further_verification = to_further_verification
+        if tentative:
+            examination.tentative = tentative
 
         if bad_quality:
             examination.bad_quality = bad_quality

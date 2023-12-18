@@ -4,18 +4,6 @@
   position: relative;
 }
 
-.editor-tools {
-  position: absolute;
-  left: .5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: .5rem;
-  display: flex;
-  flex-direction: column;
-  gap: .5rem;
-  z-index: 2;
-}
-
 .editor-descriptor {
   position: absolute;
   right: .5rem;
@@ -27,4 +15,40 @@
   gap: .6rem;
   z-index: 2;
   justify-content: space-between;
+}
+
+.editor-navigation {
+  position: absolute;
+  left: 50%;
+  bottom: .5rem;
+  transform: translateX(-50%);
+  padding: .5rem;
+  display: flex;
+  flex-direction: row;
+  gap: .5rem;
+  z-index: 2;
+}
+
+.editor-selection-area {
+  top: 50%;
+  left: 50%;
+  position: relative;
+  width: min-content;
+  transform-origin: 0 0 0px;
+}
+
+.editor-selection-area img {
+  max-width: fit-content!important;
+}
+
+.editor-tools {
+  position: absolute;
+  left: .5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: .5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  z-index: 2;
 }

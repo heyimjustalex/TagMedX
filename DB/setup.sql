@@ -67,7 +67,7 @@ CREATE TABLE `Examination` (
   id INT NOT NULL AUTO_INCREMENT,
   id_user INT NOT NULL,
   id_sample INT NOT NULL,
-  to_further_verification BOOLEAN,
+  tentative BOOLEAN,
   bad_quality BOOLEAN,
   PRIMARY KEY (id),
   FOREIGN KEY (id_user) REFERENCES `User`(id),
@@ -105,7 +105,8 @@ VALUES
     ('user2@example.com', 'hash2', 'Jane', 'Smith', 'Ms.', 'Pediatrics', 2002),
     ('user3@example.com', 'hash3', 'Alice', 'Johnson', 'Dr.',  'Orthopedics', 2012),
     ('user4@example.com', 'hash4', 'Bob', 'Wilson', 'Mr.', 'Psychiatry', 2023),
-    ('user5@example.com', 'hash5', 'Eve', 'Davis', 'Ms.', 'Cardiology', 2020);
+    ('user5@example.com', 'hash5', 'Eve', 'Davis', 'Ms.', 'Cardiology', 2020),
+    ('test@test.pl', '$2b$12$ClO7iaMeH519tZAjH3dyjeLxYfme3nUJrI62cnz/JbyGuElU41DAi', 'Jan', 'Kanty', 'Mr.', 'Cardiology', 2000);
 
 INSERT INTO `Group` (name, description,connection_string)
 VALUES
@@ -115,63 +116,61 @@ VALUES
     ('Group 4', 'Description 4','password4'),
     ('Group 5', 'Description 5','password5');
 
-
-INSERT INTO `Set` (id_group, name, description, type, package_size)
-VALUES
-    (1, 'set 1', 'set Description 1', 'Detection', 100),
-    (2, 'set 2', 'set Description 2', 'Detection', 10),
-    (3, 'set 3', 'set Description 3', 'Classification', 100),
-    (4, 'set 4', 'set Description 4', 'Classification', 10),
-    (5, 'set 5', 'set Description 5', 'Classification', 100);
-
-INSERT INTO `Package` (id_set, id_user, is_ready)
-VALUES
-    (1, NULL, 0),
-    (1, NULL, 0),
-    (2, NULL, 1),
-    (2, NULL, 1),
-    (3, NULL, 1);
-
-
 INSERT INTO `Membership` (id_user, id_group, role)
 VALUES
     (1, 1, 'User'),
-    (2, 1, 'Admin'),
-    (2, 2, 'User'),
+    (2, 1, 'User'),
+    (6, 1, 'Admin'),
     (3, 2, 'Admin'),
-    (4, 3, 'Admin');
+    (2, 2, 'User'),
+    (6, 2, 'User');
 
-
-INSERT INTO `Sample` (id_package, path, format)
+INSERT INTO `Set` (id_group, name, description, type, package_size)
 VALUES
-    (3, '/path/to/sample1', 'Format A'),
-    (1, '/path/to/sample2', 'Format B'),
-    (4, '/path/to/sample3', 'Format A'),
-    (4, '/path/to/sample4', 'Format C'),
-    (5, '/path/to/sample5', 'Format B');
+    (1, 'set 1', 'set Description 1', 'Detection', 10),
+    (1, 'set 2', 'set Description 2', 'Classification', 10),
+    (2, 'set 3', 'set Description 3', 'Detection', 10),
+    (2, 'set 4', 'set Description 4', 'Classification', 10);
 
-
-INSERT INTO `Examination` (id_user, id_sample, to_further_verification, bad_quality)
+INSERT INTO `Package` (id_set, id_user, is_ready)
 VALUES
-    (1, 1, 0, 0),
-    (2, 2, 1, 0),
-    (3, 3, 0, 1),
-    (4, 4, 1, 0),
-    (2, 5, 0, 0);
+    (1, 1, 0),
+    (2, 2, 0),
+    (3, 6, 0),
+    (4, 6, 0);
+
+-- INSERT INTO `Sample` (id_package, path, format)
+-- VALUES
+--     (3, '/path/to/sample1', 'Format A'),
+--     (1, '/path/to/sample2', 'Format B'),
+--     (4, '/path/to/sample3', 'Format A'),
+--     (4, '/path/to/sample4', 'Format C'),
+--     (5, '/path/to/sample5', 'Format B');
+
+
+-- INSERT INTO `Examination` (id_user, id_sample, tentative, bad_quality)
+-- VALUES
+--     (1, 1, 0, 0),
+--     (2, 2, 1, 0),
+--     (3, 3, 0, 1),
+--     (4, 4, 1, 0),
+--     (2, 5, 0, 0);
 
 INSERT INTO `Label` (id_set, name, description, color)
 VALUES
-    (1, 'Label 1', 'Label Description 1', NULL),
-    (2, 'Label 2', 'Label Description 2', NULL),
-    (3, 'Label 3', 'Label Description 3', NULL),
-    (4, 'Label 4', 'Label Description 4', NULL),
-    (2, 'Label 5', 'Label Description 5', NULL);
+    (1, 'Label 1', 'Label Description 1', 'blue'),
+    (1, 'Label 2', 'Label Description 2', 'red'),
+    (2, 'Label 3', 'Label Description 3', 'cyan'),
+    (3, 'Label 4', 'Label Description 4', 'green'),
+    (4, 'Label 5', 'Label Description 5', 'pink');
 
 
-INSERT INTO `BBox` (id_examination, id_label, comment, x, y, width, height)
-VALUES
-    (1, 1, 'Comment 1', 10, 20, 30, 40),
-    (2, 2, 'Comment 2', 15, 25, 35, 45),
-    (3, 3, 'Comment 3', 20, 30, 40, 50),
-    (4, 4, 'Comment 4', 25, 35, 45, 55),
-    (2, 5, 'Comment 5', 30, 40, 50, 60);
+-- INSERT INTO `BBox` (id_examination, id_label, comment, x, y, width, height)
+-- VALUES
+--     (1, 1, 'Comment 1', 10, 20, 30, 40),
+--     (2, 2, 'Comment 2', 15, 25, 35, 45),
+--     (3, 3, 'Comment 3', 20, 30, 40, 50),
+--     (4, 4, 'Comment 4', 25, 35, 45, 55),
+--     (2, 5, 'Comment 5', 30, 40, 50, 60);
+
+-- PLEASE DO NOT ADD INVALID DATA (E.G BBox WITH LABEL FROM OTHER SET)

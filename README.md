@@ -95,7 +95,7 @@ The structure of the database is as follows:
 
 **Examination:**
 
-- Fields: id, id_user, id_sample, to_further_verification, bad_quality
+- Fields: id, id_user, id_sample, tentative, bad_quality
 - Purpose: Records information about Sample Examination by User (doctor). It might involve detection or classification. If it's classification, there is just one bounding box (BBox).
 - Relationships:
   - Many-to-One with User

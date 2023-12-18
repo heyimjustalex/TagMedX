@@ -1,9 +1,17 @@
-import { useCallback, useRef, useState } from 'react';
-import { Tool } from './EditorConsts';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 
-export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, translation }) {
+import './Editor.css';
+import { getSample } from './EditorUtils';
+import { Tool } from './EditorConsts';
+import { useNotification } from '../../hooks/useNotification';
+import { Spinner } from '@nextui-org/react';
+
+export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sampleId, translation, status, setStatus, setTranslation }) {
   const containerRef = useRef(null);
+  const notification = useNotification();
   const [isSelecting, setIsSelecting] = useState(false);
+  const [image, setImage] = useState({ src: '', width: 0, height: 0 });
   const [selection, setSelection] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0, layerX: 0, layerY: 0 });
 
@@ -50,58 +58,82 @@ export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, tr
     if (!isSelecting) e.stopPropagation();
   }, [isSelecting]);
 
+  useEffect(() => {
+    getSample(setImage, setStatus, sampleId, notification);
+  }, [sampleId]);
+
+  useEffect(() => setTranslation({ x: 0, y: 0 }), [image.src])
+
   return (
-    <div
-      ref={containerRef}
-      style={{
-        position: 'relative',
-        width: '500px',
-        height: '500px',
-        border: '1px solid #000',
-        cursor: tool === Tool.PAN ? 'inherit' : 'crosshair',
-        scale: scale,
-        left: '50%',
-        top: '50%',
-        transformOrigin: '0 0 0px',
-        transform: `translate(calc(-50% + ${translation.x}px), calc(-50% + ${translation.y}px))`
-      }}
-      onMouseDown={tool === Tool.SELECT ? handleMouseDown : () => {}}
-      onMouseMove={tool === Tool.SELECT ? handleMouseMove : () => {}}
-      onMouseUp={tool === Tool.SELECT ? handleMouseUp : () => {}}
-    >
-      { isSelecting ? (
-        <div
-          style={{
-            position: 'absolute',
-            top: selection.y,
-            left: selection.x,
-            width: selection.width,
-            height: selection.height,
-            border: '1px dashed #000',
-            backgroundColor: 'rgba(0, 0, 0, 0.2)',
-          }}
-        />
-      ) : null }
-      { bboxes.length > 0 ?
-          bboxes.map((bbox, i) => <div
-            key={`bbox-${i}`}
+    <>
+      { status.error ? <div
+        className='text-zinc-500 w-60'
+        style={{
+          position: 'relative',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)'
+        }}
+      >
+        Could not load sample image!
+      </div> : !status.ready && !image.src ? <div
+        className='w-min'
+        style={{
+          position: 'relative',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)'
+        }}
+      >
+        <Spinner size='lg' />
+      </div> : <div
+        ref={containerRef}
+        style={{
+          cursor: tool === Tool.PAN ? 'inherit' : 'crosshair',
+          scale: scale,
+          transform: `translate(calc(-50% + ${translation.x}px), calc(-50% + ${translation.y}px))`
+        }}
+        className='editor-selection-area'
+        onMouseDown={tool === Tool.SELECT ? handleMouseDown : () => {}}
+        onMouseMove={tool === Tool.SELECT ? handleMouseMove : () => {}}
+        onMouseUp={tool === Tool.SELECT ? handleMouseUp : () => {}}
+      >
+        { isSelecting ? (
+          <div
             style={{
               position: 'absolute',
-              top: bbox.y,
-              left: bbox.x,
-              width: bbox.width,
-              height: bbox.height,
-              cursor: tool === Tool.PAN ? 'inherit' : 'pointer'
+              top: selection.y,
+              left: selection.x,
+              width: selection.width,
+              height: selection.height,
+              border: '1px dashed #000',
+              backgroundColor: 'rgba(0, 0, 0, 0.2)',
             }}
-            className={
-              bbox.active
-                ? `bg-${bbox?.label?.color || 'zinc'}-100/10 border-2 border-${bbox?.label?.color || 'zinc'}-500`
-                : `bg-${bbox?.label?.color || 'zinc'}-200/10 border border-${bbox?.label?.color || 'zinc'}-400`
-            }
-            onMouseDown={tool === Tool.SELECT ? (e) => handleBboxMouseDown(e, i) : () => {}}
-            onMouseUp={tool === Tool.SELECT ? handleBboxMouseUp : () => {}}
-          />)
-      : null }
-    </div>
+          />
+        ) : null }
+        { bboxes.length > 0 ?
+            bboxes.map((bbox, i) => <div
+              key={`bbox-${i}`}
+              style={{
+                position: 'absolute',
+                top: bbox.y,
+                left: bbox.x,
+                width: bbox.width,
+                height: bbox.height,
+                cursor: tool === Tool.PAN ? 'inherit' : 'pointer'
+              }}
+              className={
+                bbox.active
+                  ? `bg-${bbox?.label?.color || 'zinc'}-100/10 border-3 border-${bbox?.label?.color || 'zinc'}-500`
+                  : `bg-${bbox?.label?.color || 'zinc'}-200/10 border-2 border-${bbox?.label?.color || 'zinc'}-400`
+              }
+              onMouseDown={tool === Tool.SELECT ? (e) => handleBboxMouseDown(e, i) : () => {}}
+              onMouseUp={tool === Tool.SELECT ? handleBboxMouseUp : () => {}}
+            />)
+        : null }
+        { image.src ? <Image src={image.src} width={image.width} height={image.height} alt={`Sample ID: ${sampleId}`} draggable={false} /> : null}
+      </div>
+      }
+    </>
   );
 }
