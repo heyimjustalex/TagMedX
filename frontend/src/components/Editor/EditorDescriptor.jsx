@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, Checkbox, Divider, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { Button, Card, Checkbox, Chip, Divider, Select, SelectItem, Textarea } from '@nextui-org/react';
 import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react';
 
 import './Editor.css';
 
-export default function EditorDescriptor({ bbox, setBboxes, labels, tentative, setTentative }) {
+export default function EditorDescriptor({ bbox, setBboxes, labels, examination, setExamination }) {
 
   const [label, setLabel] = useState(new Set());
   const [description, setDescription] = useState('');
@@ -16,20 +16,27 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, tentative, s
 
   return (
     <Card className='editor-descriptor'>
+      <div className='flex w-full text-xs text-zinc-500'>Author</div>
+      <div className='flex w-full text-small text-foreground'>
+        <Chip size='sm' color='secondary' variant='flat' className='mr-2'>A</Chip>
+        {examination.user}
+      </div>
+      <Divider />
       <div className='flex w-full text-xs text-zinc-500'>Examination</div>
       <Checkbox
         value='tentative'
         size='sm'
         color='warning'
-        isSelected={tentative}
-        onValueChange={setTentative}
+        isDisabled={!examination}
+        isSelected={examination?.tentative}
+        onValueChange={(e) => setExamination(prev => ({ ...prev, tentative: e }))}
       >
         Tentative
       </Checkbox>
       <Divider />
       <div className='flex w-full text-xs text-zinc-500'>BBox</div>
       <Select
-        label="Label"
+        label='Label'
         items={labels}
         isDisabled={!bbox}
         selectionMode='single'

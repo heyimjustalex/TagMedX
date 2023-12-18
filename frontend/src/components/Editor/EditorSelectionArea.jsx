@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
+import './Editor.css';
 import { getSample } from './EditorUtils';
 import { Tool } from './EditorConsts';
 import { useNotification } from '../../hooks/useNotification';
 import { Spinner } from '@nextui-org/react';
 
-export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sampleId, translation, status, setStatus }) {
+export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sampleId, translation, status, setStatus, setTranslation }) {
   const containerRef = useRef(null);
-  const [image, setImage] = useState({ src: '', width: 0, height: 0 });
   const notification = useNotification();
   const [isSelecting, setIsSelecting] = useState(false);
+  const [image, setImage] = useState({ src: '', width: 0, height: 0 });
   const [selection, setSelection] = useState({ x: 0, y: 0, width: 0, height: 0 });
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0, layerX: 0, layerY: 0 });
 
@@ -61,6 +62,8 @@ export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sa
     getSample(setImage, setStatus, sampleId, notification);
   }, [sampleId]);
 
+  useEffect(() => setTranslation({ x: 0, y: 0 }), [image.src])
+
   return (
     <>
       { status.error ? <div
@@ -73,7 +76,7 @@ export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sa
         }}
       >
         Could not load sample image!
-      </div> : !status.ready ? <div
+      </div> : !status.ready && !image.src ? <div
         className='w-min'
         style={{
           position: 'relative',
@@ -86,14 +89,11 @@ export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sa
       </div> : <div
         ref={containerRef}
         style={{
-          position: 'relative',
           cursor: tool === Tool.PAN ? 'inherit' : 'crosshair',
           scale: scale,
-          left: '50%',
-          top: '50%',
-          transformOrigin: '0 0 0px',
           transform: `translate(calc(-50% + ${translation.x}px), calc(-50% + ${translation.y}px))`
         }}
+        className='editor-selection-area'
         onMouseDown={tool === Tool.SELECT ? handleMouseDown : () => {}}
         onMouseMove={tool === Tool.SELECT ? handleMouseMove : () => {}}
         onMouseUp={tool === Tool.SELECT ? handleMouseUp : () => {}}
@@ -124,14 +124,14 @@ export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sa
               }}
               className={
                 bbox.active
-                  ? `bg-${bbox?.label?.color || 'zinc'}-100/10 border-2 border-${bbox?.label?.color || 'zinc'}-500`
-                  : `bg-${bbox?.label?.color || 'zinc'}-200/10 border border-${bbox?.label?.color || 'zinc'}-400`
+                  ? `bg-${bbox?.label?.color || 'zinc'}-100/10 border-3 border-${bbox?.label?.color || 'zinc'}-500`
+                  : `bg-${bbox?.label?.color || 'zinc'}-200/10 border-2 border-${bbox?.label?.color || 'zinc'}-400`
               }
               onMouseDown={tool === Tool.SELECT ? (e) => handleBboxMouseDown(e, i) : () => {}}
               onMouseUp={tool === Tool.SELECT ? handleBboxMouseUp : () => {}}
             />)
         : null }
-        <Image src={image.src} alt='Sample' width={image.width} height={image.height} draggable={false}/>
+        { image.src ? <Image src={image.src} width={image.width} height={image.height} alt={`Sample ID: ${sampleId}`} draggable={false} /> : null}
       </div>
       }
     </>

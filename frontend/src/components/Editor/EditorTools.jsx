@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Button, Card, Divider, Slider } from '@nextui-org/react';
 import { IconArrowsMove, IconDeviceFloppy, IconFocus2, IconLogout2, IconNewSection, IconX } from '@tabler/icons-react';
 
@@ -8,7 +8,6 @@ import { Tool } from './EditorConsts';
 
 export default function EditorTools({ tool, scale, setScale, setTranslation, setTool }) {
   const path = usePathname().split('/');
-  console.log(path)
   return (
     <Card className='editor-tools'>
       <Button
