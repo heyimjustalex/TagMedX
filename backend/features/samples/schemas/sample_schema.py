@@ -8,4 +8,4 @@ class SampleResponse(BaseModel):
 
 
 class ExtendedSampleResponse(SampleResponse):
-    examinations: list[ExtendedExaminationResponse]
+    examination: ExtendedExaminationResponse | None = None

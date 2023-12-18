@@ -63,52 +63,54 @@ async def get_extended_package(
 
     for sample in package.Sample:
         sample_response = ExtendedSampleResponse(
-            id=sample.id, id_package=sample.id_package, examinations=[]
+            id=sample.id, id_package=sample.id_package
         )
 
-        for examination in sample.Examination:
-            user = ""
+        if not sample.Examination:
+            continue
 
-            if examination.User.title:
-                user += f"{examination.User.title} "
+        user = ""
 
-            if examination.User.name:
-                user += f"{examination.User.name} "
+        if sample.Examination.User.title:
+            user += f"{sample.Examination.User.title} "
 
-            if examination.User.surname:
-                user += f"{examination.User.surname}"
+        if sample.Examination.User.name:
+            user += f"{sample.Examination.User.name} "
 
-            examination_response = ExtendedExaminationResponse(
-                id=examination.id,
-                user=user,
-                id_user=examination.id_user,
-                id_sample=examination.id_sample,
-                tentative=examination.tentative,
-                bad_quality=examination.bad_quality,
-                bboxes=[],
+        if sample.Examination.User.surname:
+            user += f"{sample.Examination.User.surname}"
+
+        examination_response = ExtendedExaminationResponse(
+            id=sample.Examination.id,
+            user=user,
+            id_user=sample.Examination.id_user,
+            id_sample=sample.Examination.id_sample,
+            tentative=sample.Examination.tentative,
+            bad_quality=sample.Examination.bad_quality,
+            bboxes=[],
+        )
+
+        for bbox in sample.Examination.BBox:
+            bbox_response = ExtendedBBoxResponse(
+                id=bbox.id,
+                id_examination=bbox.id_examination,
+                id_label=bbox.id_label,
+                comment=bbox.comment,
+                x=bbox.x,
+                y=bbox.y,
+                width=bbox.width,
+                height=bbox.height,
+                label=LabelResponse(
+                    id=bbox.Label.id,
+                    id_set=bbox.Label.id_set,
+                    name=bbox.Label.name,
+                    description=bbox.Label.description,
+                    color=bbox.Label.color,
+                ),
             )
+            examination_response.bboxes.append(bbox_response)
 
-            for bbox in examination.BBox:
-                bbox_response = ExtendedBBoxResponse(
-                    id=bbox.id,
-                    id_examination=bbox.id_examination,
-                    id_label=bbox.id_label,
-                    comment=bbox.comment,
-                    x=bbox.x,
-                    y=bbox.y,
-                    width=bbox.width,
-                    height=bbox.height,
-                    label=LabelResponse(
-                        id=bbox.Label.id,
-                        id_set=bbox.Label.id_set,
-                        name=bbox.Label.name,
-                        description=bbox.Label.description,
-                        color=bbox.Label.color,
-                    ),
-                )
-                examination_response.bboxes.append(bbox_response)
-
-            sample_response.examinations.append(examination_response)
+        sample_response.examination = examination_response
 
         response.samples.append(sample_response)
 

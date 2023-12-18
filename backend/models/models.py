@@ -99,8 +99,8 @@ class Sample(Base):
     # Define the many-to-one relationship with Package
     Package: Mapped["Package"] = relationship(back_populates="Sample")
 
-    # Define the one-to-many relationship with Examination
-    Examination: Mapped[List["Examination"]] = relationship(
+    # Define the one-to-one relationship with Examination
+    Examination: Mapped["Examination | None"] = relationship(
         back_populates="Sample", cascade="all, delete"
     )
 
