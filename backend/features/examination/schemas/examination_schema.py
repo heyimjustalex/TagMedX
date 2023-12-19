@@ -14,3 +14,18 @@ class ExaminationResponse(BaseModel):
 
 class ExtendedExaminationResponse(ExaminationResponse):
     bboxes: list[ExtendedBBoxResponse]
+
+
+class BBoxCreate(BaseModel):
+    id_label: int
+    comment: str | None = None
+    x: int | None = None
+    y: int | None = None
+    width: int | None = None
+    height: int | None = None
+
+
+class ExaminationCreate(BaseModel):
+    id_sample: int
+    tentative: bool | None = None
+    BBox: list[BBoxCreate] | None = None
