@@ -26,6 +26,10 @@ class BBoxRepository:
     def get_bbox_by_label(self, id_label: int) -> list[BBox]:
         return self.db.query(BBox).filter(BBox.id_label == id_label).all()
 
+    def delete_bboxes_by_examination(self, examination_id: int):
+        self.db.query(BBox).filter(BBox.id_examination == examination_id).delete()
+        self.db.commit()
+
     # def check_user_is_assigned_to_package(self, user_id: int) -> BBox | None:
     #     return (
     #         self.db.query(BBox)

@@ -6,7 +6,7 @@ from models.models import BBox
 
 class BBoxService:
     def __init__(self, db: Session):
-        self.repository = BBoxRepository(db)
+        self.bbox_repository = BBoxRepository(db)
 
     def create_bbox(
         self,
@@ -27,7 +27,7 @@ class BBoxService:
         bbox.width = width
         bbox.height = height
 
-        self.repository.create_bbox(bbox)
+        self.bbox_repository.create_bbox(bbox)
         return bbox
 
     def update_bbox(
@@ -60,7 +60,7 @@ class BBoxService:
         if height:
             bbox.height = height
 
-        self.repository.update_bbox()
+        self.bbox_repository.update_bbox()
         return bbox
 
     def delete_bbox(self, id_bbox: int):
@@ -69,10 +69,10 @@ class BBoxService:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="BBox not found"
             )
-        self.repository.delete_bbox(bbox)
+        self.bbox_repository.delete_bbox(bbox)
 
     def get_bbox_by_id(self, id_bbox: int) -> BBox:
-        bbox = self.repository.get_bbox_by_id(id_bbox)
+        bbox = self.bbox_repository.get_bbox_by_id(id_bbox)
         if not bbox:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="BBox not found"
@@ -80,7 +80,7 @@ class BBoxService:
         return bbox
 
     def get_bbox_by_examination(self, id_examination: int) -> list[BBox]:
-        examination = self.repository.get_bbox_by_examination(id_examination)
+        examination = self.bbox_repository.get_bbox_by_examination(id_examination)
         if not examination:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -89,12 +89,15 @@ class BBoxService:
         return examination
 
     def get_bbox_by_label(self, id_label: int) -> list[BBox]:
-        label = self.repository.get_bbox_by_label(id_label)
+        label = self.bbox_repository.get_bbox_by_label(id_label)
         if not label:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="BBox_by_label not found"
             )
         return label
+
+    def delete_bboxes_by_examination(self, examination_id: int):
+        return self.bbox_repository.delete_bboxes_by_examination(examination_id)
 
     # def check_user_is_assigned_to_package(self, user_id: int) -> BBox:
     #     user = self.repository.check_user_is_assigned_to_package(user_id)

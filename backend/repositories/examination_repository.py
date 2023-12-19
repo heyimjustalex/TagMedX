@@ -13,19 +13,23 @@ class ExaminationRepository:
     def update(self):
         self.db.commit()
 
-    def delete_examination(self, examination: Examination):
-        self.db.delete(examination)
-        self.db.commit()
+    def delete_examination(self, examination_id: int):
+        examination = self.get_examination_by_id(examination_id)
+        if examination:
+            self.db.delete(examination)
+            self.db.commit()
 
-    def get_examination_by_id(self, id_examination) -> Examination | None:
+    def get_examination_by_id(self, examination_id: int) -> Examination | None:
         return (
-            self.db.query(Examination).filter(Examination.id == id_examination).first()
+            self.db.query(Examination).filter(Examination.id == examination_id).first()
         )
 
-    def get_examinations_by_user(self, id_user: int) -> list[Examination]:
-        return self.db.query(Examination).filter(Examination.id_user == id_user).all()
+    def get_examinations_by_user(self, id_user: int) -> Examination | None:
+        return self.db.query(Examination).filter(Examination.id_user == id_user).first()
 
-    def get_examinations_by_sample(self, id_sample: int) -> list[Examination]:
+    def get_examination_by_sample(self, sample_id: int) -> Examination | None:
         return (
-            self.db.query(Examination).filter(Examination.id_sample == id_sample).all()
+            self.db.query(Examination)
+            .filter(Examination.id_sample == sample_id)
+            .first()
         )
