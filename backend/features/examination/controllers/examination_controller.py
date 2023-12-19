@@ -26,6 +26,7 @@ async def create_or_update_examinations(
     )
 
     if existing_examination:
+        existing_examination.id_user = user_data.id
         existing_examination.tentative = examination_data.tentative
 
         bbox_service.delete_bboxes_by_examination(existing_examination.id)
