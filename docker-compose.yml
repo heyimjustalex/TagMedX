@@ -36,6 +36,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./backend/:/app:ro
+      - images:/images:rw
     ports:
       - 8000:8000
     environment:
@@ -63,5 +64,6 @@ services:
 
 volumes:
   DB:
+  images:
 networks:
   network:
