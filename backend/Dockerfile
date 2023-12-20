@@ -11,7 +11,8 @@ RUN apk --no-cache add build-base=0.5-r3 py3-pkgconfig=1.5.5-r3 mariadb-dev=10.1
     && pip install --no-cache-dir --upgrade pip==23.3.2 \
     && pip install --no-cache-dir -r requirements.txt \
     && mkdir /images \
-    && adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app /images
+    && adduser -u 5678 --disabled-password --gecos "" appuser \
+    && chown -R appuser /app /images
 
 USER appuser
 
