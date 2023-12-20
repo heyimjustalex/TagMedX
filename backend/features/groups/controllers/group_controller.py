@@ -197,3 +197,18 @@ def join_group(
     return GroupWithRoleResponse(
         name=group.name, description=group.description, id=group.id, role=role
     )
+
+@router.get(
+    "/api/groups/{group_id}/role",
+    tags=["Groups"],
+    response_model=str
+)
+def get_role_in_group(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    group_id: int,
+    db: Annotated[Session, Depends(get_db)],
+):
+    group_service = GroupService(db)
+    group = group_service.get_group(group_id)
+    role = group_service.get_role_in_group(user_data.id, group_id)
+    return role

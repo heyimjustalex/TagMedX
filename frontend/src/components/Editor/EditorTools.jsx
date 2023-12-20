@@ -6,7 +6,7 @@ import { IconArrowsMove, IconDeviceFloppy, IconFocus2, IconLogout2, IconNewSecti
 import './Editor.css';
 import { Tool } from './EditorConsts';
 
-export default function EditorTools({ tool, scale, setScale, setTranslation, setTool }) {
+export default function EditorTools({ tool, scale, setScale, setTranslation, setTool, changed }) {
   const path = usePathname().split('/');
   return (
     <Card className='editor-tools'>
@@ -56,6 +56,7 @@ export default function EditorTools({ tool, scale, setScale, setTranslation, set
         color='primary'
         variant='light'
         onPress={() => {}}
+        isDisabled={!changed}
       >
         <IconDeviceFloppy />
       </Button>
@@ -65,6 +66,7 @@ export default function EditorTools({ tool, scale, setScale, setTranslation, set
         color='primary'
         variant='light'
         onPress={() => {}}
+        isDisabled={!changed}
       >
         <IconX />
       </Button>

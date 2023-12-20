@@ -52,7 +52,6 @@ async def get_extended_package(
     package = package_service.get_package(id_package)
 
     group_service = GroupService(db)
-    user_role = group_service.get_role_in_group(user_data.id, package.Set.id_group)
 
     response = ExtendedPackageResponse(
         id=package.id,
@@ -86,6 +85,8 @@ async def get_extended_package(
 
         if sample.Examination.User.surname:
             user += f"{sample.Examination.User.surname}"
+
+        user_role = group_service.get_role_in_group(sample.Examination.User.id, package.Set.id_group)
 
         examination_response = ExtendedExaminationResponse(
             id=sample.Examination.id,

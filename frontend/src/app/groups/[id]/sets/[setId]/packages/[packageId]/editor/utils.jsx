@@ -12,8 +12,17 @@ export async function getLabels(setId) {
 export async function getPackage(packageId) {
   if(!isNaN(packageId)) {
   const res = await get(`packages/${packageId}/extend`);
-    if(!res.ok) console.error(`Get set labels: ${res.code} ${res.status}`);
+    if(!res.ok) console.error(`Get package: ${res.code} ${res.status}`);
     else return res;
   }
-  return Promise.resolve({ code: 204, body: [] });
+  return Promise.resolve({ code: 204, body: {} });
+}
+
+export async function getRole(groupId) {
+  if(!isNaN(groupId)) {
+  const res = await get(`groups/${groupId}/role`);
+    if(!res.ok) console.error(`Get role: ${res.code} ${res.status}`);
+    else return res;
+  }
+  return Promise.resolve({ code: 204, body: '' });
 }

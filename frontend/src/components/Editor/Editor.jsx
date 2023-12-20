@@ -1,11 +1,12 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Tool } from './EditorConsts';
 import EditorTools from './EditorTools';
 import EditorDescriptor from './EditorDescriptor';
 import EditorNavigation from './EditorNavigation';
 import EditorSelectionArea from './EditorSelectionArea';
+import { bboxCompare, examinationCompare } from './EditorUtils';
 
 export default function Editor({ user, pack, labels }) {
 
@@ -17,8 +18,8 @@ export default function Editor({ user, pack, labels }) {
   const [translation, setTranslation] = useState({ x: 0, y: 0 });
   const [newTranslation, setNewTranslation] = useState({ x: 0, y: 0 });
   const [status, setStatus] = useState({ ready: false, error: false });
-  const [examination, setExamination] = useState({ id_user: '', user: '', tentative: false });
-  const [pointer, setPointer] = useState(pack?.samples?.findIndex(e => e?.examinations?.length < 1) || 0);
+  const [examination, setExamination] = useState({ id_user: '', user: '', role: '?', tentative: false });
+  const [pointer, setPointer] = useState(pack?.samples?.findIndex(e => !e?.examination) || 0);
 
   const handleMouseDown = useCallback((e) => {
     setPan(true);
@@ -48,20 +49,31 @@ export default function Editor({ user, pack, labels }) {
   }, [setPan, newTranslation, setTranslation]);
 
   useEffect(() => {
-    if(pack?.samples[pointer]?.examinations?.length) {
+    if(pack?.samples[pointer]?.examination) {
       setExamination({
-        id_user: pack?.samples[pointer]?.examinations[0]?.id_user,
-        user: pack?.samples[pointer]?.examinations[0]?.user,
-        tentative: pack?.samples[pointer]?.examinations[0]?.tentative || false
+        id_user: pack?.samples[pointer]?.examination?.id_user,
+        user: pack?.samples[pointer]?.examination?.user,
+        role: pack?.samples[pointer]?.examination?.role,
+        tentative: pack?.samples[pointer]?.examination?.tentative || false
       });
-      if(pack?.samples[pointer]?.examinations[0]?.bboxes) {
-        setBboxes(pack?.samples[pointer]?.examinations[0].bboxes);
+      if(pack?.samples[pointer]?.examination?.bboxes) {
+        setBboxes(pack?.samples[pointer]?.examination.bboxes);
       }
     } else {
-      setExamination({ id_user: user?.user_id, user: `${user?.title} ${user?.name} ${user?.surname}`, tentative: false });
+      setExamination({
+        id_user: user?.user_id,
+        user: `${user?.title} ${user?.name} ${user?.surname}`,
+        role: user?.role,
+        tentative: false
+      });
       setBboxes([]);
     }
   }, [pointer, user]);
+
+  const changed = useMemo(() =>
+    !(examinationCompare(pack?.samples[pointer]?.examination, examination)
+    && bboxCompare(pack?.samples[pointer]?.examination?.bboxes, bboxes))
+  , [examination, bboxes])
 
   return (
     <div
@@ -77,6 +89,7 @@ export default function Editor({ user, pack, labels }) {
       <EditorTools
         tool={tool}
         scale={scale}
+        changed={changed}
         setTool={setTool}
         setScale={setScale}
         setTranslation={setTranslation}
@@ -88,8 +101,9 @@ export default function Editor({ user, pack, labels }) {
         setExamination={setExamination}
         bbox={bboxes.find(e => e.active)}
       />
-      <EditorNavigation 
+      <EditorNavigation
         pointer={pointer}
+        changed={changed}
         setStatus={setStatus}
         setPointer={setPointer}
         length={pack?.samples?.length}

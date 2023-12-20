@@ -3,6 +3,7 @@ import { Button, Card, Checkbox, Chip, Divider, Select, SelectItem, Textarea } f
 import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react';
 
 import './Editor.css';
+import { RoleMap } from './EditorConsts';
 
 export default function EditorDescriptor({ bbox, setBboxes, labels, examination, setExamination }) {
 
@@ -18,7 +19,9 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
     <Card className='editor-descriptor'>
       <div className='flex w-full text-xs text-zinc-500'>Author</div>
       <div className='flex w-full text-small text-foreground'>
-        <Chip size='sm' color='secondary' variant='flat' className='mr-2'>A</Chip>
+        <Chip size='sm' color={RoleMap[examination.role]} title={examination.role} variant='flat' className='mr-2'>
+          {examination.role.charAt(0)}
+        </Chip>
         {examination.user}
       </div>
       <Divider />
