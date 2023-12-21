@@ -5,9 +5,14 @@ import { IconArrowsMove, IconDeviceFloppy, IconFocus2, IconLogout2, IconNewSecti
 
 import './Editor.css';
 import { Tool } from './EditorConsts';
+import { saveExamination } from './EditorUtils';
+import { useNotification } from '../../hooks/useNotification';
 
-export default function EditorTools({ tool, scale, setScale, setTranslation, setTool, changed }) {
+export default function EditorTools({ tool, scale, setScale, setTranslation, setTool, changed, pointer, examination, bboxes, sampleId, user, setPack, setDefaultValues }) {
+
   const path = usePathname().split('/');
+  const notification = useNotification();
+
   return (
     <Card className='editor-tools'>
       <Button
@@ -55,7 +60,7 @@ export default function EditorTools({ tool, scale, setScale, setTranslation, set
         title='Save'
         color='primary'
         variant='light'
-        onPress={() => {}}
+        onPress={() => saveExamination(pointer, examination, bboxes, sampleId, user, setPack, notification)}
         isDisabled={!changed}
       >
         <IconDeviceFloppy />
@@ -65,7 +70,7 @@ export default function EditorTools({ tool, scale, setScale, setTranslation, set
         title='Discard'
         color='primary'
         variant='light'
-        onPress={() => {}}
+        onPress={setDefaultValues}
         isDisabled={!changed}
       >
         <IconX />

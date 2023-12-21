@@ -6,7 +6,7 @@ import { checkSession } from '../../../../../../../../utils/serverSession';
 
 export default async function EditorPage({ params }) {
 
-  const [user, role, pack, labels] = await Promise.all([
+  const [user, role, data, labels] = await Promise.all([
     getUser(checkSession()),
     getRole(params.id),
     getPackage(params.packageId),
@@ -16,9 +16,9 @@ export default async function EditorPage({ params }) {
   return (
     <>
       { 
-        [user.code, role.code, pack.code, labels.code].includes(401) ? redirect('/login?expired=1') :
+        [user.code, role.code, data.code, labels.code].includes(401) ? redirect('/login?expired=1') :
         <section className='editor-page'>
-          <Editor user={{ ...user.body, role: role.body }} pack={pack.body} labels={labels.body} />
+          <Editor user={{ ...user.body, role: role.body }} data={data.body} labels={labels.body} />
         </section>
       }
     </>

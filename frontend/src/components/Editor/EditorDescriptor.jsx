@@ -7,12 +7,12 @@ import { RoleMap } from './EditorConsts';
 
 export default function EditorDescriptor({ bbox, setBboxes, labels, examination, setExamination }) {
 
-  const [label, setLabel] = useState(new Set());
-  const [description, setDescription] = useState('');
+  const [comment, setComment] = useState('');
+  const [label, setLabel] = useState({ id: new Set(), color: 'blue' });
 
   useEffect(() => {
-    setLabel({ id: bbox?.label?.id || new Set(), color: bbox?.label?.color });
-    setDescription(bbox?.description || '');
+    setLabel({ id: bbox?.label?.id ? new Set().add(bbox?.label?.id?.toString()) : new Set(), color: bbox?.label?.color });
+    setComment(bbox?.comment || '');
   }, [bbox]);
 
   return (
@@ -61,9 +61,9 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
       <Textarea
         minRows={4}
         isDisabled={!bbox}
-        label='Description'
-        value={description}
-        onChange={e => setDescription(e.target.value)}
+        label='Comment'
+        value={comment}
+        onChange={e => setComment(e.target.value)}
       />
       <div className='flex justify-between'>
         <Button
@@ -86,8 +86,11 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
           onPress={() => setBboxes(
             prev => prev.map(bbox => bbox.active ? {
               ...bbox,
-              label,
-              description,
+              comment,
+              label: {
+                id: parseInt(label.id.values().next().value),
+                color: label.color || null
+              },
               active: false }
             : bbox ))
           }

@@ -6,12 +6,13 @@ import EditorTools from './EditorTools';
 import EditorDescriptor from './EditorDescriptor';
 import EditorNavigation from './EditorNavigation';
 import EditorSelectionArea from './EditorSelectionArea';
-import { bboxCompare, examinationCompare } from './EditorUtils';
+import { bboxCompare, examinationCompare, getPointerDefaultValue } from './EditorUtils';
 
-export default function Editor({ user, pack, labels }) {
+export default function Editor({ user, data, labels }) {
 
   const [pan, setPan] = useState(false);
   const [scale, setScale] = useState(1);
+  const [pack, setPack] = useState(data);
   const [bboxes, setBboxes] = useState([]);
   const [tool, setTool] = useState(Tool.SELECT);
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
@@ -19,7 +20,7 @@ export default function Editor({ user, pack, labels }) {
   const [newTranslation, setNewTranslation] = useState({ x: 0, y: 0 });
   const [status, setStatus] = useState({ ready: false, error: false });
   const [examination, setExamination] = useState({ id_user: '', user: '', role: '?', tentative: false });
-  const [pointer, setPointer] = useState(pack?.samples?.findIndex(e => !e?.examination) || 0);
+  const [pointer, setPointer] = useState(() => getPointerDefaultValue(pack?.samples));
 
   const handleMouseDown = useCallback((e) => {
     setPan(true);
@@ -48,7 +49,7 @@ export default function Editor({ user, pack, labels }) {
     }
   }, [setPan, newTranslation, setTranslation]);
 
-  useEffect(() => {
+  const setDefaultValues = useCallback(() => {
     if(pack?.samples[pointer]?.examination) {
       setExamination({
         id_user: pack?.samples[pointer]?.examination?.id_user,
@@ -68,7 +69,9 @@ export default function Editor({ user, pack, labels }) {
       });
       setBboxes([]);
     }
-  }, [pointer, user]);
+  }, [pack, pointer, user])
+
+  useEffect(setDefaultValues, [pack, pointer, user]);
 
   const changed = useMemo(() =>
     !(examinationCompare(pack?.samples[pointer]?.examination, examination)
@@ -87,12 +90,19 @@ export default function Editor({ user, pack, labels }) {
       }}
     >
       <EditorTools
+        user={user}
         tool={tool}
         scale={scale}
+        bboxes={bboxes}
+        pointer={pointer}
+        setPack={setPack}
         changed={changed}
         setTool={setTool}
         setScale={setScale}
+        examination={examination}
         setTranslation={setTranslation}
+        sampleId={pack?.samples[pointer]?.id}
+        setDefaultValues={setDefaultValues}
       />
       <EditorDescriptor
         labels={labels}

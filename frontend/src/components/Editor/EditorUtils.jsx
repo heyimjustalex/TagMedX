@@ -1,4 +1,5 @@
 import { NextColor } from '../../consts/NextColor';
+import { put, del } from '../../utils/fetch';
 
 export async function getSample(setImage, setStatus, sampleId, notification) {
 
@@ -41,16 +42,61 @@ export function examinationCompare(e1, e2) {
 export function bboxCompare(b1, b2) {
   if(!b1 && b2.length === 0) return true;
   else if(b1?.length === b2.length) {
-    b1.forEach((bbox, i) => {
-      if(
-        bbox.x != b2[i].x ||
-        bbox.y != b2[i].y ||
-        bbox.width != b2[i].width ||
-        bbox.height != b2[i].height ||
-        bbox.id_label != b2[i].id_label ||
-        bbox.comment != b2[i].comment
-      ) return false;
-    });
+    if(b1.some((bbox, i) =>
+      bbox.x != b2[i].x ||
+      bbox.y != b2[i].y ||
+      bbox.width != b2[i].width ||
+      bbox.height != b2[i].height ||
+      bbox.id_label != b2[i].id_label ||
+      bbox.comment != b2[i].comment
+    )) return false;
   } else return false;
   return true;
+}
+
+export async function saveExamination(pointer, examination, bboxes, sampleId, user, setPack, notification) {
+  const res = await put('examinations', { 
+    id_sample: sampleId,
+    tentative: examination.tentative,
+    BBox: bboxes.map(e => ({
+      x: e.x,
+      y: e.y,
+      width: e.width,
+      height: e.height,
+      comment: e.comment || null,
+      id_label: e?.label?.id || null
+    })),
+  });
+
+  if(res.ok) {
+    setPack(prev => ({
+      ...prev,
+      samples: [...prev.samples.map((e, i) => ({
+        id: e.id,
+        id_package: e.id_package,
+        examination: pointer === i ?
+          {
+            bboxes: bboxes,
+            id: e.examination.id,
+            id_sample: e.examination.id_sample,
+            id_user: 1,
+            role: user.role,
+            tentative: examination.tentative,
+            user: `${user.title} ${user.name} ${user.surname}`
+          }
+        : e.examination
+      }))]
+    }));
+    notification.make(NextColor.SUCCESS, 'Examination saved', 'You have successfully saved examination.');
+  }
+  else {
+    notification.make(NextColor.DANGER, 'Examination error', 'Could not save examination.');
+  }
+}
+
+export function getPointerDefaultValue(samples) {
+  if(samples) {
+    const index = samples?.findIndex(e => !e?.examination);
+    return index !== -1 ? index : 0;
+  } else return 0;
 }
