@@ -52,6 +52,8 @@ export default function Editor({ user, data, labels }) {
   const setDefaultValues = useCallback(() => {
     if(pack?.samples[pointer]?.examination) {
       setExamination({
+        id: pack?.samples[pointer]?.examination?.id,
+        id_sample: pack?.samples[pointer]?.examination?.id_sample,
         id_user: pack?.samples[pointer]?.examination?.id_user,
         user: pack?.samples[pointer]?.examination?.user,
         role: pack?.samples[pointer]?.examination?.role,
@@ -62,6 +64,8 @@ export default function Editor({ user, data, labels }) {
       }
     } else {
       setExamination({
+        id: null,
+        id_sample: null,
         id_user: user?.user_id,
         user: `${user?.title} ${user?.name} ${user?.surname}`,
         role: user?.role,

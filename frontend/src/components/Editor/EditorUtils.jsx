@@ -1,5 +1,5 @@
 import { NextColor } from '../../consts/NextColor';
-import { put, del } from '../../utils/fetch';
+import { del, put } from '../../utils/fetch';
 
 export async function getSample(setImage, setStatus, sampleId, notification) {
 
@@ -55,7 +55,8 @@ export function bboxCompare(b1, b2) {
 }
 
 export async function saveExamination(pointer, examination, bboxes, sampleId, user, setPack, notification) {
-  const res = await put('examinations', { 
+  const res = await put('examinations', {
+    id: examination.id || null,
     id_sample: sampleId,
     tentative: examination.tentative,
     BBox: bboxes.map(e => ({
@@ -77,11 +78,11 @@ export async function saveExamination(pointer, examination, bboxes, sampleId, us
         examination: pointer === i ?
           {
             bboxes: bboxes,
-            id: e.examination.id,
-            id_sample: e.examination.id_sample,
-            id_user: 1,
+            id: examination.id || null, // here use response id
+            id_sample: res.body.id_sample,
+            id_user: user.id,
             role: user.role,
-            tentative: examination.tentative,
+            tentative: res.body.tentative,
             user: `${user.title} ${user.name} ${user.surname}`
           }
         : e.examination
@@ -91,6 +92,25 @@ export async function saveExamination(pointer, examination, bboxes, sampleId, us
   }
   else {
     notification.make(NextColor.DANGER, 'Examination error', 'Could not save examination.');
+  }
+}
+
+export async function deleteExamination(pointer, examination, setPack, notification) {
+  const res = await del(`examinations/${examination.id}`);
+
+  if(res.ok) {
+    setPack(prev => ({
+      ...prev,
+      samples: [...prev.samples.map((e, i) => ({
+        id: e.id,
+        id_package: e.id_package,
+        examination: pointer === i ? null : e.examination
+      }))]
+    }));
+    notification.make(NextColor.SUCCESS, 'Examination removed', 'You have successfully removed examination.');
+  }
+  else {
+    notification.make(NextColor.DANGER, 'Examination error', 'Could not remove examination.');
   }
 }
 
