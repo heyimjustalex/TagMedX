@@ -29,3 +29,7 @@ class ExaminationCreate(BaseModel):
     id_sample: int
     tentative: bool | None = None
     BBox: list[BBoxCreate] | None = None
+
+
+class ExaminationCreateResponse(ExaminationCreate):
+    id: int

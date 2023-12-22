@@ -2,7 +2,7 @@ import os
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from repositories.package_repository import PackageRepository
-from models.models import Package
+from models.models import Package, Sample, Examination, Set
 
 
 class PackageService:
@@ -73,3 +73,12 @@ class PackageService:
             if len(package.Sample) < package.Set.package_size:
                 return package.id
         return self.create_package(id_set).id
+
+    def update_package_is_ready(self, sample: Sample, package: Package, set_info: Set):
+        all_samples_have_examination = self.repository.update_package_is_ready(
+            sample, package, set_info
+        )
+        return all_samples_have_examination
+
+    def update_package_is_ready_false(self, sample_id: int):
+        return self.repository.update_package_is_ready_false(sample_id)
