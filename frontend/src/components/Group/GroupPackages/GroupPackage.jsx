@@ -48,7 +48,7 @@ export default function GroupPackage({ data, users, groupId, setPackages, isAdmi
                 showAnchorIcon
                 as={RouteLink}
                 anchorIcon={<IconEyeExclamation />}
-                href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor`}
+                href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor?tentative=true`}
               >
                 Uncertain
               </Link>

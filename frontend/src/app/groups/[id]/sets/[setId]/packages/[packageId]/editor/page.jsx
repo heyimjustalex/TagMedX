@@ -4,12 +4,12 @@ import { getUser } from '../../../../../../../profile/utils';
 import Editor from '../../../../../../../../components/Editor/Editor';
 import { checkSession } from '../../../../../../../../utils/serverSession';
 
-export default async function EditorPage({ params }) {
+export default async function EditorPage({ params, searchParams }) {
 
   const [user, role, data, labels] = await Promise.all([
     getUser(checkSession()),
     getRole(params.id),
-    getPackage(params.packageId),
+    getPackage(params.packageId, searchParams.tentative),
     getLabels(params.setId)
   ]);
 

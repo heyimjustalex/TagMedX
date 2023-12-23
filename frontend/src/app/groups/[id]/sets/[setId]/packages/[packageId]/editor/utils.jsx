@@ -9,9 +9,9 @@ export async function getLabels(setId) {
   return Promise.resolve({ code: 204, body: [] });
 }
 
-export async function getPackage(packageId) {
+export async function getPackage(packageId, tentative) {
   if(!isNaN(packageId)) {
-  const res = await get(`packages/${packageId}/extend`);
+  const res = await get(`packages/${packageId}/extend?tentative=${tentative ? 'true' : 'false'}`);
     if(!res.ok) console.error(`Get package: ${res.code} ${res.status}`);
     else return res;
   }
