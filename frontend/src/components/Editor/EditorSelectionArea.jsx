@@ -8,7 +8,7 @@ import { useNotification } from '../../hooks/useNotification';
 import { Spinner } from '@nextui-org/react';
 import { NextColor } from '../../consts/NextColor';
 
-export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sampleId, translation, status, setStatus, setTranslation, adminOverride }) {
+export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sampleId, translation, status, setStatus, detection, setTranslation, adminOverride }) {
   const containerRef = useRef(null);
   const notification = useNotification();
   const [isSelecting, setIsSelecting] = useState(false);
@@ -45,7 +45,8 @@ export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sa
     setIsSelecting(false);
     if(selection.width > 1 && selection.height > 1) {
       if(adminOverride) notification.make(NextColor.WARNING, 'Override denied', 'You cannot override admin\'s examination.')
-      else setBboxes(prev => [...prev.map(bbox => ({ ...bbox, active: false })), { ...selection, active: true }]);
+      else if(detection) setBboxes(prev => [...prev.map(bbox => ({ ...bbox, active: false })), { ...selection, active: true }]);
+      else setBboxes([{ ...selection, active: true }]);
     } else {
       setBboxes(prev => prev.map(bbox => ({ ...bbox, active: false })));
     }

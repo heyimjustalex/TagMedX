@@ -18,6 +18,15 @@ export async function getPackage(packageId, tentative) {
   return Promise.resolve({ code: 204, body: {} });
 }
 
+export async function getSet(setId) {
+  if(!isNaN(setId)) {
+  const res = await get(`sets/${setId}`);
+    if(!res.ok) console.error(`Get set: ${res.code} ${res.status}`);
+    else return res;
+  }
+  return Promise.resolve({ code: 204, body: {} });
+}
+
 export async function getRole(groupId) {
   if(!isNaN(groupId)) {
   const res = await get(`groups/${groupId}/role`);

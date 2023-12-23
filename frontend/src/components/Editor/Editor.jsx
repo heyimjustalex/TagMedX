@@ -8,7 +8,7 @@ import EditorNavigation from './EditorNavigation';
 import EditorSelectionArea from './EditorSelectionArea';
 import { bboxCompare, examinationCompare, getPointerDefaultValue } from './EditorUtils';
 
-export default function Editor({ user, data, labels }) {
+export default function Editor({ user, data, labels, set }) {
 
   const [pan, setPan] = useState(false);
   const [scale, setScale] = useState(1);
@@ -136,8 +136,9 @@ export default function Editor({ user, data, labels }) {
         setBboxes={setBboxes}
         setStatus={setStatus}
         adminOverride={adminOverride}
-        sampleId={pack?.samples[pointer]?.id}
         setTranslation={setTranslation}
+        detection={set.type === 'Detection'}
+        sampleId={pack?.samples[pointer]?.id}
         translation={{ x: translation.x + newTranslation.x, y: translation.y + newTranslation.y }}
       />
     </div>
