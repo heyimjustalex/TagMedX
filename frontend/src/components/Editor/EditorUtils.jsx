@@ -78,7 +78,7 @@ export async function saveExamination(pointer, examination, bboxes, sampleId, us
         examination: pointer === i ?
           {
             bboxes: bboxes,
-            id: examination.id || null, // here use response id
+            id: res.body.id,
             id_sample: res.body.id_sample,
             id_user: user.id,
             role: user.role,
