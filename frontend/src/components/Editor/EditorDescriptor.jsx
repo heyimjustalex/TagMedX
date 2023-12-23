@@ -5,7 +5,7 @@ import { IconDeviceFloppy, IconTrash, IconX } from '@tabler/icons-react';
 import './Editor.css';
 import { RoleMap } from './EditorConsts';
 
-export default function EditorDescriptor({ bbox, setBboxes, labels, examination, setExamination }) {
+export default function EditorDescriptor({ bbox, setBboxes, labels, examination, adminOverride, setExamination }) {
 
   const [comment, setComment] = useState('');
   const [label, setLabel] = useState({ id: new Set(), color: 'blue' });
@@ -30,7 +30,7 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
         value='tentative'
         size='sm'
         color='warning'
-        isDisabled={!examination}
+        isDisabled={!examination || adminOverride}
         isSelected={examination?.tentative}
         onValueChange={(e) => setExamination(prev => ({ ...prev, tentative: e }))}
       >
@@ -41,7 +41,7 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
       <Select
         label='Label'
         items={labels}
-        isDisabled={!bbox}
+        isDisabled={!bbox || adminOverride}
         selectionMode='single'
         selectedKeys={label.id}
         onSelectionChange={e => setLabel({
@@ -60,7 +60,7 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
       </Select>
       <Textarea
         minRows={4}
-        isDisabled={!bbox}
+        isDisabled={!bbox || adminOverride}
         label='Comment'
         value={comment}
         onChange={e => setComment(e.target.value)}
@@ -72,7 +72,7 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
           variant='light'
           className='flex'
           color='danger'
-          isDisabled={!bbox}
+          isDisabled={!bbox || adminOverride}
           onPress={() => setBboxes(prev => prev.filter(bbox => !bbox.active))}
         >
           <IconTrash />
@@ -82,7 +82,7 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
           title='Save'
           color='primary'
           variant='light'
-          isDisabled={!bbox}
+          isDisabled={!bbox || adminOverride}
           onPress={() => setBboxes(
             prev => prev.map(bbox => bbox.active ? {
               ...bbox,
@@ -102,7 +102,7 @@ export default function EditorDescriptor({ bbox, setBboxes, labels, examination,
           title='Discard'
           color='primary'
           variant='light'
-          isDisabled={!bbox}
+          isDisabled={!bbox || adminOverride}
           onPress={() => setBboxes(prev => prev.map(bbox => bbox.active ? { ...bbox, active: false } : bbox ))}
         >
           <IconX />

@@ -6,8 +6,9 @@ import { getSample } from './EditorUtils';
 import { Tool } from './EditorConsts';
 import { useNotification } from '../../hooks/useNotification';
 import { Spinner } from '@nextui-org/react';
+import { NextColor } from '../../consts/NextColor';
 
-export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sampleId, translation, status, setStatus, setTranslation }) {
+export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sampleId, translation, status, setStatus, setTranslation, adminOverride }) {
   const containerRef = useRef(null);
   const notification = useNotification();
   const [isSelecting, setIsSelecting] = useState(false);
@@ -43,11 +44,13 @@ export default function EditorSelectionArea({ scale, tool, bboxes, setBboxes, sa
   const handleMouseUp = useCallback(() => {
     setIsSelecting(false);
     if(selection.width > 1 && selection.height > 1) {
-      setBboxes(prev => [...prev.map(bbox => ({ ...bbox, active: false })), { ...selection, active: true }]);
+      if(adminOverride) notification.make(NextColor.WARNING, 'Override denied', 'You cannot override admin\'s examination.')
+      else setBboxes(prev => [...prev.map(bbox => ({ ...bbox, active: false })), { ...selection, active: true }]);
     } else {
       setBboxes(prev => prev.map(bbox => ({ ...bbox, active: false })));
     }
-  }, [setIsSelecting, selection, setBboxes]);
+    
+  }, [setIsSelecting, selection, setBboxes, adminOverride]);
 
   const handleBboxMouseDown = useCallback((e, i) => {
     e.stopPropagation();
