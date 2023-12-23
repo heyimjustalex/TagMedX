@@ -32,6 +32,7 @@ export default function GroupLabelsTopContent({ data, setId, setModal }) {
         color='primary'
         className='min-w-fit'
         endContent={<IconTag />}
+        isDisabled={!setId}
         onPress={() => setModal({ ...defaultLabelModal, open: true, edit: false })}
       >
         Add Label
