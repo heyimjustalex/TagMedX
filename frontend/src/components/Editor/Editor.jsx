@@ -1,24 +1,26 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Tool } from './EditorConsts';
 import EditorTools from './EditorTools';
 import EditorDescriptor from './EditorDescriptor';
 import EditorNavigation from './EditorNavigation';
 import EditorSelectionArea from './EditorSelectionArea';
+import { bboxCompare, examinationCompare, getPointerDefaultValue } from './EditorUtils';
 
-export default function Editor({ user, pack, labels }) {
+export default function Editor({ user, data, labels }) {
 
   const [pan, setPan] = useState(false);
   const [scale, setScale] = useState(1);
+  const [pack, setPack] = useState(data);
   const [bboxes, setBboxes] = useState([]);
   const [tool, setTool] = useState(Tool.SELECT);
   const [startPoint, setStartPoint] = useState({ x: 0, y: 0 });
   const [translation, setTranslation] = useState({ x: 0, y: 0 });
   const [newTranslation, setNewTranslation] = useState({ x: 0, y: 0 });
   const [status, setStatus] = useState({ ready: false, error: false });
-  const [examination, setExamination] = useState({ id_user: '', user: '', tentative: false });
-  const [pointer, setPointer] = useState(pack?.samples?.findIndex(e => e?.examinations?.length < 1) || 0);
+  const [examination, setExamination] = useState({ id_user: '', user: '', role: '?', tentative: false });
+  const [pointer, setPointer] = useState(() => getPointerDefaultValue(pack?.samples));
 
   const handleMouseDown = useCallback((e) => {
     setPan(true);
@@ -47,21 +49,38 @@ export default function Editor({ user, pack, labels }) {
     }
   }, [setPan, newTranslation, setTranslation]);
 
-  useEffect(() => {
-    if(pack?.samples[pointer]?.examinations?.length) {
+  const setDefaultValues = useCallback(() => {
+    if(pack?.samples[pointer]?.examination) {
       setExamination({
-        id_user: pack?.samples[pointer]?.examinations[0]?.id_user,
-        user: pack?.samples[pointer]?.examinations[0]?.user,
-        tentative: pack?.samples[pointer]?.examinations[0]?.tentative || false
+        id: pack?.samples[pointer]?.examination?.id,
+        id_sample: pack?.samples[pointer]?.examination?.id_sample,
+        id_user: pack?.samples[pointer]?.examination?.id_user,
+        user: pack?.samples[pointer]?.examination?.user,
+        role: pack?.samples[pointer]?.examination?.role,
+        tentative: pack?.samples[pointer]?.examination?.tentative || false
       });
-      if(pack?.samples[pointer]?.examinations[0]?.bboxes) {
-        setBboxes(pack?.samples[pointer]?.examinations[0].bboxes);
+      if(pack?.samples[pointer]?.examination?.bboxes) {
+        setBboxes(pack?.samples[pointer]?.examination.bboxes);
       }
     } else {
-      setExamination({ id_user: user?.user_id, user: `${user?.title} ${user?.name} ${user?.surname}`, tentative: false });
+      setExamination({
+        id: null,
+        id_sample: null,
+        id_user: user?.user_id,
+        user: `${user?.title} ${user?.name} ${user?.surname}`,
+        role: user?.role,
+        tentative: false
+      });
       setBboxes([]);
     }
-  }, [pointer, user]);
+  }, [pack, pointer, user])
+
+  useEffect(setDefaultValues, [pack, pointer, user]);
+
+  const changed = useMemo(() =>
+    !(examinationCompare(pack?.samples[pointer]?.examination, examination)
+    && bboxCompare(pack?.samples[pointer]?.examination?.bboxes, bboxes))
+  , [examination, bboxes])
 
   return (
     <div
@@ -75,11 +94,19 @@ export default function Editor({ user, pack, labels }) {
       }}
     >
       <EditorTools
+        user={user}
         tool={tool}
         scale={scale}
+        bboxes={bboxes}
+        pointer={pointer}
+        setPack={setPack}
+        changed={changed}
         setTool={setTool}
         setScale={setScale}
+        examination={examination}
         setTranslation={setTranslation}
+        sampleId={pack?.samples[pointer]?.id}
+        setDefaultValues={setDefaultValues}
       />
       <EditorDescriptor
         labels={labels}
@@ -88,8 +115,9 @@ export default function Editor({ user, pack, labels }) {
         setExamination={setExamination}
         bbox={bboxes.find(e => e.active)}
       />
-      <EditorNavigation 
+      <EditorNavigation
         pointer={pointer}
+        changed={changed}
         setStatus={setStatus}
         setPointer={setPointer}
         length={pack?.samples?.length}
