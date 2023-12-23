@@ -5,6 +5,7 @@ import RouteLink from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Card, CardBody, Tab, Tabs } from '@nextui-org/react';
 
+import GroupOverview from './GroupOverview/GroupOverview';
 import GroupSettings from './GroupSettings/GroupSettings';
 import GroupUsers from './GroupUsers/GroupUsers';
 import GroupSets from './GroupSets/GroupSets';
@@ -26,9 +27,7 @@ export default function Group({ group }) {
         <Tab key="overview" title="Overview" href={`/groups/${data.id}?tab=overview`} as={RouteLink}>
           <Card>
             <CardBody className='p-4'>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              <GroupOverview />
             </CardBody>
           </Card>
         </Tab>

@@ -17,7 +17,11 @@ export default function GroupLabelsRemoveModal({ modal, setModal, setData, notif
         <ModalHeader className='flex flex-col gap-1'>Remove Label</ModalHeader>
         <ModalBody>
           Are you sure, you want to remove label: {
-            <Chip className='capitalize' color={modal.color || 'default'} size='sm' variant='flat'>
+            <Chip className='capitalize' size='sm' variant='flat' classNames={{
+              base: modal.color  ? `bg-${modal.color }-100` : 'bg-zinc-200',
+              content: modal.color  ? `text-${modal.color }-500` : 'text-zinc-600'
+            }}
+            >
               {modal.name || 'default'}
             </Chip>
           } This will cause deletion all bounding boxed marked this label.

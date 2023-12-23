@@ -8,7 +8,7 @@ import EditorNavigation from './EditorNavigation';
 import EditorSelectionArea from './EditorSelectionArea';
 import { bboxCompare, examinationCompare, getPointerDefaultValue } from './EditorUtils';
 
-export default function Editor({ user, data, labels }) {
+export default function Editor({ user, data, labels, set }) {
 
   const [pan, setPan] = useState(false);
   const [scale, setScale] = useState(1);
@@ -82,6 +82,11 @@ export default function Editor({ user, data, labels }) {
     && bboxCompare(pack?.samples[pointer]?.examination?.bboxes, bboxes))
   , [examination, bboxes])
 
+  const adminOverride = useMemo(() =>
+    user.role === 'User' &&
+    pack?.samples[pointer]?.examination?.role === 'Admin'
+  , [pack, pointer, user])
+
   return (
     <div
       className='editor'
@@ -112,6 +117,7 @@ export default function Editor({ user, data, labels }) {
         labels={labels}
         setBboxes={setBboxes}
         examination={examination}
+        adminOverride={adminOverride}
         setExamination={setExamination}
         bbox={bboxes.find(e => e.active)}
       />
@@ -129,8 +135,10 @@ export default function Editor({ user, data, labels }) {
         status={status}
         setBboxes={setBboxes}
         setStatus={setStatus}
-        sampleId={pack?.samples[pointer]?.id}
+        adminOverride={adminOverride}
         setTranslation={setTranslation}
+        detection={set.type === 'Detection'}
+        sampleId={pack?.samples[pointer]?.id}
         translation={{ x: translation.x + newTranslation.x, y: translation.y + newTranslation.y }}
       />
     </div>
