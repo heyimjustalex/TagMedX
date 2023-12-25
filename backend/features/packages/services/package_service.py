@@ -2,12 +2,15 @@ import os
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from repositories.package_repository import PackageRepository
-from models.models import Package, Sample, Examination, Set
+from repositories.group_repository import Roles
+from models.models import Package
+from ...groups.services.group_service import GroupService
 
 
 class PackageService:
     def __init__(self, db: Session):
         self.repository = PackageRepository(db)
+        self.group_service = GroupService(db)
 
     def create_package(self, id_set: int) -> Package:
         package = Package()
@@ -15,33 +18,29 @@ class PackageService:
         self.repository.create_package(package)
         return package
 
-    def check_if_assigned_to_user(self, id_user: int, id_package: int):
-        package = self.get_package(id_package)
+    def check_if_assigned_to_user(self, id_user: int, package: Package):
         if package.id_user != id_user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="This package is not assigned to this user",
             )
 
-    def assign_to_user(self, id_package: int, id_user: int) -> Package:
-        package = self.get_package(id_package)
+    def assign_to_user(self, package: Package, id_user: int) -> Package:
         package.id_user = id_user
         self.repository.update()
         return package
 
-    def mark_as_ready(self, id_user: int, id_package: int) -> Package:
-        package = self.get_package(id_package)
-        if id_user != package.id_user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="It is not possible to mark another user's package as ready",
-            )
+    def mark_as_ready(self, package: Package) -> Package:
         package.is_ready = True
         self.repository.update()
         return package
 
-    def delete_package(self, id_package: int):
-        package = self.get_package(id_package)
+    def mark_as_unready(self, package: Package) -> Package:
+        package.is_ready = False
+        self.repository.update()
+        return package
+
+    def delete_package(self, package: Package):
         for sample in package.Sample:
             os.remove(sample.path)
         self.repository.delete_package(package)
@@ -64,21 +63,25 @@ class PackageService:
         return self.repository.get_packages_by_group(id_group)
 
     def get_package_id_with_free_slots_or_create_new_one(self, id_set: int) -> int:
-        # package = self.repository.get_package_with_free_slots_by_set(id_set)
-        # if not package:
-        #     return self.create_package(id_set).id
-        # return package.id
         packages = self.get_packages_in_set(id_set)
         for package in packages:
             if len(package.Sample) < package.Set.package_size:
                 return package.id
         return self.create_package(id_set).id
 
-    def update_package_is_ready(self, sample: Sample, package: Package, set_info: Set):
-        all_samples_have_examination = self.repository.update_package_is_ready(
-            sample, package, set_info
-        )
-        return all_samples_have_examination
+    def check_if_assigned_to_user_or_if_user_is_admin(
+        self, id_user: int, package: Package
+    ):
+        role = self.group_service.get_role_in_group(id_user, package.Set.id_group)
 
-    def update_package_is_ready_false(self, sample_id: int):
-        return self.repository.update_package_is_ready_false(sample_id)
+        if package.id_user != id_user and role != Roles.ADMIN:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="No authority for this operation",
+            )
+
+    def all_samples_examinated(self, package: Package) -> bool:
+        for sample in package.Sample:
+            if not sample.Examination:
+                return False
+        return True

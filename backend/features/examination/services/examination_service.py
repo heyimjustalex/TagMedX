@@ -27,12 +27,8 @@ class ExaminationService:
         self,
         examination: Examination,
         id_user: int,
-        id_sample: int,
         tentative: bool | None = None,
     ) -> Examination:
-        if id_sample:
-            examination.id_sample = id_sample
-
         if tentative:
             examination.tentative = tentative
 
@@ -42,10 +38,10 @@ class ExaminationService:
         self.repository.update()
         return examination
 
-    def delete_examination(self, examination_id: int):
-        self.repository.delete_examination(examination_id)
+    def delete_examination(self, examination: Examination):
+        self.repository.delete_examination(examination)
 
-    def get_examination_by_id(self, id_examination: int) -> Examination:
+    def get_examination(self, id_examination: int) -> Examination:
         examination = self.repository.get_examination_by_id(id_examination)
         if not examination:
             raise HTTPException(
@@ -53,8 +49,13 @@ class ExaminationService:
             )
         return examination
 
-    def get_user_examinations(self, id_user: int) -> Examination | None:
+    def get_user_examinations(self, id_user: int) -> list[Examination]:
         return self.repository.get_examinations_by_user(id_user)
 
-    def get_examination_by_sample(self, sample_id: int) -> Examination | None:
-        return self.repository.get_examination_by_sample(sample_id)
+    def get_sample_examination(self, sample_id: int) -> Examination | None:
+        examination = self.repository.get_examination_by_sample(sample_id)
+        if not examination:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Examination not found"
+            )
+        return examination

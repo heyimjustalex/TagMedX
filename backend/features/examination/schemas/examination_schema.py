@@ -9,7 +9,6 @@ class ExaminationResponse(BaseModel):
     id_user: int
     id_sample: int
     tentative: bool | None = None
-    bad_quality: bool | None = None
 
 
 class ExtendedExaminationResponse(ExaminationResponse):
@@ -28,8 +27,4 @@ class BBoxCreate(BaseModel):
 class ExaminationCreate(BaseModel):
     id_sample: int
     tentative: bool | None = None
-    BBox: list[BBoxCreate] | None = None
-
-
-class ExaminationCreateResponse(ExaminationCreate):
-    id: int
+    BBox: list[BBoxCreate]

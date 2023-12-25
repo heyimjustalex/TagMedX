@@ -132,7 +132,6 @@ class Examination(Base):
     id_user: Mapped[int] = mapped_column(ForeignKey("User.id"))
     id_sample: Mapped[int] = mapped_column(ForeignKey("Sample.id"))
     tentative: Mapped[bool | None]
-    bad_quality: Mapped[bool | None]
 
     # Define the many-to-one relationship with User
     User: Mapped["User"] = relationship(back_populates="Examination")

@@ -47,7 +47,7 @@ def get_bbox(
     db: Annotated[Session, Depends(get_db)],
 ):
     bbox_service = BBoxService(db)
-    bbox = bbox_service.get_bbox_by_id(id_bbox)
+    bbox = bbox_service.get_bbox(id_bbox)
 
     return BBoxResponse(
         id=bbox.id,
@@ -71,7 +71,7 @@ def get_bbox_by_examination(
     db: Annotated[Session, Depends(get_db)],
 ):
     bbox_service = BBoxService(db)
-    bbox_by_examination = bbox_service.get_bbox_by_examination(id_examination)
+    bbox_by_examination = bbox_service.get_examination_bboxes(id_examination)
     response: list[BBoxResponse] = []
     for bbox in bbox_by_examination:
         response.append(
@@ -97,12 +97,12 @@ async def update_bbox(
     db: Annotated[Session, Depends(get_db)],
 ):
     bbox_service = BBoxService(db)
-    bbox = bbox_service.get_bbox_by_id(id_bbox)
+    bbox = bbox_service.get_bbox(id_bbox)
 
     # _ = bbox_service.check_user_is_assigned_to_package(user_data.id)
 
     bbox = bbox_service.update_bbox(
-        bbox.id,
+        bbox,
         bbox_update.comment,
         bbox_update.x,
         bbox_update.y,
@@ -130,7 +130,7 @@ async def delete_bbox(
 ):
     bbox_service = BBoxService(db)
     # _ = bbox_service.check_user_is_assigned_to_package(user_data.id)
-    bbox = bbox_service.get_bbox_by_id(id_bbox)
-    bbox_service.delete_bbox(bbox.id)
+    bbox = bbox_service.get_bbox(id_bbox)
+    bbox_service.delete_bbox(bbox)
 
     return {"message:" "BBox removed successfully"}

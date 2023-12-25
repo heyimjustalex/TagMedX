@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import func
-from models.models import Package, Set, Sample, Package, Examination
+from models.models import Package, Set, Sample, Package
 
 
 class PackageRepository:
@@ -44,31 +44,3 @@ class PackageRepository:
             .filter(Package.Set.has(Set.id_group == id_group))
             .all()
         )
-
-    def update_package_is_ready(self, sample: Sample, package: Package, set_info: Set):
-        all_samples_have_examination = (
-            self.db.query(Sample)
-            .join(Examination, Sample.id == Examination.id_sample)
-            .filter(Sample.id_package == sample.id_package)
-            .count()
-            == set_info.package_size
-        )
-        if all_samples_have_examination:
-            package.is_ready = True
-            self.db.commit()
-            return True
-        else:
-            return False
-
-    def update_package_is_ready_false(self, sample_id: int):
-        sample = self.db.query(Sample).filter(Sample.id == sample_id).first()
-        if sample:
-            package = (
-                self.db.query(Package).filter(Package.id == sample.id_package).first()
-            )
-
-            if package:
-                package.is_ready = False
-                self.db.commit()
-                return True
-        return False
