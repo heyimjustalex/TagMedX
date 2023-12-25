@@ -61,3 +61,11 @@ class LabelService:
 
     def get_labels_in_group(self, id_group: int) -> list[Label]:
         return self.repository.get_labels_by_group(id_group)
+
+    def check_if_label_exists_and_belongs_to_set(self, id_label: int, id_set: int):
+        label = self.get_label(id_label)
+        if label.id_set != id_set:
+            raise HTTPException(
+                status_code=status.HTTP_406_NOT_ACCEPTABLE,
+                detail=f"Label {id_label} does not belong to the set",
+            )

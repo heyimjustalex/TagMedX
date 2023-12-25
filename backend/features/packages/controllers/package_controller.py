@@ -86,7 +86,9 @@ async def get_extended_package(
         if sample.Examination.User.surname:
             user += f"{sample.Examination.User.surname}"
 
-        user_role = group_service.get_role_in_group(sample.Examination.User.id, package.Set.id_group)
+        user_role = group_service.get_role_in_group(
+            sample.Examination.User.id, package.Set.id_group
+        )
 
         examination_response = ExtendedExaminationResponse(
             id=sample.Examination.id,
@@ -95,7 +97,6 @@ async def get_extended_package(
             id_user=sample.Examination.id_user,
             id_sample=sample.Examination.id_sample,
             tentative=sample.Examination.tentative,
-            bad_quality=sample.Examination.bad_quality,
             bboxes=[],
         )
 
@@ -229,7 +230,7 @@ async def assign_to_user(
     _ = group_service.check_if_admin(user_data.id, package.Set.id_group)
     _ = group_service.get_membership(package.Set.id_group, id_user)
 
-    package = package_service.assign_to_user(id_package, id_user)
+    package = package_service.assign_to_user(package, id_user)
 
     return PackageResponse(
         id=package.id,
@@ -250,7 +251,9 @@ async def mark_as_ready(
     db: Annotated[Session, Depends(get_db)],
 ):
     package_service = PackageService(db)
-    package = package_service.mark_as_ready(user_data.id, id_package)
+    package = package_service.get_package(id_package)
+    package_service.check_if_assigned_to_user_or_if_user_is_admin(user_data.id, package)
+    package = package_service.mark_as_ready(package)
 
     return PackageResponse(
         id=package.id,
@@ -272,5 +275,5 @@ async def delete_package(
     group_service = GroupService(db)
     _ = group_service.check_if_admin(user_data.id, package.Set.id_group)
 
-    package_service.delete_package(package.id)
+    package_service.delete_package(package)
     return {"message": "Package removed successfully"}

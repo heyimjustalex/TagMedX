@@ -66,9 +66,8 @@ CREATE TABLE `Sample` (
 CREATE TABLE `Examination` (
   id INT NOT NULL AUTO_INCREMENT,
   id_user INT NOT NULL,
-  id_sample INT NOT NULL,
+  id_sample INT UNIQUE NOT NULL,
   tentative BOOLEAN,
-  bad_quality BOOLEAN,
   PRIMARY KEY (id),
   FOREIGN KEY (id_user) REFERENCES `User`(id),
   FOREIGN KEY (id_sample) REFERENCES `Sample`(id)

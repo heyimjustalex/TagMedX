@@ -1,5 +1,4 @@
-
-FROM python:3.12-slim
+FROM python:3.12.1-alpine3.19
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -8,13 +7,14 @@ WORKDIR /app
 
 COPY requirements.txt /app/
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends --no-install-suggests \
-    pkg-config python3-dev default-libmysqlclient-dev build-essential \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+RUN apk --no-cache add build-base=0.5-r3 py3-pkgconfig=1.5.5-r3 mariadb-dev=10.11.5-r3 \
+    && pip install --no-cache-dir --upgrade pip==23.3.2 \
     && pip install --no-cache-dir -r requirements.txt \
-    && mkdir /images
+    && mkdir /images \
+    && adduser -u 5678 --disabled-password --gecos "" appuser \
+    && chown -R appuser /app /images
+
+USER appuser
 
 COPY . /app/
 

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import relationship, DeclarativeBase, mapped_column, Mapped
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, UniqueConstraint
 from typing import List
 
 
@@ -132,18 +132,21 @@ class Examination(Base):
     id_user: Mapped[int] = mapped_column(ForeignKey("User.id"))
     id_sample: Mapped[int] = mapped_column(ForeignKey("Sample.id"))
     tentative: Mapped[bool | None]
-    bad_quality: Mapped[bool | None]
 
     # Define the many-to-one relationship with User
     User: Mapped["User"] = relationship(back_populates="Examination")
 
     # Define the many-to-one relationship with Sample
-    Sample: Mapped["Sample"] = relationship(back_populates="Examination")
+    Sample: Mapped["Sample"] = relationship(
+        back_populates="Examination", single_parent=True
+    )
 
     # Define the one-to-many relationship with BBox
     BBox: Mapped[List["BBox"]] = relationship(
         back_populates="Examination", cascade="all, delete"
     )
+
+    __table_args__ = (UniqueConstraint("id_sample"),)
 
 
 class Label(Base):
