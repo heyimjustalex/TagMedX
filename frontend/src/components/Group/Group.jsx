@@ -27,7 +27,7 @@ export default function Group({ group }) {
         <Tab key="overview" title="Overview" href={`/groups/${data.id}?tab=overview`} as={RouteLink}>
           <Card>
             <CardBody className='p-4'>
-              <GroupOverview />
+              <GroupOverview data={data?.stats} />
             </CardBody>
           </Card>
         </Tab>

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Card, Switch } from '@nextui-org/react';
 import { IconAlertTriangle, IconBoxModel, IconBoxModel2, IconPackage, IconProgressCheck } from '@tabler/icons-react';
 
-import { NextColor } from '../../../consts/NextColor';
 import GroupOverviewCard from './GroupOverviewCard';
+import { NextColor } from '../../../consts/NextColor';
 
-export default function GroupOverview() {
+export default function GroupOverview({ data }) {
 
   const [userOnly, setUserOnly] = useState(false);
 
@@ -17,11 +17,41 @@ export default function GroupOverview() {
         
       </Card>
       <div className='flex flex-row flex-wrap gap-4 w-full'>
-      <GroupOverviewCard title='Detection sets' Icon={IconBoxModel2} val1={1} val2={2} color={NextColor.PRIMARY} />
-        <GroupOverviewCard title='Classification sets' Icon={IconBoxModel} val1={1} val2={2} color={NextColor.DANGER} />
-        <GroupOverviewCard title='Ready packages' Icon={IconPackage} val1={userOnly ? 2 : 3} val2={userOnly ? 5 : 10} color={NextColor.SECONDARY} />
-        <GroupOverviewCard title='Total progress' Icon={IconProgressCheck} val1={userOnly ? 59 : 123} val2={userOnly ? 109 : 432} color={NextColor.SUCCESS} />
-        <GroupOverviewCard title='Tentative examinations' Icon={IconAlertTriangle} val1={userOnly ? 4 : 12} val2={userOnly ? 109 : 432} color={NextColor.WARNING} />
+        <GroupOverviewCard
+          title='Detection sets'
+          Icon={IconBoxModel2}
+          val1={data?.detection_sets}
+          val2={data?.sets}
+          color={NextColor.PRIMARY}
+        />
+        <GroupOverviewCard
+          title='Classification sets'
+          Icon={IconBoxModel}
+          val1={data?.classification_sets}
+          val2={data?.sets}
+          color={NextColor.DANGER}
+        />
+        <GroupOverviewCard
+          title='Ready packages'
+          Icon={IconPackage}
+          val1={userOnly ? data?.user_ready_packages : data?.ready_packages}
+          val2={userOnly ? data?.user_packages : data?.packages}
+          color={NextColor.SECONDARY}
+        />
+        <GroupOverviewCard
+          title='Total progress'
+          Icon={IconProgressCheck}
+          val1={userOnly ? data?.user_examinated_samples : data?.examinated_samples}
+          val2={userOnly ? data?.user_samples : data?.samples}
+          color={NextColor.SUCCESS}
+        />
+        <GroupOverviewCard
+          title='Tentative examinations'
+          Icon={IconAlertTriangle}
+          val1={userOnly ? data?.user_tentative_examinations : data?.tentative_examinations}
+          val2={userOnly ? data?.user_examinated_samples : data?.examinated_samples}
+          color={NextColor.WARNING}
+        />
       </div>
     </>
   )

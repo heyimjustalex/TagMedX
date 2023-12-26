@@ -48,7 +48,7 @@ export async function getLabels(id) {
 
 export async function getStats(id) {
   if(!isNaN(id)) {
-    const res = await get(`group/${id}/stats`);
+    const res = await get(`groups/${id}/stats`);
     if(!res.ok) console.error(`Get group stats: ${res.code} ${res.status}`);
     else return res;
   }
