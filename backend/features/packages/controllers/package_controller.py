@@ -9,8 +9,10 @@ from typing import Annotated
 from connectionDB.session import get_db
 from sqlalchemy.orm import Session
 from ..services.package_service import PackageService
+from ...examination.services.examination_service import ExaminationService
 from ...groups.services.group_service import GroupService
 from ...sets.services.set_service import SetService
+from repositories.group_repository import Roles
 
 router = APIRouter()
 
@@ -29,9 +31,15 @@ async def get_package(
     group_service = GroupService(db)
     _ = group_service.get_membership(package.Set.id_group, user_data.id)
 
+    examination_service = ExaminationService(db)
+
     return PackageResponse(
         id=package.id,
         id_set=package.id_set,
+        all=examination_service.count_package_examinations(package.id),
+        tentative=examination_service.count_package_examinations(
+            package.id, tentative=True
+        ),
         id_user=package.id_user,
         is_ready=package.is_ready,
     )
@@ -51,11 +59,19 @@ async def get_extended_package(
     package_service = PackageService(db)
     package = package_service.get_package(id_package)
 
+    package_service.check_if_assigned_to_user_or_if_user_is_admin(user_data.id, package)
+
     group_service = GroupService(db)
+
+    examination_service = ExaminationService(db)
 
     response = ExtendedPackageResponse(
         id=package.id,
         id_set=package.id_set,
+        all=examination_service.count_package_examinations(package.id),
+        tentative=examination_service.count_package_examinations(
+            package.id, tentative=True
+        ),
         id_user=package.id_user,
         is_ready=package.is_ready,
         samples=[],
@@ -141,10 +157,15 @@ async def get_packages_in_set(
     set = set_service.get_set(id_set)
 
     group_service = GroupService(db)
-    _ = group_service.get_membership(set.id_group, user_data.id)
+    role = group_service.get_role_in_group(user_data.id, set.id_group)
 
     package_service = PackageService(db)
-    packages = package_service.get_packages_in_set(set.id)
+    examination_service = ExaminationService(db)
+
+    if role == Roles.ADMIN:
+        packages = package_service.get_packages_in_set(set.id)
+    else:
+        packages = package_service.get_user_packages_in_set(set.id, user_data.id)
 
     response: list[PackageResponse] = []
     for package in packages:
@@ -152,6 +173,10 @@ async def get_packages_in_set(
             PackageResponse(
                 id=package.id,
                 id_set=package.id_set,
+                all=examination_service.count_package_examinations(package.id),
+                tentative=examination_service.count_package_examinations(
+                    package.id, tentative=True
+                ),
                 id_user=package.id_user,
                 is_ready=package.is_ready,
             )
@@ -171,10 +196,15 @@ async def get_packages_in_group(
     db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
-    _ = group_service.get_membership(id_group, user_data.id)
-
     package_service = PackageService(db)
-    packages = package_service.get_packages_in_group(id_group)
+    examination_service = ExaminationService(db)
+
+    role = group_service.get_role_in_group(user_data.id, id_group)
+
+    if role == Roles.ADMIN:
+        packages = package_service.get_packages_in_group(id_group)
+    else:
+        packages = package_service.get_user_packages_in_group(id_group, user_data.id)
 
     response: list[PackageResponse] = []
     for package in packages:
@@ -182,6 +212,10 @@ async def get_packages_in_group(
             PackageResponse(
                 id=package.id,
                 id_set=package.id_set,
+                all=examination_service.count_package_examinations(package.id),
+                tentative=examination_service.count_package_examinations(
+                    package.id, tentative=True
+                ),
                 id_user=package.id_user,
                 is_ready=package.is_ready,
             )
@@ -195,6 +229,7 @@ async def get_user_packages(
     user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
     db: Annotated[Session, Depends(get_db)],
 ):
+    examination_service = ExaminationService(db)
     package_service = PackageService(db)
     packages = package_service.get_user_packages(user_data.id)
 
@@ -204,6 +239,10 @@ async def get_user_packages(
             PackageResponse(
                 id=package.id,
                 id_set=package.id_set,
+                all=examination_service.count_package_examinations(package.id),
+                tentative=examination_service.count_package_examinations(
+                    package.id, tentative=True
+                ),
                 id_user=package.id_user,
                 is_ready=package.is_ready,
             )
@@ -232,9 +271,15 @@ async def assign_to_user(
 
     package = package_service.assign_to_user(package, id_user)
 
+    examination_service = ExaminationService(db)
+
     return PackageResponse(
         id=package.id,
         id_set=package.id_set,
+        all=examination_service.count_package_examinations(package.id),
+        tentative=examination_service.count_package_examinations(
+            package.id, tentative=True
+        ),
         id_user=package.id_user,
         is_ready=package.is_ready,
     )
@@ -250,6 +295,7 @@ async def mark_as_ready(
     id_package: int,
     db: Annotated[Session, Depends(get_db)],
 ):
+    examination_service = ExaminationService(db)
     package_service = PackageService(db)
     package = package_service.get_package(id_package)
     package_service.check_if_assigned_to_user_or_if_user_is_admin(user_data.id, package)
@@ -258,6 +304,38 @@ async def mark_as_ready(
     return PackageResponse(
         id=package.id,
         id_set=package.id_set,
+        all=examination_service.count_package_examinations(package.id),
+        tentative=examination_service.count_package_examinations(
+            package.id, tentative=True
+        ),
+        id_user=package.id_user,
+        is_ready=package.is_ready,
+    )
+
+
+@router.put(
+    "/api/packages/{id_package}/unready",
+    tags=["Packages"],
+    response_model=PackageResponse,
+)
+async def mark_as_unready(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    id_package: int,
+    db: Annotated[Session, Depends(get_db)],
+):
+    examination_service = ExaminationService(db)
+    package_service = PackageService(db)
+    package = package_service.get_package(id_package)
+    package_service.check_if_assigned_to_user_or_if_user_is_admin(user_data.id, package)
+    package = package_service.mark_as_unready(package)
+
+    return PackageResponse(
+        id=package.id,
+        id_set=package.id_set,
+        all=examination_service.count_package_examinations(package.id),
+        tentative=examination_service.count_package_examinations(
+            package.id, tentative=True
+        ),
         id_user=package.id_user,
         is_ready=package.is_ready,
     )

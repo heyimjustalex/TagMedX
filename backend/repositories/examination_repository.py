@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.models import Examination
+from models.models import Examination, Sample
 
 
 class ExaminationRepository:
@@ -30,4 +30,21 @@ class ExaminationRepository:
             self.db.query(Examination)
             .filter(Examination.id_sample == id_sample)
             .first()
+        )
+
+    def count_examinations_by_package(self, id_package: int) -> int:
+        return (
+            self.db.query(Examination)
+            .filter(Examination.Sample.has(Sample.id_package == id_package))
+            .count()
+        )
+
+    def count_examinations_by_package_and_tentative(self, id_package: int) -> int:
+        return (
+            self.db.query(Examination)
+            .filter(
+                Examination.Sample.has(Sample.id_package == id_package),
+                Examination.tentative == True,
+            )
+            .count()
         )

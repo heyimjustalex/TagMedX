@@ -56,11 +56,17 @@ class PackageService:
     def get_packages_in_set(self, id_set: int) -> list[Package]:
         return self.repository.get_packages_by_set(id_set)
 
+    def get_user_packages_in_set(self, id_set: int, id_user: int) -> list[Package]:
+        return self.repository.get_packages_by_set_and_user(id_set, id_user)
+
     def get_user_packages(self, id_user: int) -> list[Package]:
         return self.repository.get_packages_by_user(id_user)
 
     def get_packages_in_group(self, id_group: int) -> list[Package]:
         return self.repository.get_packages_by_group(id_group)
+
+    def get_user_packages_in_group(self, id_group: int, id_user: int) -> list[Package]:
+        return self.repository.get_packages_by_group_and_user(id_group, id_user)
 
     def get_package_id_with_free_slots_or_create_new_one(self, id_set: int) -> int:
         packages = self.get_packages_in_set(id_set)

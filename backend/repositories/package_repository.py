@@ -44,3 +44,21 @@ class PackageRepository:
             .filter(Package.Set.has(Set.id_group == id_group))
             .all()
         )
+
+    def get_packages_by_group_and_user(
+        self, id_group: int, id_user: int
+    ) -> list[Package]:
+        return (
+            self.db.query(Package)
+            .filter(
+                Package.Set.has(Set.id_group == id_group), Package.id_user == id_user
+            )
+            .all()
+        )
+
+    def get_packages_by_set_and_user(self, id_set: int, id_user: int) -> list[Package]:
+        return (
+            self.db.query(Package)
+            .filter(Package.id_set == id_set, Package.id_user == id_user)
+            .all()
+        )

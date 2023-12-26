@@ -59,3 +59,12 @@ class ExaminationService:
                 status_code=status.HTTP_404_NOT_FOUND, detail="Examination not found"
             )
         return examination
+
+    def count_package_examinations(
+        self, id_package: int, tentative: bool = False
+    ) -> int:
+        if tentative:
+            return self.repository.count_examinations_by_package_and_tentative(
+                id_package
+            )
+        return self.repository.count_examinations_by_package(id_package)
