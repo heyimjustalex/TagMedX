@@ -14,8 +14,8 @@ export default function GroupPackage({ data, users, groupId, setPackages, isAdmi
       <CardBody className='overflow-visible p-0'>
         <div className='flex justify-between'>
           <p className='flex text-default-800 font-bold uppercase'># {data.id}</p>
-          <Chip className='flex' color={data.is_ready ? 'success' : 'primary'} size='sm' variant='flat'>
-            {data.is_ready ? 'Ready' : 'Pending'}
+          <Chip className='flex' color={!data.id_user ? 'default' : data.is_ready ? 'success' : 'primary'} size='sm' variant='flat'>
+            {!data.id_user ? 'Unassigned' : data.is_ready ? 'Ready' : 'Pending'}
           </Chip>
         </div>
         { isAdmin ?
@@ -47,6 +47,7 @@ export default function GroupPackage({ data, users, groupId, setPackages, isAdmi
                 size='sm'
                 showAnchorIcon
                 as={RouteLink}
+                isDisabled={data.tentative === 0}
                 anchorIcon={<IconEyeExclamation />}
                 href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor?tentative=true`}
               >
@@ -57,6 +58,7 @@ export default function GroupPackage({ data, users, groupId, setPackages, isAdmi
                 size='sm'
                 showAnchorIcon
                 as={RouteLink}
+                isDisabled={data.all === 0}
                 anchorIcon={<IconEye />}
                 href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor`}
               >
@@ -69,6 +71,7 @@ export default function GroupPackage({ data, users, groupId, setPackages, isAdmi
               size='sm'
               showAnchorIcon
               as={RouteLink}
+              isDisabled={data.all === 0}
               anchorIcon={<IconHealthRecognition />}
               href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor`}
             >
