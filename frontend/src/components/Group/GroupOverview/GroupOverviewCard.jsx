@@ -17,6 +17,7 @@ export default function GroupOverviewCard({ title, Icon, val1, val2, color }) {
           strokeWidth={4}
           showValueLabel={true}
           color={color}
+          aria-label='stat'
         />
       </CardBody>
       <CardFooter className='p-0 justify-center'>

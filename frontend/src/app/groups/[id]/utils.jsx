@@ -46,6 +46,15 @@ export async function getLabels(id) {
   return Promise.resolve({ code: 204, body: [] });
 }
 
+export async function getStats(id) {
+  if(!isNaN(id)) {
+    const res = await get(`groups/${id}/stats`);
+    if(!res.ok) console.error(`Get group stats: ${res.code} ${res.status}`);
+    else return res;
+  }
+  return Promise.resolve({ code: 204, body: {} });
+}
+
 export async function generateMetadata({ params, searchParams }) {
   if(!isNaN(params.id)) {
     const res = await get(`groups/${params.id}/name`);

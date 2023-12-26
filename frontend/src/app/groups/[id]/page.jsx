@@ -1,16 +1,17 @@
 import { redirect } from 'next/navigation';
 
 import Group from '../../../components/Group/Group';
-import { getData, getLabels, getPackages, getSets, getUsers } from './utils';
+import { getData, getLabels, getPackages, getSets, getUsers, getStats } from './utils';
 
 export default async function GroupPage({ params }) {
 
-  const [data, users, sets, packages, labels] = await Promise.all([
+  const [data, users, sets, packages, labels, stats] = await Promise.all([
     getData(params.id),
     getUsers(params.id),
     getSets(params.id),
     getPackages(params.id),
-    getLabels(params.id)
+    getLabels(params.id),
+    getStats(params.id)
   ]);
 
   return (
@@ -23,7 +24,8 @@ export default async function GroupPage({ params }) {
             users: users.body,
             sets: sets.body,
             packages: packages.body,
-            labels: labels.body
+            labels: labels.body,
+            stats: stats.body
           }} />
         </section>
       }
