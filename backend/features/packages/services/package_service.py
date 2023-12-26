@@ -91,3 +91,18 @@ class PackageService:
             if not sample.Examination:
                 return False
         return True
+
+    def count_packages_in_group(
+        self, id_group: int, id_user: int | None = None, is_ready: bool | None = None
+    ) -> int:
+        if id_user is not None and is_ready is not None:
+            return self.repository.count_packages_by_group_user_and_readiness(
+                id_group, id_user, is_ready
+            )
+        elif is_ready is not None:
+            return self.repository.count_packages_by_group_and_readiness(
+                id_group, is_ready
+            )
+        elif id_user is not None:
+            return self.repository.count_packages_by_group_and_user(id_group, id_user)
+        return self.repository.count_packages_by_group(id_group)

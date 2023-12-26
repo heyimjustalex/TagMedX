@@ -36,8 +36,8 @@ async def get_package(
     return PackageResponse(
         id=package.id,
         id_set=package.id_set,
-        all=examination_service.count_package_examinations(package.id),
-        tentative=examination_service.count_package_examinations(
+        all=examination_service.count_examinations_in_package(package.id),
+        tentative=examination_service.count_examinations_in_package(
             package.id, tentative=True
         ),
         id_user=package.id_user,
@@ -68,8 +68,8 @@ async def get_extended_package(
     response = ExtendedPackageResponse(
         id=package.id,
         id_set=package.id_set,
-        all=examination_service.count_package_examinations(package.id),
-        tentative=examination_service.count_package_examinations(
+        all=examination_service.count_examinations_in_package(package.id),
+        tentative=examination_service.count_examinations_in_package(
             package.id, tentative=True
         ),
         id_user=package.id_user,
@@ -173,8 +173,8 @@ async def get_packages_in_set(
             PackageResponse(
                 id=package.id,
                 id_set=package.id_set,
-                all=examination_service.count_package_examinations(package.id),
-                tentative=examination_service.count_package_examinations(
+                all=examination_service.count_examinations_in_package(package.id),
+                tentative=examination_service.count_examinations_in_package(
                     package.id, tentative=True
                 ),
                 id_user=package.id_user,
@@ -212,8 +212,8 @@ async def get_packages_in_group(
             PackageResponse(
                 id=package.id,
                 id_set=package.id_set,
-                all=examination_service.count_package_examinations(package.id),
-                tentative=examination_service.count_package_examinations(
+                all=examination_service.count_examinations_in_package(package.id),
+                tentative=examination_service.count_examinations_in_package(
                     package.id, tentative=True
                 ),
                 id_user=package.id_user,
@@ -239,8 +239,8 @@ async def get_user_packages(
             PackageResponse(
                 id=package.id,
                 id_set=package.id_set,
-                all=examination_service.count_package_examinations(package.id),
-                tentative=examination_service.count_package_examinations(
+                all=examination_service.count_examinations_in_package(package.id),
+                tentative=examination_service.count_examinations_in_package(
                     package.id, tentative=True
                 ),
                 id_user=package.id_user,
@@ -276,8 +276,8 @@ async def assign_to_user(
     return PackageResponse(
         id=package.id,
         id_set=package.id_set,
-        all=examination_service.count_package_examinations(package.id),
-        tentative=examination_service.count_package_examinations(
+        all=examination_service.count_examinations_in_package(package.id),
+        tentative=examination_service.count_examinations_in_package(
             package.id, tentative=True
         ),
         id_user=package.id_user,
@@ -304,8 +304,8 @@ async def mark_as_ready(
     return PackageResponse(
         id=package.id,
         id_set=package.id_set,
-        all=examination_service.count_package_examinations(package.id),
-        tentative=examination_service.count_package_examinations(
+        all=examination_service.count_examinations_in_package(package.id),
+        tentative=examination_service.count_examinations_in_package(
             package.id, tentative=True
         ),
         id_user=package.id_user,
@@ -332,8 +332,8 @@ async def mark_as_unready(
     return PackageResponse(
         id=package.id,
         id_set=package.id_set,
-        all=examination_service.count_package_examinations(package.id),
-        tentative=examination_service.count_package_examinations(
+        all=examination_service.count_examinations_in_package(package.id),
+        tentative=examination_service.count_examinations_in_package(
             package.id, tentative=True
         ),
         id_user=package.id_user,

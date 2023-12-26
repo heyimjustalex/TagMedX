@@ -46,7 +46,7 @@ CREATE TABLE `Package` (
   id INT NOT NULL AUTO_INCREMENT,
   id_set INT NOT NULL,
   id_user INT,
-  is_ready BOOLEAN,
+  is_ready BOOLEAN NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   FOREIGN KEY (id_set) REFERENCES `Set`(id),
   FOREIGN KEY (id_user) REFERENCES `User`(id)
@@ -67,7 +67,7 @@ CREATE TABLE `Examination` (
   id INT NOT NULL AUTO_INCREMENT,
   id_user INT NOT NULL,
   id_sample INT UNIQUE NOT NULL,
-  tentative BOOLEAN,
+  tentative BOOLEAN NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   FOREIGN KEY (id_user) REFERENCES `User`(id),
   FOREIGN KEY (id_sample) REFERENCES `Sample`(id)

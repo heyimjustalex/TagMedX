@@ -8,7 +8,7 @@ class ExaminationResponse(BaseModel):
     role: str
     id_user: int
     id_sample: int
-    tentative: bool | None = None
+    tentative: bool
 
 
 class ExtendedExaminationResponse(ExaminationResponse):
@@ -26,5 +26,5 @@ class BBoxCreate(BaseModel):
 
 class ExaminationCreate(BaseModel):
     id_sample: int
-    tentative: bool | None = None
     BBox: list[BBoxCreate]
+    tentative: bool = False

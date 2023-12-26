@@ -12,7 +12,7 @@ class ExaminationService:
         self,
         id_user: int,
         id_sample: int,
-        tentative: bool | None = None,
+        tentative: bool = False,
     ) -> Examination:
         examination = Examination()
 
@@ -60,11 +60,28 @@ class ExaminationService:
             )
         return examination
 
-    def count_package_examinations(
-        self, id_package: int, tentative: bool = False
+    def count_examinations_in_package(
+        self, id_package: int, tentative: bool | None = None
     ) -> int:
-        if tentative:
+        if tentative is not None:
             return self.repository.count_examinations_by_package_and_tentative(
-                id_package
+                id_package, tentative
             )
         return self.repository.count_examinations_by_package(id_package)
+
+    def count_examinations_in_group(
+        self, id_group: int, id_user: int | None = None, tentative: bool | None = None
+    ) -> int:
+        if id_user and tentative is not None:
+            return self.repository.count_examinations_by_group_user_and_tentative(
+                id_group, id_user, tentative
+            )
+        elif id_user:
+            return self.repository.count_examinations_by_group_and_user(
+                id_group, id_user
+            )
+        elif tentative is not None:
+            return self.repository.count_examinations_by_group_and_tentative(
+                id_group, tentative
+            )
+        return self.repository.count_examinations_by_group(id_group)

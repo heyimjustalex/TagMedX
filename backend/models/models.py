@@ -111,7 +111,7 @@ class Package(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     id_set: Mapped[int] = mapped_column(ForeignKey("Set.id"))
     id_user: Mapped[int | None] = mapped_column(ForeignKey("User.id"))
-    is_ready: Mapped[bool | None]
+    is_ready: Mapped[bool] = mapped_column(default=False)
 
     # Define the one-to-many relationship with Sample
     Sample: Mapped[List["Sample"]] = relationship(
@@ -131,7 +131,7 @@ class Examination(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     id_user: Mapped[int] = mapped_column(ForeignKey("User.id"))
     id_sample: Mapped[int] = mapped_column(ForeignKey("Sample.id"))
-    tentative: Mapped[bool | None]
+    tentative: Mapped[bool] = mapped_column(default=False)
 
     # Define the many-to-one relationship with User
     User: Mapped["User"] = relationship(back_populates="Examination")

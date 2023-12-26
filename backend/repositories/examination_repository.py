@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.models import Examination, Sample
+from models.models import Examination, Sample, Set, Package
 
 
 class ExaminationRepository:
@@ -39,12 +39,66 @@ class ExaminationRepository:
             .count()
         )
 
-    def count_examinations_by_package_and_tentative(self, id_package: int) -> int:
+    def count_examinations_by_package_and_tentative(
+        self, id_package: int, tentative: bool
+    ) -> int:
         return (
             self.db.query(Examination)
             .filter(
                 Examination.Sample.has(Sample.id_package == id_package),
-                Examination.tentative == True,
+                Examination.tentative == tentative,
+            )
+            .count()
+        )
+
+    def count_examinations_by_group(self, id_group: int) -> int:
+        return (
+            self.db.query(Examination)
+            .filter(
+                Examination.Sample.has(
+                    Sample.Package.has(Package.Set.has(Set.id_group == id_group))
+                )
+            )
+            .count()
+        )
+
+    def count_examinations_by_group_and_user(self, id_group: int, id_user: int) -> int:
+        return (
+            self.db.query(Examination)
+            .filter(
+                Examination.Sample.has(
+                    Sample.Package.has(Package.Set.has(Set.id_group == id_group))
+                ),
+                Examination.id_user == id_user,
+            )
+            .count()
+        )
+
+    def count_examinations_by_group_and_tentative(
+        self, id_group: int, tentative: bool
+    ) -> int:
+        return (
+            self.db.query(Examination)
+            .filter(
+                Examination.Sample.has(
+                    Sample.Package.has(Package.Set.has(Set.id_group == id_group))
+                ),
+                Examination.tentative == tentative,
+            )
+            .count()
+        )
+
+    def count_examinations_by_group_user_and_tentative(
+        self, id_group: int, id_user: int, tentative: bool
+    ) -> int:
+        return (
+            self.db.query(Examination)
+            .filter(
+                Examination.Sample.has(
+                    Sample.Package.has(Package.Set.has(Set.id_group == id_group))
+                ),
+                Examination.id_user == id_user,
+                Examination.tentative == tentative,
             )
             .count()
         )

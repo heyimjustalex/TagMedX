@@ -7,8 +7,8 @@ class PackageResponse(BaseModel):
     id_set: int
     all: int
     tentative: int
+    is_ready: bool
     id_user: int | None = None
-    is_ready: bool | None = None
 
 
 class ExtendedPackageResponse(PackageResponse):

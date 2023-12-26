@@ -4,6 +4,10 @@ from sqlalchemy.orm import Session
 from ..services.group_service import GroupService
 from repositories.group_repository import Roles
 from features.users.services.user_service import UserService
+from ...sets.services.set_service import SetService
+from ...packages.services.package_service import PackageService
+from ...samples.services.sample_service import SampleService
+from ...examination.services.examination_service import ExaminationService
 from connectionDB.session import get_db
 from features.authorization.services.token_service import TokenService, UserData
 from ..schemas.group_schema import (
@@ -13,6 +17,7 @@ from ..schemas.group_schema import (
     GroupJoin,
     AdminGroupResponse,
     GroupMemberResponse,
+    GroupStatsResponse,
 )
 
 router = APIRouter()
@@ -81,6 +86,60 @@ def get_group(
 
     return GroupWithRoleResponse(
         name=group.name, description=group.description, id=group.id, role=role
+    )
+
+
+@router.get(
+    "/api/groups/{group_id}/stats",
+    tags=["Groups"],
+    response_model=GroupStatsResponse,
+)
+def get_group_stats(
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    group_id: int,
+    db: Annotated[Session, Depends(get_db)],
+):
+    group_service = GroupService(db)
+    set_service = SetService(db)
+    package_service = PackageService(db)
+    sample_service = SampleService(db)
+    examination_service = ExaminationService(db)
+
+    group = group_service.get_group(group_id)
+    role = group_service.get_role_in_group(user_data.id, group.id)
+
+    return GroupStatsResponse(
+        name=group.name,
+        description=group.description,
+        id=group.id,
+        role=role,
+        sets=set_service.count_sets_in_group(group.id),
+        detection_sets=set_service.count_sets_in_group(group.id, "Detection"),
+        classification_sets=set_service.count_sets_in_group(group.id, "Classification"),
+        packages=package_service.count_packages_in_group(group.id),
+        ready_packages=package_service.count_packages_in_group(group.id, is_ready=True),
+        user_packages=package_service.count_packages_in_group(
+            group.id, id_user=user_data.id
+        ),
+        user_ready_packages=package_service.count_packages_in_group(
+            group.id, id_user=user_data.id, is_ready=True
+        ),
+        samples=sample_service.count_samples_in_group(group.id),
+        examinated_samples=sample_service.count_samples_in_group(
+            group.id, examinated=True
+        ),
+        user_samples=sample_service.count_samples_in_group(
+            group.id, id_user=user_data.id
+        ),
+        user_examinated_samples=sample_service.count_samples_in_group(
+            group.id, id_user=user_data.id, examinated=True
+        ),
+        tentative_examinations=examination_service.count_examinations_in_group(
+            group.id, tentative=True
+        ),
+        user_tentative_examinations=examination_service.count_examinations_in_group(
+            group.id, id_user=user_data.id, tentative=True
+        ),
     )
 
 

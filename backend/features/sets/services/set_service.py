@@ -64,3 +64,8 @@ class SetService:
 
     def get_sets_by_type(self, type: str) -> list[Set]:
         return self.repository.get_sets_by_type(type)
+
+    def count_sets_in_group(self, id_group: int, type: str | None = None) -> int:
+        if type:
+            return self.repository.count_sets_by_group_and_type(id_group, type)
+        return self.repository.count_sets_by_group(id_group)

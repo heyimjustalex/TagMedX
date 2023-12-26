@@ -25,3 +25,13 @@ class SetRepository:
 
     def get_sets_by_type(self, type: str) -> list[Set]:
         return self.db.query(Set).filter(Set.type == type).all()
+
+    def count_sets_by_group(self, id_group: int) -> int:
+        return self.db.query(Set).filter(Set.id_group == id_group).count()
+
+    def count_sets_by_group_and_type(self, id_group: int, type: str) -> int:
+        return (
+            self.db.query(Set)
+            .filter(Set.id_group == id_group, Set.type == type)
+            .count()
+        )

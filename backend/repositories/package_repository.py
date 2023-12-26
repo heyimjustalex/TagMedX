@@ -62,3 +62,43 @@ class PackageRepository:
             .filter(Package.id_set == id_set, Package.id_user == id_user)
             .all()
         )
+
+    def count_packages_by_group(self, id_group: int) -> int:
+        return (
+            self.db.query(Package)
+            .filter(Package.Set.has(Set.id_group == id_group))
+            .count()
+        )
+
+    def count_packages_by_group_and_readiness(
+        self, id_group: int, is_ready: bool
+    ) -> int:
+        return (
+            self.db.query(Package)
+            .filter(
+                Package.Set.has(Set.id_group == id_group), Package.is_ready == is_ready
+            )
+            .count()
+        )
+
+    def count_packages_by_group_and_user(self, id_group: int, id_user: int) -> int:
+        return (
+            self.db.query(Package)
+            .filter(
+                Package.Set.has(Set.id_group == id_group), Package.id_user == id_user
+            )
+            .count()
+        )
+
+    def count_packages_by_group_user_and_readiness(
+        self, id_group: int, id_user: int, is_ready: bool
+    ) -> int:
+        return (
+            self.db.query(Package)
+            .filter(
+                Package.Set.has(Set.id_group == id_group),
+                Package.id_user == id_user,
+                Package.is_ready == is_ready,
+            )
+            .count()
+        )

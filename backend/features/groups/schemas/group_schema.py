@@ -26,6 +26,22 @@ class AdminGroupResponse(GroupWithRoleResponse):
     connection_string: str
 
 
+class GroupStatsResponse(GroupWithRoleResponse):
+    sets: int
+    detection_sets: int
+    classification_sets: int
+    packages: int
+    ready_packages: int
+    user_packages: int
+    user_ready_packages: int
+    samples: int
+    examinated_samples: int
+    user_samples: int
+    user_examinated_samples: int
+    tentative_examinations: int
+    user_tentative_examinations: int
+
+
 class MembershipCreate(BaseModel):
     id_user: int
     id_group: int

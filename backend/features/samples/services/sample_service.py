@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from repositories.sample_repository import SampleRepository
 from models.models import Sample
 from fastapi import HTTPException, status
+from typing import Literal
 
 IMAGE_TYPES = {"image/jpeg": "jpg", "image/png": "png"}
 
@@ -57,3 +58,19 @@ class SampleService:
 
     def get_user_samples(self, id_user: int) -> list[Sample]:
         return self.repository.get_samples_by_user(id_user)
+
+    def count_samples_in_group(
+        self,
+        id_group: int,
+        id_user: int | None = None,
+        examinated: Literal[True] | None = None,
+    ) -> int:
+        if id_user and examinated:
+            return self.repository.count_samples_with_examination_by_group_and_user(
+                id_group, id_user
+            )
+        elif id_user:
+            return self.repository.count_samples_by_group_and_user(id_group, id_user)
+        elif examinated:
+            return self.repository.count_samples_with_examination_by_group(id_group)
+        return self.repository.count_samples_by_group(id_group)
