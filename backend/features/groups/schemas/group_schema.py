@@ -38,7 +38,9 @@ class GroupStatsResponse(GroupWithRoleResponse):
     examinated_samples: int
     user_samples: int
     user_examinated_samples: int
+    examinations: int
     tentative_examinations: int
+    user_examinations: int
     user_tentative_examinations: int
 
 

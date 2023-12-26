@@ -134,8 +134,12 @@ def get_group_stats(
         user_examinated_samples=sample_service.count_samples_in_group(
             group.id, id_user=user_data.id, examinated=True
         ),
+        examinations=examination_service.count_examinations_in_group(group.id),
         tentative_examinations=examination_service.count_examinations_in_group(
             group.id, tentative=True
+        ),
+        user_examinations=examination_service.count_examinations_in_group(
+            group.id, id_user=user_data.id
         ),
         user_tentative_examinations=examination_service.count_examinations_in_group(
             group.id, id_user=user_data.id, tentative=True
