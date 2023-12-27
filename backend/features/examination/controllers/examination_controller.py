@@ -12,6 +12,7 @@ from ...label.services.label_service import LabelService
 from ...bbox.schemas.bbox_schema import ExtendedBBoxResponse
 from ...label.schemas.label_schema import LabelResponse
 from ..schemas.examination_schema import ExaminationCreate, ExtendedExaminationResponse
+from repositories.group_repository import Roles
 
 router = APIRouter()
 
@@ -35,9 +36,10 @@ async def create_or_update_examinations(
 
     sample = sample_service.get_sample(examination_create.id_sample)
 
-    package_service.check_if_assigned_to_user_or_if_user_is_admin(
-        user_data.id, sample.Package
-    )
+    role = group_service.get_role_in_group(user_data.id, sample.Package.Set.id_group)
+
+    if role != Roles.ADMIN:
+        package_service.check_if_assigned_to_user(user_data.id, sample.Package)
 
     for bbox_create in examination_create.BBox:
         label_service.check_if_label_exists_and_belongs_to_set(
@@ -126,13 +128,19 @@ async def delete_examination(
     db: Annotated[Session, Depends(get_db)],
 ):
     examination_service = ExaminationService(db)
+    group_service = GroupService(db)
     package_service = PackageService(db)
 
     examination = examination_service.get_examination(id_examination)
 
-    package_service.check_if_assigned_to_user_or_if_user_is_admin(
-        user_data.id, examination.Sample.Package
+    role = group_service.get_role_in_group(
+        user_data.id, examination.Sample.Package.Set.id_group
     )
+
+    if role != Roles.ADMIN:
+        package_service.check_if_assigned_to_user(
+            user_data.id, examination.Sample.Package
+        )
 
     examination_service.delete_examination(examination)
     package_service.mark_as_unready(examination.Sample.Package)
