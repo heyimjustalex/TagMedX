@@ -49,7 +49,7 @@ export default function GroupOverview({ data }) {
           title='Tentative examinations'
           Icon={IconAlertTriangle}
           val1={userOnly ? data?.user_tentative_examinations : data?.tentative_examinations}
-          val2={userOnly ? data?.user_examinated_samples : data?.examinated_samples}
+          val2={userOnly ? data?.user_examinations : data?.examinations}
           color={NextColor.WARNING}
         />
       </div>

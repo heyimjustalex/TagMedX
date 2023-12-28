@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import Group from '../../../components/Group/Group';
-import { getData, getLabels, getPackages, getSets, getUsers, getStats } from './utils';
+import { getData, getLabels, getPackages, getSets, getStats, getUsers } from './utils';
 
 export default async function GroupPage({ params }) {
 
