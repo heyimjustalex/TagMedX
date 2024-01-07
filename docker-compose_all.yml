@@ -34,6 +34,12 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    environment:
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_HOST=db_TagMedX
+      - DB_PORT=3306
+      - DB_NAME=db
     volumes:
       - ./backend/:/app:ro
       - images:/images:rw
@@ -56,8 +62,6 @@ services:
       - 3000:3000
     networks:
       - network
-
-
 
 volumes:
   DB:

@@ -1,10 +1,14 @@
+import os
 from pydantic import BaseModel
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import HTTPException, status, Request
 
-SECRET_KEY = "74caa9bf0fa881601db5ea5dfd2db14fd0dbd8908e40118a3a6beba43f75900d"
+SECRET_KEY = os.getenv(
+    "AUTH_SECRET_KEY",
+    "74caa9bf0fa881601db5ea5dfd2db14fd0dbd8908e40118a3a6beba43f75900d",
+)
 ALGORITHM = "HS256"
 DEFAULT_ACCESS_TOKEN_EXPIRE_MINUTES = 60
 

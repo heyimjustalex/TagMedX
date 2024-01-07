@@ -41,6 +41,11 @@ services:
       - 8000:8000
     environment:
       - WATCHFILES_FORCE_POLLING=true
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_HOST=db_TagMedX
+      - DB_PORT=3306
+      - DB_NAME=db
     networks:
       - network
     restart: on-failure
@@ -59,8 +64,6 @@ services:
   #     - 80:3000
   #   networks:
   #     - network
-
-
 
 volumes:
   DB:
