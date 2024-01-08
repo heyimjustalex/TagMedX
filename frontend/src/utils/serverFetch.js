@@ -4,7 +4,7 @@ async function get(url) {
   const cookieStore = cookies();
   const cookie = cookieStore.get('token');
 
-  const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
+  const res = await fetch(process.env.NEXT_PRIVATE_API + url, {
     method: 'GET',
     credentials: 'include',
     headers: {
@@ -24,7 +24,7 @@ async function get(url) {
 }
 
 async function post(url, data, cookie) {
-  const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
+  const res = await fetch(process.env.NEXT_PRIVATE_API + url, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -45,7 +45,7 @@ async function post(url, data, cookie) {
 }
 
 async function put(url, data, cookie) {
-  const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
+  const res = await fetch(process.env.NEXT_PRIVATE_API + url, {
     method: 'PUT',
     credentials: 'include',
     headers: {
@@ -66,7 +66,7 @@ async function put(url, data, cookie) {
 }
 
 async function patch(url, data, cookie) {
-  const res = await fetch(process.env.NEXT_PUBLIC_API + url, {
+  const res = await fetch(process.env.NEXT_PRIVATE_API + url, {
     method: 'PATCH',
     credentials: 'include',
     headers: {

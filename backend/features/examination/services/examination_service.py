@@ -52,8 +52,8 @@ class ExaminationService:
     def get_user_examinations(self, id_user: int) -> list[Examination]:
         return self.repository.get_examinations_by_user(id_user)
 
-    def get_sample_examination(self, sample_id: int) -> Examination | None:
-        examination = self.repository.get_examination_by_sample(sample_id)
+    def get_sample_examination(self, id_sample: int) -> Examination:
+        examination = self.repository.get_examination_by_sample(id_sample)
         if not examination:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Examination not found"

@@ -59,9 +59,12 @@ async def get_extended_package(
     package_service = PackageService(db)
     package = package_service.get_package(id_package)
 
-    package_service.check_if_assigned_to_user_or_if_user_is_admin(user_data.id, package)
-
     group_service = GroupService(db)
+
+    role = group_service.get_role_in_group(user_data.id, package.Set.id_group)
+
+    if role != Roles.ADMIN:
+        package_service.check_if_assigned_to_user(user_data.id, package)
 
     examination_service = ExaminationService(db)
 
@@ -297,8 +300,15 @@ async def mark_as_ready(
 ):
     examination_service = ExaminationService(db)
     package_service = PackageService(db)
+    group_service = GroupService(db)
+
     package = package_service.get_package(id_package)
-    package_service.check_if_assigned_to_user_or_if_user_is_admin(user_data.id, package)
+
+    role = group_service.get_role_in_group(user_data.id, package.Set.id_group)
+
+    if role != Roles.ADMIN:
+        package_service.check_if_assigned_to_user(user_data.id, package)
+
     package = package_service.mark_as_ready(package)
 
     return PackageResponse(
@@ -324,9 +334,16 @@ async def mark_as_unready(
     db: Annotated[Session, Depends(get_db)],
 ):
     examination_service = ExaminationService(db)
+    group_service = GroupService(db)
     package_service = PackageService(db)
+
     package = package_service.get_package(id_package)
-    package_service.check_if_assigned_to_user_or_if_user_is_admin(user_data.id, package)
+
+    role = group_service.get_role_in_group(user_data.id, package.Set.id_group)
+
+    if role != Roles.ADMIN:
+        package_service.check_if_assigned_to_user(user_data.id, package)
+
     package = package_service.mark_as_unready(package)
 
     return PackageResponse(

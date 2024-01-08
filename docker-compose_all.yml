@@ -34,6 +34,12 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    environment:
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_HOST=db_TagMedX
+      - DB_PORT=3306
+      - DB_NAME=db
     volumes:
       - ./backend/:/app:ro
       - images:/images:rw
@@ -51,13 +57,13 @@ services:
       - ./frontend/src:/app/src:ro
       - /app/node_modules
     environment:
-      NODE_ENV: development
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API=http://localhost:8000/api/
+      - NEXT_PRIVATE_API=http://backend_TagMedX:8000/api/
     ports:
       - 3000:3000
     networks:
       - network
-
-
 
 volumes:
   DB:

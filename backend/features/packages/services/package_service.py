@@ -2,15 +2,12 @@ import os
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from repositories.package_repository import PackageRepository
-from repositories.group_repository import Roles
 from models.models import Package
-from ...groups.services.group_service import GroupService
 
 
 class PackageService:
     def __init__(self, db: Session):
         self.repository = PackageRepository(db)
-        self.group_service = GroupService(db)
 
     def create_package(self, id_set: int) -> Package:
         package = Package()
@@ -74,17 +71,6 @@ class PackageService:
             if len(package.Sample) < package.Set.package_size:
                 return package.id
         return self.create_package(id_set).id
-
-    def check_if_assigned_to_user_or_if_user_is_admin(
-        self, id_user: int, package: Package
-    ):
-        role = self.group_service.get_role_in_group(id_user, package.Set.id_group)
-
-        if package.id_user != id_user and role != Roles.ADMIN:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="No authority for this operation",
-            )
 
     def all_samples_examinated(self, package: Package) -> bool:
         for sample in package.Sample:
