@@ -59,7 +59,7 @@ services:
     environment:
       - NODE_ENV=development
       - NEXT_PUBLIC_API=http://localhost:8000/api/
-      - NEXT_PUBLIC_URL=http://localhost:8000/
+      - NEXT_PRIVATE_API=http://backend_TagMedX:8000/api/
     ports:
       - 3000:3000
     networks:
