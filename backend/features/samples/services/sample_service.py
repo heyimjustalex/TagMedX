@@ -1,4 +1,8 @@
 import os
+import numpy as np
+from io import BytesIO
+from pydicom import dcmread
+from PIL import Image
 from uuid import uuid4
 from sqlalchemy.orm import Session
 from repositories.sample_repository import SampleRepository
@@ -6,7 +10,11 @@ from models.models import Sample
 from fastapi import HTTPException, status
 from typing import Literal
 
-IMAGE_TYPES = {"image/jpeg": "jpg", "image/png": "png"}
+IMAGE_TYPES = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "application/octet-stream": "jpg",
+}
 
 
 class SampleService:
@@ -29,8 +37,26 @@ class SampleService:
             )
 
         path = f"/images/package{id_package}_{uuid4()}.{IMAGE_TYPES.get(content_type)}"
-        with open(path, "wb") as image_file:
-            image_file.write(file_content)
+
+        if content_type == "application/octet-stream":
+            try:
+                ds = dcmread(BytesIO(file_content), force=True)
+                image_array = ds.pixel_array.astype(float)
+                scaled_image_array = (
+                    np.maximum(image_array, 0) / image_array.max()
+                ) * 255.0
+                scaled_image_array = np.uint8(scaled_image_array)
+                image = Image.fromarray(scaled_image_array)
+                image.save(path)
+            except Exception as e:
+                print(e)
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Error during converting {content_type} type file to jpeg",
+                )
+        else:
+            with open(path, "wb") as image_file:
+                image_file.write(file_content)
 
         sample = Sample()
         sample.id_package = id_package
