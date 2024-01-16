@@ -71,7 +71,6 @@ export default function GroupPackage({ data, users, groupId, setPackages, isAdmi
               size='sm'
               showAnchorIcon
               as={RouteLink}
-              isDisabled={data.all === 0}
               anchorIcon={<IconHealthRecognition />}
               href={`/groups/${groupId}/sets/${data.id_set}/packages/${data.id}/editor`}
             >

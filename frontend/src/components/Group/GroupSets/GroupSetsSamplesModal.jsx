@@ -128,9 +128,9 @@ export default function GroupSetsSamplesModal({ modal, setModal, setData, notifi
         multiple
         type='file'
         ref={input}
-        onChange={handleChange}
-        accept='image/*'
         className='hidden'
+        onChange={handleChange}
+        accept='image/png, image/jpeg, application/dcm, application/dicom'
       />
     </>
   )
