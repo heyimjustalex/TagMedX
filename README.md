@@ -281,3 +281,17 @@ Additionally list in pull request description main changes.
 ### Merging
 
 ⚠ Use squash and merge ⚠
+
+## Screenshots
+
+![screen1](./screenshots/1.png)
+![screen2](./screenshots/2.png)
+![screen3](./screenshots/3.png)
+![screen4](./screenshots/4.png)
+![screen5](./screenshots/5.png)
+![screen6](./screenshots/6.png)
+![screen7](./screenshots/7.png)
+![screen8](./screenshots/8.png)
+![screen9](./screenshots/9.png)
+![screen10](./screenshots/10.png)
+![screen11](./screenshots/11.png)
