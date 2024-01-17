@@ -11,6 +11,8 @@ from ..schemas.label_schema import (
     LabelResponse,
     LabelUpdate,
 )
+from fastapi.responses import StreamingResponse
+import json
 
 router = APIRouter()
 
@@ -167,3 +169,37 @@ def delete_label(
     label_service.delete_label(id_label)
 
     return {"message": "Label removed successfully"}
+
+
+@router.post("/api/export/package/coco/{package_id}", tags=["Export"])
+def export_annotations_from_package_to_coco(
+    package_id: int, db: Session = Depends(get_db)
+):
+    label_service = LabelService(db)
+    coco_data = label_service.export_annotations_from_package_to_coco(package_id)
+
+    def generate():
+        yield json.dumps(coco_data, indent=2).encode()
+
+    return StreamingResponse(
+        generate(),
+        media_type="application/json",
+        headers={
+            "Content-Disposition": f"attachment;filename=package_{package_id}_coco.json"
+        },
+    )
+
+
+@router.post("/api/export/set/coco/{set_id}", tags=["Export"])
+def export_annotations_from_set_to_coco(set_id: int, db: Session = Depends(get_db)):
+    label_service = LabelService(db)
+    coco_data = label_service.export_annotations_from_set_to_coco(set_id)
+
+    def generate():
+        yield json.dumps(coco_data, indent=2).encode()
+
+    return StreamingResponse(
+        generate(),
+        media_type="application/json",
+        headers={"Content-Disposition": f"attachment;filename=set_{set_id}_coco.json"},
+    )
