@@ -19,9 +19,9 @@ router = APIRouter()
 
 @router.post("/api/labels", tags=["Labels"], response_model=LabelResponse)
 def create_label(
-        label_create: LabelCreate,
-        user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
-        db: Annotated[Session, Depends(get_db)],
+    label_create: LabelCreate,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     set_service = SetService(db)
     set = set_service.get_set(label_create.id_set)
@@ -48,9 +48,9 @@ def create_label(
 
 @router.get("/api/labels/{id_label}", tags=["Labels"], response_model=LabelResponse)
 def get_label(
-        id_label: int,
-        user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
-        db: Annotated[Session, Depends(get_db)],
+    id_label: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     label_service = LabelService(db)
     label = label_service.get_label(id_label)
@@ -71,9 +71,9 @@ def get_label(
     "/api/labels/set/{id_set}", tags=["Labels"], response_model=list[LabelResponse]
 )
 def get_labels_for_set(
-        id_set: int,
-        user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
-        db: Annotated[Session, Depends(get_db)],
+    id_set: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     set_service = SetService(db)
     set = set_service.get_set(id_set)
@@ -103,9 +103,9 @@ def get_labels_for_set(
     "/api/labels/group/{id_group}", tags=["Labels"], response_model=list[LabelResponse]
 )
 def get_labels_in_group(
-        id_group: int,
-        user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
-        db: Annotated[Session, Depends(get_db)],
+    id_group: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     group_service = GroupService(db)
     _ = group_service.get_membership(id_group, user_data.id)
@@ -130,10 +130,10 @@ def get_labels_in_group(
 
 @router.put("/api/labels/{id_label}", tags=["Labels"], response_model=LabelResponse)
 def update_label(
-        id_label: int,
-        label_update: LabelUpdate,
-        user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
-        db: Annotated[Session, Depends(get_db)],
+    id_label: int,
+    label_update: LabelUpdate,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     label_service = LabelService(db)
     label = label_service.get_label(id_label)
@@ -156,9 +156,9 @@ def update_label(
 
 @router.delete("/api/labels/{id_label}", tags=["Labels"])
 def delete_label(
-        id_label: int,
-        user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
-        db: Annotated[Session, Depends(get_db)],
+    id_label: int,
+    user_data: Annotated[UserData, Depends(TokenService.get_user_data)],
+    db: Annotated[Session, Depends(get_db)],
 ):
     label_service = LabelService(db)
     label = label_service.get_label(id_label)
@@ -172,7 +172,9 @@ def delete_label(
 
 
 @router.post("/api/export/package/coco/{package_id}", tags=["Export"])
-def export_annotations_from_package_to_coco(package_id: int, db: Session = Depends(get_db)):
+def export_annotations_from_package_to_coco(
+    package_id: int, db: Session = Depends(get_db)
+):
     label_service = LabelService(db)
     coco_data = label_service.export_annotations_from_package_to_coco(package_id)
 
@@ -199,7 +201,5 @@ def export_annotations_from_set_to_coco(set_id: int, db: Session = Depends(get_d
     return StreamingResponse(
         generate(),
         media_type="application/json",
-        headers={
-            "Content-Disposition": f"attachment;filename=set_{set_id}_coco.json"
-        },
+        headers={"Content-Disposition": f"attachment;filename=set_{set_id}_coco.json"},
     )

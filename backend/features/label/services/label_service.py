@@ -34,11 +34,7 @@ def export_to_coco(samples: list[Sample]):
             if label_id not in label_id_mapping:
                 label_id_mapping[label_id] = category_id
                 coco_data["categories"].append(
-                    {
-                        "id": category_id,
-                        "name": bbox.Label.name,
-                        "supercategory": ""
-                    }
+                    {"id": category_id, "name": bbox.Label.name, "supercategory": ""}
                 )
                 category_id += 1
 
