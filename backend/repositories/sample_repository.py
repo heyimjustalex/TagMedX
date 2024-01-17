@@ -23,6 +23,13 @@ class SampleRepository:
     def get_samples_by_package(self, id_package: int) -> list[Sample]:
         return self.db.query(Sample).filter(Sample.id_package == id_package).all()
 
+    def get_samples_from_set(self, set_id: int) -> list[Sample]:
+        return (
+            self.db.query(Sample)
+            .filter(Sample.Package.has(Package.Set.has(Set.id == set_id)))
+            .all()
+        )
+
     def get_samples_by_user(self, id_user: int) -> list[Sample]:
         return (
             self.db.query(Sample)
