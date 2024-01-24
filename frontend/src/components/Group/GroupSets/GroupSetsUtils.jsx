@@ -1,5 +1,5 @@
 import { Chip, Tooltip } from '@nextui-org/react';
-import { IconEdit, IconFileExport, IconFilePlus, IconTrash } from '@tabler/icons-react';
+import { IconDatabaseExport, IconEdit, IconFilePlus, IconTrash } from '@tabler/icons-react';
 
 import { del, post, put } from '../../../utils/fetch';
 import { NextColorMap } from '../../../consts/NextColorMap';
@@ -40,7 +40,7 @@ export function renderCell(item, columnKey, setModal, setRemoveModal, setSamples
           </Tooltip>
           <Tooltip content="Export set" placement='top-end'>
             <span className="text-lg text-default-600 cursor-pointer active:opacity-50">
-              <IconFileExport onClick={() => {}} />
+              <IconDatabaseExport onClick={() => {}} />
             </span>
           </Tooltip>
           <Tooltip color="danger" content="Remove set" placement='top-end'>
