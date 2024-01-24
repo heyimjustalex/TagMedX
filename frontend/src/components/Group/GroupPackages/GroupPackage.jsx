@@ -1,6 +1,6 @@
 import RouteLink from 'next/link';
-import { IconEye, IconEyeExclamation, IconHealthRecognition } from '@tabler/icons-react';
-import { Card, CardBody, CardFooter, CardHeader, Chip, Link, Select, SelectItem } from '@nextui-org/react';
+import { IconEye, IconEyeExclamation, IconHealthRecognition, IconPackageExport } from '@tabler/icons-react';
+import { Button, Card, CardBody, CardFooter, CardHeader, Chip, Link, Select, SelectItem } from '@nextui-org/react';
 
 export default function GroupPackage({ data, users, groupId, setPackages, isAdmin }) {
 
@@ -19,24 +19,28 @@ export default function GroupPackage({ data, users, groupId, setPackages, isAdmi
           </Chip>
         </div>
         { isAdmin ?
-          <Select 
-            size='sm'
-            className='mt-3'
-            label="Assigned user"
-            selectionMode='single'
-            selectedKeys={selectedKey}
-            onChange={e => {
-              setPackages(prev => prev.map(
-                pack => pack.id === data.id ? { ...data, id_user: parseInt(e.target.value) || null } : pack
-              ))
-            }}
-          >
-            {users.map((user) => (
-              <SelectItem key={user.user_id} value={user.user_id}>
-                {`${user.title || ''} ${user.name} ${user.surname}`}
-              </SelectItem>
-            ))}
-          </Select>
+          <div className='flex flex-row gap-2 mt-3'>
+            <Select 
+              size='sm'
+              label="Assigned user"
+              selectionMode='single'
+              selectedKeys={selectedKey}
+              onChange={e => {
+                setPackages(prev => prev.map(
+                  pack => pack.id === data.id ? { ...data, id_user: parseInt(e.target.value) || null } : pack
+                ))
+              }}
+            >
+              {users.map((user) => (
+                <SelectItem key={user.user_id} value={user.user_id}>
+                  {`${user.title || ''} ${user.name} ${user.surname}`}
+                </SelectItem>
+              ))}
+            </Select>
+            <Button isIconOnly variant='flat' radius='sm' size='lg'>
+              <IconPackageExport />
+            </Button>
+          </div>
         : null }
       </CardBody>
       <CardFooter className='p-0 pt-3'>
