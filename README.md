@@ -195,14 +195,6 @@ docker-compose -f docker-compose_all.yml up --build
 - Tailwind CSS
 - NextUI
 
-### TODO - Deadline: 2.11.2023 but it would be better to end this part up to 26.10.2023
-
-- Main page
-- Register/Login Page
-- Group page
-- Adding user to a group
-- File (photos) upload (create some new assets folder for uploaded photos)
-
 ### Naming conventions
 
 1. Components functions and files should start with capital letter.
